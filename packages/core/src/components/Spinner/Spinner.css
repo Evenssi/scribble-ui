@@ -2,14 +2,21 @@
  *
  * A pure-CSS animated loading indicator in three flavors.
  *
- * Per the subagent rules, this component does NOT layer the
- * `url(#su-hand-c)` wobble filter on top of its motion — stacking a
- * jittering filter onto a continuously rotating SVG produces a borderline
- * seizure-class shimmer. Animation-only components are explicitly exempt
- * from the wobble.
+ * Hand-drawn aesthetic: handled at the SVG-path level (irregular
+ * control points, non-closed ring, mismatched dot blobs, asymmetric
+ * pencil wave) — see Spinner.tsx. CSS only owns the primary motion:
  *
- * Color flows through `currentColor`, so callers theme by setting `color`
- * on the spinner itself or on any ancestor.
+ *   • ring   → steady clockwise rotate.
+ *   • dots   → staggered scale/opacity pulse.
+ *   • pencil → draw-in / erase-out via stroke-dashoffset.
+ *
+ * NO jitter / wobble layers. The earlier version stacked a global
+ * stepwise translate on top of the rotation and the dots' pulse — it
+ * looked like the spinner was vibrating, not drawn. The shapes are
+ * already scribbled (see TSX), so the motion can stay clean.
+ *
+ * Color flows through `currentColor`, so callers theme by setting
+ * `color` on the spinner itself or on any ancestor.
  */
 
 .su-spinner {
@@ -60,17 +67,25 @@
 
 /* === Variant: ring ==========================================
  *
- * The animation is applied to the inner <circle> rather than the
- * <svg> root. Rotating the root SVG sometimes resolves
- * `transform-origin: center` against the inline box instead of the
- * SVG geometry (a long-standing WebKit/Blink quirk), which can make
- * the arc appear to wobble or stand still depending on layout.
- * Animating the circle with an explicit pixel origin (12px 12px in
- * the 24×24 viewBox) is rock-solid across browsers. */
+ * Single clean rotation — 1.2s linear, clockwise. The hand-drawn
+ * irregularity comes entirely from the path data (a non-closed loop
+ * with off-true Bezier control points), not from animation.
+ *
+ * `transform-origin` is set in pixel coordinates against the SVG's
+ * own viewBox to work around the WebKit/Blink inline-SVG transform
+ * origin quirk where `center` would resolve against the surrounding
+ * inline box instead of the SVG geometry. */
 
-.su-spinner__ring circle {
-  transform-origin: 12px 12px;
-  animation: su-spinner-rotate 1s linear infinite;
+.su-spinner__ring {
+  /* `transform-box: view-box` re-roots transform-origin to the SVG's
+   * own viewBox coordinate system; combined with `center` (= 50% 50%)
+   * the rotation pivot tracks the geometric center at every rendered
+   * size (16 / 24 / 36 px). A pixel-literal origin like `12px 12px`
+   * would only happen to be correct for md (24 px) and would offset
+   * the pivot for sm and lg, making the ring orbit a phantom point. */
+  transform-origin: center;
+  transform-box: view-box;
+  animation: su-spinner-rotate 1.2s linear infinite;
 }
 
 @keyframes su-spinner-rotate {
@@ -79,7 +94,13 @@
   }
 }
 
-/* === Variant: dots ========================================== */
+/* === Variant: dots ==========================================
+ *
+ * Classic staggered three-dot pulse. Each blob scales from 0.4 → 1
+ * and back, with the three blobs offset by 0.16s so they read as a
+ * left-to-right wave. No translation jitter — the blobs are already
+ * irregular shapes (see the path data in TSX), so a clean pulse looks
+ * hand-made on its own. */
 
 .su-spinner__dot {
   transform-origin: center;
@@ -112,12 +133,15 @@
   }
 }
 
-/* === Variant: pencil ======================================== */
+/* === Variant: pencil ========================================
+ *
+ * Draw-in / erase-out via stroke-dashoffset on a path whose total
+ * length is normalised to 40 by `pathLength="40"` in TSX (so the dash
+ * math is independent of rendered px size). The wave shape itself is
+ * deliberately asymmetric in TSX (peaks of unequal height, an
+ * end-flick) so the line reads as a real signature even mid-draw. */
 
-.su-spinner__pencil path {
-  /* `pathLength="40"` on the SVG normalises the dash math regardless of
-   * the rendered px size. The animation draws the line in, then erases
-   * it, then loops. */
+.su-spinner__pencil-path {
   animation: su-spinner-pencil 1.4s ease-in-out infinite;
 }
 
@@ -133,25 +157,27 @@
   }
 }
 
-/* === Reduced motion ========================================= */
+/* === Reduced motion =========================================
+ *
+ * Freeze the primary motion — the hand-drawn shape itself is still
+ * legible (and looks scribbled, since irregularity lives in the path
+ * data), so a static spinner remains a valid loading indicator. */
 
 @media (prefers-reduced-motion: reduce) {
-  /* Freeze every variant in a "still legible" pose so users who opted
-   * out of motion still see the indicator instead of nothing. */
-  .su-spinner__ring circle,
+  .su-spinner__ring,
   .su-spinner__dot,
-  .su-spinner__pencil path {
+  .su-spinner__pencil-path {
     animation: none;
   }
 
   .su-spinner__dot {
-    /* Hold all three dots at full opacity / scale so the indicator is
+    /* Hold all three blobs at full opacity / scale so the indicator is
      * unambiguously present. */
     transform: none;
     opacity: 1;
   }
 
-  .su-spinner__pencil path {
+  .su-spinner__pencil-path {
     /* Show the full scribble. */
     stroke-dashoffset: 0;
   }
