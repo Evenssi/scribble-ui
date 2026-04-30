@@ -1,0 +1,145 @@
+/* scribble-ui · Tag
+ *
+ * Small hand-drawn label. Tags are typically static visuals so we
+ * keep the calm `#su-hand-c` wobble at rest. The close button gets
+ * its own focus ring and is filter-free so the ✕ glyph stays crisp.
+ */
+
+.su-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-1);
+
+  font-family: var(--su-font-family-hand);
+  font-weight: var(--su-font-weight-medium);
+  color: var(--su-ink-primary);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-xs);
+
+  /* Hand-drawn wobble (Calm level by default). */
+  filter: url(#su-hand-c);
+
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* === Colors ================================================ */
+
+.su-tag--default { background: var(--su-bg-paper); }
+
+.su-tag--brand   { background: var(--su-color-brand-soft); }
+.su-tag--success { background: var(--su-status-success-bg); }
+.su-tag--danger  { background: var(--su-status-danger-bg); }
+.su-tag--warning {
+  background: color-mix(in srgb, var(--su-color-warning) 30%, var(--su-bg-paper));
+}
+.su-tag--info {
+  background: color-mix(in srgb, var(--su-color-info) 25%, var(--su-bg-paper));
+}
+
+.su-tag--yellow { background: var(--su-note-yellow); }
+.su-tag--orange { background: var(--su-note-orange); }
+.su-tag--pink   { background: var(--su-note-pink);   }
+.su-tag--blue   { background: var(--su-note-blue);   }
+.su-tag--mint   { background: var(--su-note-mint);   }
+.su-tag--purple { background: var(--su-note-purple); }
+.su-tag--green  { background: var(--su-note-green);  }
+
+/* === Sizes ================================================= */
+
+.su-tag--sm {
+  font-size: var(--su-font-size-small);
+  padding: 2px 8px;
+  min-height: 22px;
+}
+
+.su-tag--md {
+  font-size: var(--su-font-size-body);
+  padding: 4px 10px;
+  min-height: 28px;
+}
+
+.su-tag--lg {
+  font-size: var(--su-font-size-h3);
+  padding: 6px 14px;
+  min-height: 36px;
+}
+
+/* === Slots ================================================= */
+
+.su-tag__icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1em;
+  line-height: 1;
+  /* Keep slot icons crisp — neutralise the parent wobble. */
+  filter: none;
+}
+
+.su-tag__label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.su-tag__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin-left: var(--su-space-1);
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--su-ink-muted);
+  cursor: pointer;
+  /* Keep the close glyph crisp — no inherited wobble. */
+  filter: none;
+  transition:
+    background var(--su-duration-fast) ease-out,
+    color var(--su-duration-fast) ease-out;
+}
+
+.su-tag__close:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--su-ink-primary) 12%, transparent);
+  color: var(--su-ink-primary);
+}
+
+.su-tag__close:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+.su-tag__close:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* === States ================================================ */
+
+/* Hover/active bumps only fire when the tag itself is clickable.
+ * Static tags stay calm to avoid a noisy "list of dancing tags".
+ * The Tag component sets onClick only when the consumer passes one. */
+.su-tag:hover:not(.su-tag--disabled) {
+  /* No transform/shadow change for non-interactive tags; rely on the
+   * close button or icon's own affordance for feedback. */
+}
+
+.su-tag--disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  /* Drop wobble entirely when disabled — match Button's calm inert. */
+  filter: none;
+  box-shadow: none;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-tag__close {
+    transition: none;
+  }
+}
