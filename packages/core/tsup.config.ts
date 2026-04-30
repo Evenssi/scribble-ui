@@ -14,6 +14,22 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Input/Input.css',
     to: 'dist/components/Input/Input.css',
   },
+  {
+    from: 'src/components/Card/Card.css',
+    to: 'dist/components/Card/Card.css',
+  },
+  {
+    from: 'src/components/Tag/Tag.css',
+    to: 'dist/components/Tag/Tag.css',
+  },
+  {
+    from: 'src/components/Checkbox/Checkbox.css',
+    to: 'dist/components/Checkbox/Checkbox.css',
+  },
+  {
+    from: 'src/components/Radio/Radio.css',
+    to: 'dist/components/Radio/Radio.css',
+  },
 ];
 
 export default defineConfig({
