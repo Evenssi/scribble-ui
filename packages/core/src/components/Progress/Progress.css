@@ -1,0 +1,225 @@
+/* scribble-ui · Progress
+ *
+ * Determinate / indeterminate progress indicator. Pairs with Spinner:
+ * Spinner says "something is happening", Progress says "this much is
+ * done".
+ *
+ * Visual contract
+ * ---------------
+ *  - The current percentage flows in via the inline custom property
+ *    `--su-progress-value` (e.g. `42%`). Both `line` (width) and
+ *    `circle` (stroke-dashoffset) read from it, so the JSX never has
+ *    to write per-render style numbers beyond that one variable.
+ *  - Status colors come from the existing semantic tokens:
+ *      normal  → --su-ink-primary
+ *      success → --su-color-success
+ *      warning → --su-color-warning
+ *      danger  → --su-color-danger
+ *    The active color is exposed locally as `--su-progress-color` so
+ *    both `line` fill and `circle` stroke can share the same rule.
+ *  - Hand-drawn aesthetic: the `line` track wears the calm
+ *    `url(#su-hand-c)` filter (same level as Switch's track). The
+ *    `circle` variant deliberately stays clean — applying the wobble
+ *    filter to a continuously rotating SVG produces visible jitter
+ *    artefacts (the filter re-rasterises every frame), so we follow
+ *    Spinner's precedent and let the SVG geometry carry the
+ *    handmade feel on its own.
+ *  - `prefers-reduced-motion: reduce` collapses every transition /
+ *    keyframe to the static state.
+ */
+
+.su-progress {
+  /* Local color resolved by the status modifiers below. Default = ink. */
+  --su-progress-color: var(--su-ink-primary);
+  /* Default — overridden by the inline style on every render. */
+  --su-progress-value: 0%;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  vertical-align: middle;
+}
+
+/* === Status → color ======================================== */
+
+.su-progress--status-success {
+  --su-progress-color: var(--su-color-success);
+}
+.su-progress--status-warning {
+  --su-progress-color: var(--su-color-warning);
+}
+.su-progress--status-danger {
+  --su-progress-color: var(--su-color-danger);
+}
+
+/* === Shared label ========================================== */
+
+.su-progress__label {
+  font-family: var(--su-font-family-hand);
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  line-height: var(--su-line-height-tight);
+  /* Label sits outside the hand-drawn frame — keep it crisp. */
+  filter: none;
+  white-space: nowrap;
+}
+
+/* === Variant: line ========================================= */
+
+.su-progress--line {
+  width: 100%;
+  /* The label sits to the right of the track when present. */
+}
+
+.su-progress--line .su-progress__track {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  /* Low-saturation neutral track, derived from ink so it adapts to
+   * surface changes without inventing a new token. */
+  background-color: color-mix(in srgb, var(--su-ink-primary) 12%, transparent);
+  border-radius: 999px;
+  overflow: hidden;
+  /* Calm hand-drawn wobble (same level as Switch's track). */
+  filter: url(#su-hand-c);
+}
+
+.su-progress--line .su-progress__fill {
+  display: block;
+  height: 100%;
+  width: var(--su-progress-value);
+  background-color: var(--su-progress-color);
+  border-radius: 999px;
+  /* Determinate fills smoothly animate to the new width. The bouncy
+   * easing matches the rest of the system without extending past 100%
+   * (max-width is 100% by definition). */
+  transition: width var(--su-duration-normal) var(--su-ease-bounce),
+    background-color var(--su-duration-fast) ease-out;
+}
+
+/* Per-size line heights. */
+.su-progress--line.su-progress--sm .su-progress__track { height: 6px; }
+.su-progress--line.su-progress--md .su-progress__track { height: 10px; }
+.su-progress--line.su-progress--lg .su-progress__track { height: 14px; }
+
+/* === Variant: line · indeterminate ========================= *
+ * A half-width fill slides left → right in a continuous loop.
+ * The hand-drawn wobble on the track stays; the fill is crisp so
+ * the motion doesn't smear. */
+
+.su-progress--line.su-progress--indeterminate .su-progress__fill {
+  width: 50%;
+  /* `width` is fixed during indeterminate — disable its transition so
+   * the slide animation drives motion exclusively via translateX. */
+  transition: none;
+  animation: su-progress-line-indeterminate 1.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes su-progress-line-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    /* The fill is 50% of the track wide, so translating to 200% of its
+     * own width lands its left edge at the right edge of the track. */
+    transform: translateX(200%);
+  }
+}
+
+/* === Variant: circle ======================================= */
+
+.su-progress--circle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* The size of the inline-flex box matches the svg, so the absolutely
+   * positioned center label has a stable reference. */
+  flex: 0 0 auto;
+}
+
+.su-progress--circle.su-progress--sm { width: 56px; height: 56px; }
+.su-progress--circle.su-progress--md { width: 80px; height: 80px; }
+.su-progress--circle.su-progress--lg { width: 112px; height: 112px; }
+
+.su-progress__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Crisp SVG — see header comment. */
+  filter: none;
+}
+
+.su-progress__circle-track {
+  stroke: color-mix(in srgb, var(--su-ink-primary) 12%, transparent);
+}
+
+.su-progress__circle-fill {
+  stroke: var(--su-progress-color);
+  transition:
+    stroke-dashoffset var(--su-duration-normal) var(--su-ease-bounce),
+    stroke var(--su-duration-fast) ease-out;
+}
+
+/* Center label inside the ring. Absolute-positioned, sized per preset. */
+.su-progress--circle .su-progress__label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--su-ink-primary);
+  font-weight: var(--su-font-weight-medium);
+}
+
+.su-progress--circle.su-progress--sm .su-progress__label {
+  font-size: var(--su-font-size-small);
+}
+.su-progress--circle.su-progress--md .su-progress__label {
+  font-size: var(--su-font-size-body);
+}
+.su-progress--circle.su-progress--lg .su-progress__label {
+  font-size: var(--su-font-size-h3);
+}
+
+/* === Variant: circle · indeterminate ======================= *
+ * The dasharray is a short fixed arc (set in JSX). Spinning the svg
+ * clockwise carries that arc around the perimeter. */
+
+.su-progress--circle.su-progress--indeterminate .su-progress__svg {
+  animation: su-progress-circle-spin 1.2s linear infinite;
+  transform-origin: center;
+  transform-box: view-box;
+}
+
+.su-progress--circle.su-progress--indeterminate .su-progress__circle-fill {
+  /* Disable the determinate easing transition so the spin reads as
+   * continuous motion rather than a sequence of value-change tweens. */
+  transition: none;
+}
+
+@keyframes su-progress-circle-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Reduced motion ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-progress--line .su-progress__fill,
+  .su-progress__circle-fill {
+    transition: none;
+  }
+  .su-progress--line.su-progress--indeterminate .su-progress__fill,
+  .su-progress--circle.su-progress--indeterminate .su-progress__svg {
+    animation: none;
+  }
+  /* Park the indeterminate line fill at the start so it stays visible
+   * (otherwise it would sit translated off-canvas). */
+  .su-progress--line.su-progress--indeterminate .su-progress__fill {
+    transform: translateX(0);
+  }
+}

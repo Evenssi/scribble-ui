@@ -89,6 +89,9 @@ export default function RootLayout({
               <Link href="/components/spinner" className="docs-nav-link">
                 Spinner
               </Link>
+              <Link href="/components/progress" className="docs-nav-link">
+                Progress
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

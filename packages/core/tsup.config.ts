@@ -74,6 +74,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Spinner/Spinner.css',
     to: 'dist/components/Spinner/Spinner.css',
   },
+  {
+    from: 'src/components/Progress/Progress.css',
+    to: 'dist/components/Progress/Progress.css',
+  },
 ];
 
 export default defineConfig({

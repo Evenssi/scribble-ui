@@ -156,10 +156,18 @@ export default function HomePage() {
             — ring, dots or hand-drawn pencil loader inheriting currentColor.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/progress">
+            Progress
+          </Link>
+          <span className="home-component-desc">
+            — line or circle progress with status colors, labels and indeterminate mode.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 9 · 17 components shipped · Tabs next.
+        Day 10 · 18 components shipped · Tabs next.
       </p>
     </article>
   );
