@@ -1,0 +1,174 @@
+/* scribble-ui · Textarea
+ *
+ * Multi-line sibling of Input. The visible border lives on
+ * `.su-textarea__wrapper` so the optional character counter can sit
+ * inside the same hand-drawn outline as the text. The native
+ * `<textarea>` itself is intentionally borderless and transparent.
+ *
+ * Class names are flat and prefixed with `su-textarea` so consumers
+ * don't need a CSS-Modules-aware bundler.
+ */
+
+.su-textarea {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--su-space-1);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  /* Sensible default so a bare <Textarea /> is usable in narrow flows. */
+  min-width: 240px;
+}
+
+.su-textarea__wrapper {
+  position: relative;
+  display: flex;
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-btn);
+  box-shadow: var(--su-shadow-xs);
+
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    border-color var(--su-duration-fast) ease-out,
+    filter var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+/* Focus: bump the wobble for a livelier sketch. */
+.su-textarea__wrapper:focus-within {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+  border-color: var(--su-color-brand-deep);
+}
+
+/* When in error, focus still bumps the wobble but keeps the danger color. */
+.su-textarea__wrapper--error,
+.su-textarea__wrapper--error:focus-within {
+  border-color: var(--su-color-danger);
+}
+
+/* === Sizes ================================================== */
+
+.su-textarea__wrapper--sm {
+  font-size: var(--su-font-size-small);
+  padding: 6px 10px;
+  min-height: 64px;
+}
+
+.su-textarea__wrapper--md {
+  font-size: var(--su-font-size-body);
+  padding: 10px 14px;
+  min-height: 96px;
+}
+
+.su-textarea__wrapper--lg {
+  font-size: var(--su-font-size-h3);
+  padding: 14px 18px;
+  min-height: 128px;
+}
+
+/* When the counter is visible we reserve room at the bottom so the
+ * caret never collides with it. */
+.su-textarea__wrapper--with-count {
+  padding-bottom: calc(var(--su-space-3) + var(--su-space-2));
+}
+
+/* === States ================================================= */
+
+.su-textarea__wrapper--disabled {
+  background: color-mix(in srgb, var(--su-bg-paper) 80%, var(--su-bg-grid));
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+  /* Drop the wobble entirely when disabled — match Button/Input's calm inert state. */
+  filter: none;
+}
+
+.su-textarea__wrapper--readonly {
+  background: color-mix(in srgb, var(--su-bg-paper) 92%, var(--su-bg-grid));
+}
+
+/* === Native control ========================================= */
+
+.su-textarea__control {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: var(--su-line-height-normal);
+  /* Native vertical resize handle is the default — distinguishes Textarea
+   * from Input. autoResize disables it (see below). */
+  resize: vertical;
+}
+
+.su-textarea__control::placeholder {
+  color: var(--su-ink-faint);
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.su-textarea__control:disabled {
+  cursor: not-allowed;
+  color: var(--su-ink-faint);
+  resize: none;
+}
+
+/* autoResize takes over height management; the user must not drag. */
+.su-textarea__wrapper--auto .su-textarea__control {
+  resize: none;
+  overflow-y: hidden;
+}
+
+/* === Counter ================================================ */
+
+.su-textarea__count {
+  position: absolute;
+  right: var(--su-space-2);
+  bottom: var(--su-space-1);
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-faint);
+  pointer-events: none;
+  user-select: none;
+  /* Keep the digits crisp — don't wobble the counter itself. */
+  filter: none;
+}
+
+.su-textarea__count--warning {
+  color: var(--su-color-warning);
+}
+
+.su-textarea__count--danger {
+  color: var(--su-color-danger);
+  font-weight: var(--su-font-weight-bold);
+}
+
+/* === Helper text ============================================ */
+
+.su-textarea__helper {
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  padding-left: var(--su-space-1);
+  /* Helper sits outside the hand-drawn frame. */
+  filter: none;
+}
+
+.su-textarea__helper--error {
+  color: var(--su-color-danger);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-textarea__wrapper {
+    transition: none;
+  }
+}

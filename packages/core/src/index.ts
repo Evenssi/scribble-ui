@@ -14,3 +14,4 @@ export * from './components/Modal';
 export * from './components/Tooltip';
 export * from './components/Select';
 export * from './components/Switch';
+export * from './components/Textarea';

@@ -100,6 +100,14 @@ export default function HomePage() {
             — accessible on/off toggle with bouncy thumb and three sizes.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/textarea">
+            Textarea
+          </Link>
+          <span className="home-component-desc">
+            — multi-line input with auto-resize, character count and helper text.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">

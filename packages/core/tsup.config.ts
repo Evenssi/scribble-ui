@@ -46,6 +46,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Switch/Switch.css',
     to: 'dist/components/Switch/Switch.css',
   },
+  {
+    from: 'src/components/Textarea/Textarea.css',
+    to: 'dist/components/Textarea/Textarea.css',
+  },
 ];
 
 export default defineConfig({
