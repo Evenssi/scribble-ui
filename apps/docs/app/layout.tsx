@@ -74,6 +74,9 @@ export default function RootLayout({
               <Link href="/components/divider" className="docs-nav-link">
                 Divider
               </Link>
+              <Link href="/components/toast" className="docs-nav-link">
+                Toast
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

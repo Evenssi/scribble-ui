@@ -1,0 +1,386 @@
+/* scribble-ui · Toast
+ *
+ * Two layers:
+ *  1. `.su-toast-region` — a fixed-positioned, flex column that lives
+ *     in the portalled `<Toaster />` tree. Six instances (one per
+ *     placement) are always present in the DOM; empty regions render
+ *     nothing and so collapse harmlessly.
+ *  2. `.su-toast` — the per-message card. Looks like a small sticky
+ *     note with a colored variant strip on the left edge.
+ *
+ * v1 simplification: leaving toasts unmount immediately (no exit
+ * animation). The enter animation still plays via `animation:` so
+ * the queue *feels* right; an opt-in exit pass can be layered on
+ * later without an API change.
+ */
+
+/* === Region (one per placement) ============================== */
+
+.su-toast-region {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-2);
+  /* Regions don't intercept clicks themselves — only the toasts do. */
+  pointer-events: none;
+  /* Cap width so long messages don't span the whole viewport. */
+  max-width: min(420px, calc(100vw - var(--su-space-4) * 2));
+}
+
+.su-toast-region > * {
+  pointer-events: auto;
+}
+
+.su-toast-region--top-left {
+  top: var(--su-space-4);
+  left: var(--su-space-4);
+  align-items: flex-start;
+}
+
+.su-toast-region--top-center {
+  top: var(--su-space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.su-toast-region--top-right {
+  top: var(--su-space-4);
+  right: var(--su-space-4);
+  align-items: flex-end;
+}
+
+.su-toast-region--bottom-left {
+  bottom: var(--su-space-4);
+  left: var(--su-space-4);
+  align-items: flex-start;
+  /* Newest toast sits closest to the viewport edge. */
+  flex-direction: column-reverse;
+}
+
+.su-toast-region--bottom-center {
+  bottom: var(--su-space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.su-toast-region--bottom-right {
+  bottom: var(--su-space-4);
+  right: var(--su-space-4);
+  align-items: flex-end;
+  flex-direction: column-reverse;
+}
+
+/* === Toast card ============================================== */
+
+.su-toast {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--su-space-2);
+
+  min-width: 280px;
+  max-width: 100%;
+  padding: var(--su-space-3);
+  /* Reserve space for the variant strip on the left edge. */
+  padding-left: calc(var(--su-space-3) + 6px);
+
+  font-family: var(--su-font-family-hand);
+  font-size: var(--su-font-size-body);
+  color: var(--su-ink-primary);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-md);
+
+  /* Hand-drawn wobble (Calm by default). */
+  filter: url(#su-hand-c);
+
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+}
+
+/* Variant strip — drawn as a 6px ribbon hugging the left edge. */
+.su-toast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: transparent;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+  /* Strip should follow the same wobble — no `filter: none` here. */
+}
+
+.su-toast--success::before {
+  background: var(--su-color-success);
+}
+
+.su-toast--warning::before {
+  background: var(--su-color-warning);
+}
+
+.su-toast--danger::before {
+  background: var(--su-color-danger);
+}
+
+.su-toast--info::before {
+  background: var(--su-color-info);
+}
+
+.su-toast--default::before {
+  background: var(--su-bg-grid);
+}
+
+/* Hover bumps the wobble, paired with a transform + shadow lift to
+ * follow the global "hover hand-drawn" rule (see Button).
+ *
+ * Note: there is no `:active` state — toasts aren't activatable
+ * targets. Their inner buttons handle their own interaction.
+ */
+.su-toast:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--su-shadow-lg);
+  filter: url(#su-hand-b);
+}
+
+/* === Slots =================================================== */
+
+.su-toast__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 1.1em;
+  line-height: 1;
+  color: var(--su-ink-primary);
+  /* Keep glyphs crisp inside the wobbling card. */
+  filter: none;
+}
+
+.su-toast--success .su-toast__icon {
+  color: var(--su-color-brand-deep);
+}
+
+.su-toast--danger .su-toast__icon {
+  color: var(--su-color-danger);
+}
+
+.su-toast--warning .su-toast__icon {
+  color: var(--su-color-warning);
+}
+
+.su-toast--info .su-toast__icon {
+  color: var(--su-color-info);
+}
+
+.su-toast__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-2);
+}
+
+.su-toast__message {
+  word-break: break-word;
+  line-height: var(--su-line-height-normal);
+}
+
+.su-toast__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--su-space-2);
+}
+
+/* Action + close are nested controls — they keep their own focus
+ * outlines and intentionally drop the wobble for crisp affordance. */
+.su-toast__action {
+  appearance: none;
+  border: var(--su-stroke-thin) dashed var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  background: transparent;
+  padding: var(--su-space-1) var(--su-space-2);
+  font: inherit;
+  font-weight: var(--su-font-weight-bold);
+  color: var(--su-ink-primary);
+  cursor: pointer;
+  filter: none;
+  transition: background var(--su-duration-fast) ease-out,
+    color var(--su-duration-fast) ease-out;
+}
+
+.su-toast__action:hover {
+  background: var(--su-bg-grid);
+}
+
+.su-toast__action:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+.su-toast__close {
+  flex: 0 0 auto;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin: -2px -2px 0 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--su-ink-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  filter: none;
+  transition: background var(--su-duration-fast) ease-out,
+    color var(--su-duration-fast) ease-out;
+}
+
+.su-toast__close:hover {
+  background: var(--su-bg-grid);
+  color: var(--su-ink-primary);
+}
+
+.su-toast__close:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+/* === Enter animations ======================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  .su-toast {
+    animation-duration: var(--su-duration-normal);
+    animation-timing-function: var(--su-ease-bounce);
+    animation-fill-mode: both;
+  }
+
+  .su-toast-region--top-right .su-toast,
+  .su-toast-region--bottom-right .su-toast {
+    animation-name: su-toast-enter-right;
+  }
+
+  .su-toast-region--top-left .su-toast,
+  .su-toast-region--bottom-left .su-toast {
+    animation-name: su-toast-enter-left;
+  }
+
+  .su-toast-region--top-center .su-toast {
+    animation-name: su-toast-enter-top;
+  }
+
+  .su-toast-region--bottom-center .su-toast {
+    animation-name: su-toast-enter-bottom;
+  }
+
+  @keyframes su-toast-enter-right {
+    from {
+      transform: translateX(120%) rotate(2deg);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  @keyframes su-toast-enter-left {
+    from {
+      transform: translateX(-120%) rotate(-2deg);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  @keyframes su-toast-enter-top {
+    from {
+      transform: translateY(-120%) rotate(-1deg);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  @keyframes su-toast-enter-bottom {
+    from {
+      transform: translateY(120%) rotate(1deg);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .su-toast {
+    animation: su-toast-fade-in var(--su-duration-fast) ease-out both;
+    transition: none;
+  }
+
+  .su-toast:hover {
+    transform: none;
+  }
+
+  @keyframes su-toast-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* === Responsive: phones get a full-width stack ================ */
+
+@media (max-width: 480px) {
+  .su-toast-region {
+    left: var(--su-space-2);
+    right: var(--su-space-2);
+    max-width: none;
+  }
+
+  .su-toast-region--top-center,
+  .su-toast-region--bottom-center {
+    transform: none;
+  }
+
+  .su-toast-region--top-left,
+  .su-toast-region--top-center,
+  .su-toast-region--top-right {
+    align-items: stretch;
+  }
+
+  .su-toast-region--bottom-left,
+  .su-toast-region--bottom-center,
+  .su-toast-region--bottom-right {
+    align-items: stretch;
+  }
+
+  .su-toast {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+}

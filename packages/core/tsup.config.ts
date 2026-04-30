@@ -54,6 +54,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Divider/Divider.css',
     to: 'dist/components/Divider/Divider.css',
   },
+  {
+    from: 'src/components/Toast/Toast.css',
+    to: 'dist/components/Toast/Toast.css',
+  },
 ];
 
 export default defineConfig({

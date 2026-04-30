@@ -16,3 +16,4 @@ export * from './components/Select';
 export * from './components/Switch';
 export * from './components/Textarea';
 export * from './components/Divider';
+export * from './components/Toast';

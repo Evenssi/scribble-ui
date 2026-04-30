@@ -116,6 +116,14 @@ export default function HomePage() {
             — horizontal/vertical separator with solid, dashed or hand-drawn wavy lines.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/toast">
+            Toast
+          </Link>
+          <span className="home-component-desc">
+            — imperative notifications with 6 placements, hover-pause and variants.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
