@@ -1,0 +1,214 @@
+/* scribble-ui · Select
+ *
+ * Trigger inherits the Input wrapper look (paper background, hand-drawn
+ * border, wobble filter) so a Select sits naturally next to inputs in a
+ * form. The listbox is portalled into <body> as a sticky-note panel.
+ *
+ * Class names are flat and prefixed with `su-select` so consumers don't
+ * need a CSS-Modules-aware bundler.
+ */
+
+.su-select {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--su-space-1);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  position: relative;
+}
+
+/* === Trigger ================================================ */
+
+.su-select__trigger {
+  /* Reset native button chrome so we can style it like an Input wrapper. */
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  width: 100%;
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-btn);
+  box-shadow: var(--su-shadow-xs);
+  color: var(--su-ink-primary);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    border-color var(--su-duration-fast) ease-out,
+    filter var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm). */
+  filter: url(#su-hand-c);
+}
+
+.su-select__trigger:hover:not(:disabled) {
+  filter: url(#su-hand-b);
+}
+
+.su-select__trigger:focus-visible,
+.su-select__trigger--open {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+  border-color: var(--su-color-brand-deep);
+  outline: none;
+}
+
+.su-select__trigger--error,
+.su-select__trigger--error:focus-visible {
+  border-color: var(--su-color-danger);
+}
+
+.su-select__trigger--disabled {
+  background: color-mix(in srgb, var(--su-bg-paper) 80%, var(--su-bg-grid));
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+  filter: none;
+}
+
+.su-select__trigger--placeholder .su-select__value {
+  color: var(--su-ink-faint);
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* === Sizes (match Input) ==================================== */
+
+.su-select__trigger--sm {
+  font-size: var(--su-font-size-small);
+  padding: 4px 10px;
+  min-height: 32px;
+}
+
+.su-select__trigger--md {
+  font-size: var(--su-font-size-body);
+  padding: 8px 14px;
+  min-height: 40px;
+}
+
+.su-select__trigger--lg {
+  font-size: var(--su-font-size-h3);
+  padding: 12px 18px;
+  min-height: 52px;
+}
+
+/* === Trigger inner parts ==================================== */
+
+.su-select__value {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Don't wobble the text on top of the wobbling border. */
+  filter: none;
+}
+
+.su-select__caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--su-ink-muted);
+  transition: transform var(--su-duration-fast) ease-out;
+  filter: none;
+}
+
+.su-select__trigger--open .su-select__caret {
+  transform: rotate(180deg);
+}
+
+/* === Helper text ============================================ */
+
+.su-select__helper {
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  padding-left: var(--su-space-1);
+  filter: none;
+}
+
+.su-select__helper--error {
+  color: var(--su-color-danger);
+}
+
+/* === Listbox (portalled) ==================================== */
+
+.su-select__listbox {
+  /* `position: absolute` + top/left/minWidth set inline by Select.tsx. */
+  z-index: 1100; /* sit above Modal (1000), like Tooltip */
+  margin: 0;
+  padding: var(--su-space-1) 0;
+  list-style: none;
+
+  max-height: 280px;
+  overflow-y: auto;
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-md);
+
+  /* Calm wobble; same family as the trigger. */
+  filter: url(#su-hand-c);
+
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+/* === Option ================================================= */
+
+.su-select__option {
+  padding: var(--su-space-2) var(--su-space-3);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-normal);
+
+  /* Don't wobble each row; the listbox already wobbles as a whole. */
+  filter: none;
+
+  display: flex;
+  align-items: center;
+  gap: var(--su-space-2);
+
+  transition: background var(--su-duration-fast) ease-out;
+}
+
+.su-select__option--active {
+  background: color-mix(in srgb, var(--su-color-brand) 16%, transparent);
+}
+
+.su-select__option--selected {
+  font-weight: 600;
+}
+
+.su-select__option--selected::before {
+  /* A small hand-drawn check mark to the left of the selected label. */
+  content: '✓';
+  color: var(--su-color-brand-deep);
+  margin-right: var(--su-space-1);
+  font-weight: 700;
+}
+
+.su-select__option--disabled {
+  color: var(--su-ink-faint);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.su-select__option--disabled.su-select__option--active {
+  background: transparent;
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .su-select__trigger,
+  .su-select__caret,
+  .su-select__option {
+    transition: none;
+  }
+}

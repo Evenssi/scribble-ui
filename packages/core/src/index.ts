@@ -12,3 +12,4 @@ export * from './components/Checkbox';
 export * from './components/Radio';
 export * from './components/Modal';
 export * from './components/Tooltip';
+export * from './components/Select';

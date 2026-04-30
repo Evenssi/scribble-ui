@@ -84,10 +84,18 @@ export default function HomePage() {
             — portalled bubble with hover + focus triggers, auto-flip and click toggle.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/select">
+            Select
+          </Link>
+          <span className="home-component-desc">
+            — portalled listbox dropdown with keyboard nav, typeahead and auto-flip.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 6 · 8 components shipped · Select next.
+        Day 7 · 9 components shipped · Toast next.
       </p>
     </article>
   );

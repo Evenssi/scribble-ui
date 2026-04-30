@@ -62,6 +62,9 @@ export default function RootLayout({
               <Link href="/components/tooltip" className="docs-nav-link">
                 Tooltip
               </Link>
+              <Link href="/components/select" className="docs-nav-link">
+                Select
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

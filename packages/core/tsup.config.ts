@@ -38,6 +38,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Tooltip/Tooltip.css',
     to: 'dist/components/Tooltip/Tooltip.css',
   },
+  {
+    from: 'src/components/Select/Select.css',
+    to: 'dist/components/Select/Select.css',
+  },
 ];
 
 export default defineConfig({
