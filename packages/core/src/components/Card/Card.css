@@ -1,0 +1,140 @@
+/* scribble-ui · Card
+ *
+ * A hand-drawn surface. Two visual modes (default / note) and an
+ * optional `interactive` surface that adopts the four-stage filter
+ * pattern from <Button />.
+ *
+ * Class names are flat and prefixed with `su-card` so consumers don't
+ * need a CSS-Modules-aware bundler.
+ */
+
+.su-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-2);
+
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-md);
+
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+/* === Variants ============================================== */
+
+.su-card--default {
+  background: var(--su-bg-paper);
+}
+
+.su-card--note {
+  /* Default tint when noteColor is not explicitly set. */
+  background: var(--su-note-yellow);
+}
+
+.su-card--note-yellow { background: var(--su-note-yellow); }
+.su-card--note-orange { background: var(--su-note-orange); }
+.su-card--note-pink   { background: var(--su-note-pink);   }
+.su-card--note-blue   { background: var(--su-note-blue);   }
+.su-card--note-mint   { background: var(--su-note-mint);   }
+.su-card--note-purple { background: var(--su-note-purple); }
+.su-card--note-green  { background: var(--su-note-green);  }
+
+/* === Sizes ================================================= */
+
+.su-card--sm {
+  padding: var(--su-space-3) var(--su-space-3);
+  font-size: var(--su-font-size-small);
+  min-width: 200px;
+  max-width: 280px;
+  box-shadow: var(--su-shadow-sm);
+}
+
+.su-card--md {
+  padding: var(--su-space-3) var(--su-space-4);
+  font-size: var(--su-font-size-body);
+  min-width: 280px;
+  max-width: 360px;
+  box-shadow: var(--su-shadow-md);
+}
+
+.su-card--lg {
+  padding: var(--su-space-4) var(--su-space-5);
+  font-size: var(--su-font-size-h3);
+  min-width: 340px;
+  max-width: 440px;
+  box-shadow: var(--su-shadow-lg);
+}
+
+/* === Slots ================================================= */
+
+.su-card__header {
+  font-weight: var(--su-font-weight-bold);
+  font-size: var(--su-font-size-h3);
+  /* Hand-drawn divider below the header. */
+  padding-bottom: var(--su-space-2);
+  border-bottom: var(--su-stroke-thin) dashed var(--su-ink-muted);
+}
+
+.su-card__footer {
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  padding-top: var(--su-space-2);
+  border-top: var(--su-stroke-thin) dashed var(--su-ink-muted);
+}
+
+.su-card__body {
+  flex: 1 1 auto;
+  line-height: var(--su-line-height-normal);
+}
+
+/* === Interactive (button-like) surface ===================== */
+
+.su-card--interactive {
+  cursor: pointer;
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+}
+
+.su-card--interactive:hover:not(.su-card--disabled) {
+  transform: translate(-1px, -1px) rotate(-0.4deg);
+  box-shadow: var(--su-shadow-lg);
+  filter: url(#su-hand-b);
+}
+
+.su-card--interactive:active:not(.su-card--disabled) {
+  transform: translate(2px, 2px) rotate(0.2deg);
+  box-shadow: var(--su-shadow-xs);
+  filter: url(#su-hand-a);
+}
+
+.su-card--interactive:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-card--disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  box-shadow: var(--su-shadow-sm);
+  /* Drop the wobble entirely when disabled — match Button's calm inert. */
+  filter: none;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-card--interactive,
+  .su-card--interactive:hover:not(.su-card--disabled),
+  .su-card--interactive:active:not(.su-card--disabled) {
+    transition: none;
+    transform: none;
+  }
+}
