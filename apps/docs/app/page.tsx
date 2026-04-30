@@ -164,10 +164,18 @@ export default function HomePage() {
             — line or circle progress with status colors, labels and indeterminate mode.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/popover">
+            Popover
+          </Link>
+          <span className="home-component-desc">
+            — interactive floating panel with title/footer, click-outside dismiss and auto-flip.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 10 · 18 components shipped · Tabs next.
+        Day 11 · 19 components shipped · Tabs next.
       </p>
     </article>
   );

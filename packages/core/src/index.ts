@@ -22,3 +22,4 @@ export * from './components/Badge';
 export * from './components/Skeleton';
 export * from './components/Spinner';
 export * from './components/Progress';
+export * from './components/Popover';

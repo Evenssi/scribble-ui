@@ -92,6 +92,9 @@ export default function RootLayout({
               <Link href="/components/progress" className="docs-nav-link">
                 Progress
               </Link>
+              <Link href="/components/popover" className="docs-nav-link">
+                Popover
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

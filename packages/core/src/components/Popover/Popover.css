@@ -1,0 +1,303 @@
+/* scribble-ui · Popover
+ *
+ * A floating, interactive panel portalled into document.body and
+ * positioned in absolute page coordinates by Popover.tsx. Unlike
+ * Tooltip, the surface is fully pointer/keyboard interactive — it is
+ * a real `role="dialog"` (non-modal).
+ *
+ * Class names are flat and prefixed with `su-popover` so consumers
+ * don't need a CSS-Modules-aware bundler.
+ */
+
+/* === Surface =============================================== */
+
+.su-popover {
+  /* `position: absolute` + top/left are set inline by Popover.tsx. */
+  z-index: 1100; /* sit above Modal (1000) so a popover on a modal control still wins */
+
+  min-width: 12rem;
+  max-width: min(20rem, calc(100vw - 32px));
+  font-family: inherit;
+  color: var(--su-ink-primary);
+
+  /* Popover IS interactive — never set pointer-events: none here. */
+}
+
+.su-popover:focus {
+  outline: none;
+}
+
+.su-popover__inner {
+  /* Establishes a stacking context so the half of the arrow that's
+   * tucked behind the surface actually gets covered by the paper fill. */
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  /* Stacked sticky-note shadow: the canonical hard offset shadow plus
+   * a softer second layer mixed from existing tokens, no new colors. */
+  box-shadow:
+    var(--su-shadow-md),
+    6px 6px 0 0 color-mix(in srgb, var(--su-ink-primary) 18%, transparent);
+
+  /* Hand-drawn wobble (Calm). Requires <HandDrawnFilters /> mounted.
+   * Popover is a static surface (not a button), so hover/active/disabled
+   * filter swaps deliberately do NOT apply to the panel itself. The
+   * close button (if any consumer adds one) is responsible for its own
+   * four-state filter swap. */
+  filter: url(#su-hand-c);
+
+  overflow: hidden;
+}
+
+/* === Header ================================================ */
+
+.su-popover__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--su-space-2);
+
+  padding: var(--su-space-3) var(--su-space-4);
+  border-bottom: var(--su-stroke-thin) dashed
+    color-mix(in srgb, var(--su-ink-primary) 30%, transparent);
+
+  background: var(--su-note-yellow);
+}
+
+.su-popover__title {
+  font-family: var(--su-font-family-hand);
+  font-weight: var(--su-font-weight-bold);
+  font-size: var(--su-font-size-h3);
+  line-height: var(--su-line-height-tight);
+  color: var(--su-ink-primary);
+}
+
+/* === Body ================================================== */
+
+.su-popover__body {
+  padding: var(--su-space-3) var(--su-space-4);
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-normal);
+  color: var(--su-ink-primary);
+}
+
+/* === Footer ================================================ */
+
+.su-popover__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--su-space-2);
+
+  padding: var(--su-space-2) var(--su-space-4) var(--su-space-3);
+  border-top: var(--su-stroke-thin) dashed
+    color-mix(in srgb, var(--su-ink-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--su-bg-paper) 92%, var(--su-bg-grid));
+}
+
+/* === Arrow ================================================= */
+/*
+ * Same "scribble seam" trick as Tooltip: an 8x8 square rotated near 45°
+ * pokes out a couple of pixels past the surface stroke. The slightly
+ * stronger filter at the seam (one notch up from the surface's filter)
+ * makes the joint read as hand-drawn rather than CAD-perfect.
+ */
+
+.su-popover__arrow {
+  position: absolute;
+  z-index: 0;
+  width: 10px;
+  height: 10px;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  filter: url(#su-hand-b);
+}
+
+/* When the title is present the surface's top edge is yellow; nudge
+ * the arrow color to match for top-anchored popovers (i.e. arrow at
+ * the bottom — that's a `--top` placement). For other placements the
+ * arrow either sits against the white body or the white footer, so
+ * the default paper background stays correct. We special-case only
+ * `--bottom` (arrow on top) where the seam touches the yellow header. */
+
+.su-popover--top .su-popover__arrow {
+  bottom: -6px;
+  left: calc(50% - 5px);
+  transform: rotate(43deg);
+}
+
+.su-popover--bottom .su-popover__arrow {
+  top: -6px;
+  left: calc(50% - 5px);
+  transform: rotate(47deg);
+}
+
+.su-popover--left .su-popover__arrow {
+  right: -6px;
+  top: calc(50% - 5px);
+  transform: rotate(46deg);
+}
+
+.su-popover--right .su-popover__arrow {
+  left: -6px;
+  top: calc(50% - 5px);
+  transform: rotate(44deg);
+}
+
+.su-popover--no-arrow .su-popover__arrow {
+  display: none;
+}
+
+/* === Wrapper for disabled triggers ========================= */
+
+.su-popover__wrapper {
+  display: inline-block;
+}
+
+.su-popover__wrapper:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+  border-radius: var(--su-radius-tag);
+}
+
+/* === Optional close button (consumers may render one inside
+ *     `title`/`content`; if they reuse this class they get the same
+ *     four-state filter swap as Button). =================== */
+
+.su-popover__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75em;
+  height: 1.75em;
+  padding: 0;
+  margin: 0;
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  border-radius: 50%;
+  background: var(--su-bg-paper);
+  color: var(--su-ink-primary);
+  cursor: pointer;
+  font: inherit;
+
+  filter: url(#su-hand-c);
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+}
+
+.su-popover__close:hover:not(:disabled) {
+  filter: url(#su-hand-b);
+  transform: rotate(-3deg);
+}
+
+.su-popover__close:active:not(:disabled) {
+  filter: url(#su-hand-a);
+  transform: rotate(2deg);
+}
+
+.su-popover__close:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-popover__close:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: none;
+}
+
+/* === Entrance animation ==================================== */
+/*
+ * Subtle 4-6px slide-in from the side opposite to where the popover
+ * sits, paired with an opacity fade. Wrapped in a no-preference media
+ * query so reduced-motion users see an instant snap with no transform.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .su-popover {
+    animation: su-popover-in var(--su-duration-normal) var(--su-ease-bounce);
+  }
+  .su-popover--top {
+    animation-name: su-popover-in-top;
+  }
+  .su-popover--bottom {
+    animation-name: su-popover-in-bottom;
+  }
+  .su-popover--left {
+    animation-name: su-popover-in-left;
+  }
+  .su-popover--right {
+    animation-name: su-popover-in-right;
+  }
+}
+
+@keyframes su-popover-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes su-popover-in-top {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes su-popover-in-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes su-popover-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes su-popover-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* === Reduced motion ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-popover,
+  .su-popover__inner,
+  .su-popover__arrow,
+  .su-popover__close {
+    transition: none;
+    animation: none;
+  }
+}

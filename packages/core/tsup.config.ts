@@ -78,6 +78,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Progress/Progress.css',
     to: 'dist/components/Progress/Progress.css',
   },
+  {
+    from: 'src/components/Popover/Popover.css',
+    to: 'dist/components/Popover/Popover.css',
+  },
 ];
 
 export default defineConfig({
