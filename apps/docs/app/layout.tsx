@@ -41,6 +41,9 @@ export default function RootLayout({
               <Link href="/components/button" className="docs-nav-link">
                 Button
               </Link>
+              <Link href="/components/input" className="docs-nav-link">
+                Input
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

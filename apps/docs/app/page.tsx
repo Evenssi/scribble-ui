@@ -28,10 +28,18 @@ export default function HomePage() {
             — wobbly, sticky-note styled call to action.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/input">
+            Input
+          </Link>
+          <span className="home-component-desc">
+            — text field with prefix/suffix slots, clearable, error states.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 1 scaffolding · more components landing soon.
+        Day 3 · Button + Input shipped · more components landing soon.
       </p>
     </article>
   );
