@@ -243,10 +243,77 @@ export default function SelectDocPage() {
         </div>
       </section>
 
+      {/* === Code ============================================ */}
+      <section className="doc-section">
+        <h2 className="doc-h2">Code</h2>
+        <pre className="doc-code">
+          <code>{`import { useState } from 'react';
+import { Select, Option } from 'scribble-ui';
+
+const FRUITS = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+];
+
+// 1. Array form (uncontrolled)
+<Select
+  options={FRUITS}
+  placeholder="Pick a fruit"
+  aria-label="Pick a fruit"
+/>
+
+// 2. JSX children — for icons / custom rendering
+<Select defaultValue="cat" aria-label="Pick a pet">
+  <Option value="cat">🐱 Cat</Option>
+  <Option value="dog">🐶 Dog</Option>
+  <Option value="dragon" disabled>🐉 Dragon</Option>
+</Select>
+
+// 3. Controlled
+function Controlled() {
+  const [value, setValue] = useState<string | undefined>('banana');
+  return (
+    <Select
+      options={FRUITS}
+      value={value}
+      onChange={setValue}
+      aria-label="Fruit"
+    />
+  );
+}
+
+// 4. Inside a <form> — pass \`name\` to render a hidden input
+<form onSubmit={(e) => {
+  e.preventDefault();
+  const data = new FormData(e.currentTarget);
+  console.log(data.get('flavor'));
+}}>
+  <Select
+    name="flavor"
+    options={[
+      { value: 'vanilla', label: 'Vanilla' },
+      { value: 'matcha',  label: 'Matcha'  },
+    ]}
+    defaultValue="matcha"
+  />
+  <button type="submit">Submit</button>
+</form>
+
+// 5. Validation
+<Select
+  options={FRUITS}
+  placeholder="Required"
+  error
+  helperText="Please pick a fruit before submitting."
+/>`}</code>
+        </pre>
+      </section>
+
       {/* === API table ====================================== */}
       <section className="doc-section">
         <h2 className="doc-h2">API</h2>
-        <table className="doc-api">
+        <table className="doc-table">
           <thead>
             <tr>
               <th>Prop</th>

@@ -37,6 +37,7 @@
   cursor: pointer;
 
   transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
     box-shadow var(--su-duration-fast) var(--su-ease-bounce),
     border-color var(--su-duration-fast) ease-out,
     filter var(--su-duration-fast) ease-out;
@@ -45,8 +46,15 @@
   filter: url(#su-hand-c);
 }
 
-.su-select__trigger:hover:not(:disabled) {
-  filter: url(#su-hand-b);
+/* Hover: lift the trigger like a clickable card — a small translate +
+ * a slight rotate + a heavier shadow, *without* bumping the wobble.
+ * Keeping the wobble at Calm here (instead of升档 to Medium) avoids the
+ * jarring "border suddenly gets noisier" feeling on plain hover; the
+ * extra wobble is reserved for the more committed focus/open state.
+ */
+.su-select__trigger:hover:not(:disabled):not(.su-select__trigger--open) {
+  transform: translate(-1px, -1px) rotate(-0.3deg);
+  box-shadow: var(--su-shadow-sm);
 }
 
 .su-select__trigger:focus-visible,
@@ -55,6 +63,8 @@
   box-shadow: var(--su-shadow-sm);
   border-color: var(--su-color-brand-deep);
   outline: none;
+  /* Reset the hover lift so focus/open sits flat under the listbox. */
+  transform: none;
 }
 
 .su-select__trigger--error,
@@ -210,5 +220,8 @@
   .su-select__caret,
   .su-select__option {
     transition: none;
+  }
+  .su-select__trigger:hover:not(:disabled):not(.su-select__trigger--open) {
+    transform: none;
   }
 }
