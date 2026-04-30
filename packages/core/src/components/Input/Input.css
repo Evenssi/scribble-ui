@@ -33,6 +33,25 @@
     box-shadow var(--su-duration-fast) var(--su-ease-bounce),
     border-color var(--su-duration-fast) ease-out,
     filter var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+/* Focus: bump the wobble for a livelier sketch. `focus-within` lets the
+ * upgrade fire whether the user lands on the native input or on the
+ * built-in clear button — both live inside the wrapper. */
+.su-input__wrapper:focus-within {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+  border-color: var(--su-color-brand-deep);
+}
+
+/* When in error, focus still bumps the wobble but keeps the danger color. */
+.su-input__wrapper--error,
+.su-input__wrapper--error:focus-within {
+  border-color: var(--su-color-danger);
 }
 
 /* === Sizes ================================================== */
@@ -57,16 +76,14 @@
 
 /* === States ================================================= */
 
-.su-input__wrapper--error {
-  border-color: var(--su-color-danger);
-}
-
 .su-input__wrapper--disabled {
   background: var(--su-status-success-bg); /* placeholder-tinted; visually inert */
   background: color-mix(in srgb, var(--su-bg-paper) 80%, var(--su-bg-grid));
   cursor: not-allowed;
   opacity: 0.7;
   box-shadow: none;
+  /* Drop the wobble entirely when disabled — match Button's calm inert state. */
+  filter: none;
 }
 
 .su-input__wrapper--readonly {
@@ -107,7 +124,7 @@
   flex: 0 0 auto;
   user-select: none;
   /* Render slot icons crisply by neutralising the wrapper's filter on
-   * its children. (No-op until filter lands in Commit 2.) */
+   * its children — keeps prefix/suffix glyphs from wobbling. */
   filter: none;
 }
 
