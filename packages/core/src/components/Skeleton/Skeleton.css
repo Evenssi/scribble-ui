@@ -1,0 +1,138 @@
+/* scribble-ui · Skeleton
+ *
+ * Loading placeholder. Intentionally calm: no hand-drawn wobble filter,
+ * no border, no shadow. A list of skeletons must read as a patient
+ * "content is on its way" surface, not as a dancing chorus line.
+ *
+ * Animations:
+ *   - pulse: opacity oscillates between 0.5 and 1 (default).
+ *   - wave:  a translucent highlight sweeps across the block.
+ *   - none:  static fill.
+ *
+ * `prefers-reduced-motion: reduce` collapses every variant to the
+ * static look.
+ */
+
+.su-skeleton {
+  display: block;
+  /* Low-saturation neutral — derived from ink-primary so it adapts to
+   * any future dark surface without inventing a new token. */
+  background-color: color-mix(
+    in srgb,
+    var(--su-ink-primary) 10%,
+    transparent
+  );
+  /* Required so the wave overlay can be position: absolute against us. */
+  position: relative;
+  overflow: hidden;
+  /* Killing user-select avoids the &nbsp; caret showing up on triple-click. */
+  user-select: none;
+  color: transparent;
+  /* Skeletons never wobble. Explicitly opt out so a parent rule can't
+   * inherit a filter onto us. */
+  filter: none;
+  /* Default fallback radius if a consumer's inline style doesn't win
+   * for some reason. */
+  border-radius: var(--su-radius-tag);
+}
+
+/* === Variants ============================================== */
+
+.su-skeleton--text {
+  display: block;
+  /* The width default for single-line text is "as wide as the parent". */
+  width: 100%;
+}
+
+.su-skeleton--rect {
+  display: block;
+}
+
+.su-skeleton--circle {
+  display: inline-block;
+  /* border-radius is forced inline by the component, but mirror it here
+   * so static markup demos look right too. */
+  border-radius: 50%;
+}
+
+/* === Multi-line text container ============================= */
+
+.su-skeleton-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-2);
+  width: 100%;
+}
+
+.su-skeleton--line {
+  /* Inside the group, each line is a block — width comes from inline style. */
+  display: block;
+}
+
+/* === Animation · pulse ===================================== */
+
+@keyframes su-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.su-skeleton--anim-pulse {
+  animation: su-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* === Animation · wave ====================================== */
+
+@keyframes su-skeleton-wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.su-skeleton--anim-wave::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--su-bg-paper) 40%, transparent) 50%,
+    transparent 100%
+  );
+  /* The sweep moves continuously even on slow GPUs because it's a
+   * translateX on a layer-promoted pseudo-element. */
+  animation: su-skeleton-wave 1.6s linear infinite;
+  pointer-events: none;
+}
+
+/* === Animation · none (explicit reset for safety) ========== */
+
+.su-skeleton--anim-none {
+  animation: none;
+}
+
+.su-skeleton--anim-none::after {
+  content: none;
+}
+
+/* === Reduced motion ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-skeleton--anim-pulse,
+  .su-skeleton--anim-wave {
+    animation: none;
+  }
+  .su-skeleton--anim-wave::after {
+    animation: none;
+    /* Hide the highlight bar entirely so it doesn't sit visible at the
+     * start of its cycle. */
+    display: none;
+  }
+}

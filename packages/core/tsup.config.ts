@@ -66,6 +66,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Badge/Badge.css',
     to: 'dist/components/Badge/Badge.css',
   },
+  {
+    from: 'src/components/Skeleton/Skeleton.css',
+    to: 'dist/components/Skeleton/Skeleton.css',
+  },
 ];
 
 export default defineConfig({

@@ -19,3 +19,4 @@ export * from './components/Divider';
 export * from './components/Toast';
 export * from './components/Avatar';
 export * from './components/Badge';
+export * from './components/Skeleton';

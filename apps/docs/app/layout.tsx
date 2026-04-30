@@ -83,6 +83,9 @@ export default function RootLayout({
               <Link href="/components/badge" className="docs-nav-link">
                 Badge
               </Link>
+              <Link href="/components/skeleton" className="docs-nav-link">
+                Skeleton
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>
