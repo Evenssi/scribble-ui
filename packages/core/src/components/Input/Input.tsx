@@ -112,26 +112,30 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     wantsClearable && !hasSuffix && currentValue.length > 0;
 
   const handleClear = useCallback(() => {
-    if (!isControlled) {
-      setInnerValue('');
-    }
-    // Synthesize a change event so controlled callers also see the reset.
     const node = innerRef.current;
-    if (node && onChange) {
-      // We mutate the value before dispatching so React's synthetic event
-      // sees the cleared state. This is the only way to reliably emit a
-      // synthetic ChangeEvent without an actual user keystroke.
+
+    // Use the native value setter so React's synthetic onChange fires with
+    // the cleared value — this works the same way for controlled and
+    // uncontrolled callers, which is the whole point of the bridge.
+    if (node) {
       const setter = Object.getOwnPropertyDescriptor(
         window.HTMLInputElement.prototype,
         'value'
       )?.set;
       setter?.call(node, '');
-      const evt = new Event('input', { bubbles: true });
-      node.dispatchEvent(evt);
+      node.dispatchEvent(new Event('input', { bubbles: true }));
     }
+
+    if (!isControlled) {
+      // Mirror in our local state so the next render keeps `currentValue`
+      // in sync (React's reconciliation alone won't do that for native-set
+      // values dispatched via dispatchEvent).
+      setInnerValue('');
+    }
+
     // Return focus so the user can keep typing after clearing.
     innerRef.current?.focus();
-  }, [isControlled, onChange]);
+  }, [isControlled]);
 
   return (
     <span className={cx('su-input', wrapperClassName)}>
