@@ -38,3 +38,7 @@ Thumbs.db
 
 # Misc
 *.local
+
+# Local-only AI/IDE workspace data (plans, brain, etc.) — DO NOT commit
+.workbuddy/
+.codebuddy/
