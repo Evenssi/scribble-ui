@@ -65,6 +65,9 @@ export default function RootLayout({
               <Link href="/components/select" className="docs-nav-link">
                 Select
               </Link>
+              <Link href="/components/switch" className="docs-nav-link">
+                Switch
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

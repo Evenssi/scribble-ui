@@ -1,0 +1,195 @@
+/* scribble-ui · Switch
+ *
+ * A hand-drawn toggle that wraps a native
+ * `<input type="checkbox" role="switch">`. The visible "track" lives on
+ * a dedicated wrapper so the four-stage filter, focus ring and error
+ * coloring are easy to attach. The native input stays in the DOM
+ * (visually hidden but focusable) so AT and form submission keep
+ * working.
+ */
+
+.su-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.su-switch--label-left {
+  flex-direction: row-reverse;
+}
+
+/* Hide the native input but keep it focusable + tappable via the label. */
+.su-switch__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+  opacity: 0;
+}
+
+/* === Track ================================================== */
+
+.su-switch__track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: 999px;
+  box-shadow: var(--su-shadow-xs);
+
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    background var(--su-duration-fast) ease-out,
+    border-color var(--su-duration-fast) ease-out,
+    filter var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default). */
+  filter: url(#su-hand-c);
+}
+
+/* === Thumb ================================================== */
+
+.su-switch__thumb {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: block;
+  background: var(--su-ink-primary);
+  border-radius: 50%;
+  transform: translate(2px, -50%);
+  /* Keep the thumb crisp even as the track wobbles. */
+  filter: none;
+  transition:
+    background var(--su-duration-fast) ease-out;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .su-switch__thumb {
+    transition:
+      transform var(--su-duration-normal) var(--su-ease-bounce),
+      background var(--su-duration-fast) ease-out;
+  }
+}
+
+/* === Sizes ================================================== */
+/* Track is 2:1, thumb height = track height - 6px.
+ * Thumb travel = trackWidth - thumbWidth - 4px (2px inset on each side). */
+
+.su-switch--sm .su-switch__track { width: 28px; height: 16px; }
+.su-switch--sm .su-switch__thumb { width: 10px; height: 10px; }
+.su-switch--sm.su-switch--checked .su-switch__thumb {
+  transform: translate(14px, -50%);
+}
+.su-switch--sm { font-size: var(--su-font-size-small); }
+
+.su-switch--md .su-switch__track { width: 36px; height: 20px; }
+.su-switch--md .su-switch__thumb { width: 14px; height: 14px; }
+.su-switch--md.su-switch--checked .su-switch__thumb {
+  transform: translate(18px, -50%);
+}
+.su-switch--md { font-size: var(--su-font-size-body); }
+
+.su-switch--lg .su-switch__track { width: 44px; height: 24px; }
+.su-switch--lg .su-switch__thumb { width: 18px; height: 18px; }
+.su-switch--lg.su-switch--checked .su-switch__thumb {
+  transform: translate(22px, -50%);
+}
+.su-switch--lg { font-size: var(--su-font-size-h3); }
+
+/* === Checked ================================================ */
+
+.su-switch--checked .su-switch__track {
+  background: var(--su-color-brand-soft);
+  border-color: var(--su-color-brand-deep);
+}
+
+.su-switch--checked .su-switch__thumb {
+  background: var(--su-color-brand-deep);
+}
+
+/* === Interaction ============================================ */
+
+.su-switch:hover:not(.su-switch--disabled) .su-switch__track {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+}
+
+.su-switch:active:not(.su-switch--disabled) .su-switch__track {
+  filter: url(#su-hand-a);
+  box-shadow: var(--su-shadow-xs);
+}
+
+/* Project the focus ring onto the track when the hidden input gets
+ * keyboard focus. */
+.su-switch:has(.su-switch__input:focus-visible) .su-switch__track {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+/* === Error ================================================== */
+
+.su-switch--error .su-switch__track,
+.su-switch--error.su-switch--checked .su-switch__track {
+  border-color: var(--su-color-danger);
+}
+
+.su-switch--error.su-switch--checked .su-switch__track {
+  background: var(--su-status-danger-bg);
+}
+
+.su-switch--error.su-switch--checked .su-switch__thumb {
+  background: var(--su-color-danger);
+}
+
+/* === Disabled =============================================== */
+
+.su-switch--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: var(--su-ink-faint);
+}
+
+.su-switch--disabled .su-switch__track {
+  filter: none;
+  box-shadow: none;
+}
+
+/* === Label & helper ========================================= */
+
+.su-switch__label {
+  line-height: var(--su-line-height-normal);
+}
+
+.su-switch__helper {
+  display: block;
+  font-family: var(--su-font-family-hand);
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  padding-left: var(--su-space-1);
+  margin-top: var(--su-space-1);
+  /* Helper sits outside the hand-drawn frame. */
+  filter: none;
+}
+
+.su-switch__helper--error {
+  color: var(--su-color-danger);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-switch__track,
+  .su-switch__thumb {
+    transition: none;
+  }
+}

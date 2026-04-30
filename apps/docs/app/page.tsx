@@ -92,6 +92,14 @@ export default function HomePage() {
             — portalled listbox dropdown with keyboard nav, typeahead and auto-flip.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/switch">
+            Switch
+          </Link>
+          <span className="home-component-desc">
+            — accessible on/off toggle with bouncy thumb and three sizes.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">

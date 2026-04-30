@@ -42,6 +42,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Select/Select.css',
     to: 'dist/components/Select/Select.css',
   },
+  {
+    from: 'src/components/Switch/Switch.css',
+    to: 'dist/components/Switch/Switch.css',
+  },
 ];
 
 export default defineConfig({

@@ -13,3 +13,4 @@ export * from './components/Radio';
 export * from './components/Modal';
 export * from './components/Tooltip';
 export * from './components/Select';
+export * from './components/Switch';
