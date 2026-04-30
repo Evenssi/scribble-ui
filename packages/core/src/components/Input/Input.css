@@ -1,0 +1,162 @@
+/* scribble-ui · Input
+ *
+ * The visible border lives on `.su-input__wrapper` so that prefix / suffix
+ * slots sit *inside* the same hand-drawn outline as the text. The native
+ * `<input>` itself is intentionally borderless and transparent.
+ *
+ * Class names are flat and prefixed with `su-input` so consumers don't
+ * need a CSS-Modules-aware bundler.
+ *
+ * Day 3 Commit 1: layout, sizes, slots, error/disabled state.
+ *                 Filter wiring lands in Commit 2.
+ */
+
+.su-input {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--su-space-1);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+.su-input__wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-btn);
+  box-shadow: var(--su-shadow-xs);
+
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    border-color var(--su-duration-fast) ease-out,
+    filter var(--su-duration-fast) ease-out;
+}
+
+/* === Sizes ================================================== */
+
+.su-input__wrapper--sm {
+  font-size: var(--su-font-size-small);
+  padding: 4px 10px;
+  min-height: 32px;
+}
+
+.su-input__wrapper--md {
+  font-size: var(--su-font-size-body);
+  padding: 8px 14px;
+  min-height: 40px;
+}
+
+.su-input__wrapper--lg {
+  font-size: var(--su-font-size-h3);
+  padding: 12px 18px;
+  min-height: 52px;
+}
+
+/* === States ================================================= */
+
+.su-input__wrapper--error {
+  border-color: var(--su-color-danger);
+}
+
+.su-input__wrapper--disabled {
+  background: var(--su-status-success-bg); /* placeholder-tinted; visually inert */
+  background: color-mix(in srgb, var(--su-bg-paper) 80%, var(--su-bg-grid));
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+}
+
+.su-input__wrapper--readonly {
+  background: color-mix(in srgb, var(--su-bg-paper) 92%, var(--su-bg-grid));
+}
+
+/* === Native control ========================================= */
+
+.su-input__control {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.su-input__control::placeholder {
+  color: var(--su-ink-faint);
+  /* Hand-drawn typeface tends to render placeholders heavy; ease them off. */
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.su-input__control:disabled {
+  cursor: not-allowed;
+  color: var(--su-ink-faint);
+}
+
+/* === Slots (prefix / suffix / clear) ======================== */
+
+.su-input__affix {
+  display: inline-flex;
+  align-items: center;
+  color: var(--su-ink-muted);
+  flex: 0 0 auto;
+  user-select: none;
+  /* Render slot icons crisply by neutralising the wrapper's filter on
+   * its children. (No-op until filter lands in Commit 2.) */
+  filter: none;
+}
+
+.su-input__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--su-ink-muted);
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: background var(--su-duration-fast) ease-out,
+    color var(--su-duration-fast) ease-out;
+  filter: none;
+}
+
+.su-input__clear:hover {
+  background: var(--su-bg-grid);
+  color: var(--su-ink-primary);
+}
+
+.su-input__clear:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+/* === Helper text ============================================ */
+
+.su-input__helper {
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  padding-left: var(--su-space-1);
+  /* Helper sits outside the hand-drawn frame. */
+  filter: none;
+}
+
+.su-input__helper--error {
+  color: var(--su-color-danger);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-input__wrapper {
+    transition: none;
+  }
+}
