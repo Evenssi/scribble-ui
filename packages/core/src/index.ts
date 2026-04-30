@@ -18,3 +18,4 @@ export * from './components/Textarea';
 export * from './components/Divider';
 export * from './components/Toast';
 export * from './components/Avatar';
+export * from './components/Badge';

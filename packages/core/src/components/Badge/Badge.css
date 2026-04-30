@@ -1,0 +1,133 @@
+/* scribble-ui · Badge
+ *
+ * A small hand-drawn count / dot / label. Two modes share the same
+ * `.su-badge` element:
+ *
+ *   - standalone: the badge renders inline.
+ *   - wrapper:    the badge is positioned absolutely onto a corner of
+ *                 `.su-badge-wrap__anchor`.
+ *
+ * Like Tag, badges keep the calm `#su-hand-c` wobble at rest — a row
+ * of badges should not visibly dance.
+ */
+
+/* === Wrapper (children + floating badge) =================== */
+
+.su-badge-wrap {
+  position: relative;
+  display: inline-flex;
+  /* The wrapper itself is purely a positioning context — keep it
+   * filter-free so the wrapped element renders crisply. */
+  filter: none;
+  vertical-align: middle;
+}
+
+.su-badge-wrap__anchor {
+  display: inline-flex;
+  /* Forward the size of the wrapped element directly so the badge
+   * has a stable corner to attach to. */
+}
+
+/* === Badge body ============================================ */
+
+.su-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--su-font-family-hand);
+  font-weight: var(--su-font-weight-bold);
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--su-ink-primary);
+  white-space: nowrap;
+
+  min-width: 18px;
+  padding: 0 6px;
+  height: 18px;
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  border-radius: 9999px;
+  box-shadow: var(--su-shadow-xs);
+
+  /* Hand-drawn wobble (Calm level) — matches Tag at rest. */
+  filter: url(#su-hand-c);
+
+  user-select: none;
+  pointer-events: none;
+}
+
+/* === Colors ================================================ */
+
+.su-badge--default { background: var(--su-bg-paper); }
+.su-badge--brand   { background: var(--su-color-brand-soft); }
+.su-badge--success { background: var(--su-status-success-bg); }
+.su-badge--danger  { background: var(--su-status-danger-bg); }
+.su-badge--warning {
+  background: color-mix(in srgb, var(--su-color-warning) 30%, var(--su-bg-paper));
+}
+.su-badge--info {
+  background: color-mix(in srgb, var(--su-color-info) 25%, var(--su-bg-paper));
+}
+
+/* === Dot variant =========================================== */
+
+.su-badge--dot {
+  /* 8x8 filled dot, no text. */
+  width: 10px;
+  min-width: 0;
+  height: 10px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 0;
+  line-height: 0;
+}
+
+/* === Floating placement (wrapper mode) ===================== */
+
+.su-badge--floating {
+  position: absolute;
+  /* Badges should overlap the anchor's outline — keep them above. */
+  z-index: 1;
+}
+
+.su-badge--placement-top-right {
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.su-badge--placement-top-left {
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.su-badge--placement-bottom-right {
+  bottom: 0;
+  right: 0;
+  transform: translate(50%, 50%);
+}
+
+.su-badge--placement-bottom-left {
+  bottom: 0;
+  left: 0;
+  transform: translate(-50%, 50%);
+}
+
+/* Focus ring — badges are non-interactive by default but if the host
+ * makes them focusable (tabIndex=0), still surface the dashed ring. */
+.su-badge:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+/* Respect users who prefer reduced motion. The badge's calm wobble is
+ * static, so the only motion-related concern is making sure the
+ * floating transforms are not animated by anyone overriding us. */
+@media (prefers-reduced-motion: reduce) {
+  .su-badge {
+    transition: none;
+  }
+}

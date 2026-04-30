@@ -62,6 +62,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Avatar/Avatar.css',
     to: 'dist/components/Avatar/Avatar.css',
   },
+  {
+    from: 'src/components/Badge/Badge.css',
+    to: 'dist/components/Badge/Badge.css',
+  },
 ];
 
 export default defineConfig({
