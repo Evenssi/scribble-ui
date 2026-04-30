@@ -1,0 +1,175 @@
+/* scribble-ui · Checkbox + CheckboxGroup
+ *
+ * The visible "box" lives on a dedicated wrapper so the four-stage
+ * filter and dashed focus ring are easy to attach. The native input is
+ * still in the DOM (kept visually hidden but focusable) so screen
+ * readers and form submission keep working.
+ */
+
+.su-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.su-checkbox__box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  /* Tiny asymmetric corners — keeps the hand-drawn vibe but reads
+   * unmistakably as a square so the box is never confused with a
+   * Radio circle. Do NOT use --su-radius-tag (8px) here: at 14–22px
+   * box sizes that radius would round the box into a near-pill. */
+  border-radius: 3px 2px 4px 2px;
+  box-shadow: var(--su-shadow-xs);
+  color: var(--su-color-brand-deep);
+
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out,
+    background var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default). */
+  filter: url(#su-hand-c);
+}
+
+/* Hide the native input but keep it focusable & tappable. */
+.su-checkbox__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.su-checkbox__input:disabled {
+  cursor: not-allowed;
+}
+
+/* === Sizes ================================================= */
+
+.su-checkbox--sm .su-checkbox__box { width: 14px; height: 14px; }
+.su-checkbox--sm                   { font-size: var(--su-font-size-small); }
+
+.su-checkbox--md .su-checkbox__box { width: 18px; height: 18px; }
+.su-checkbox--md                   { font-size: var(--su-font-size-body); }
+
+.su-checkbox--lg .su-checkbox__box { width: 22px; height: 22px; }
+.su-checkbox--lg                   { font-size: var(--su-font-size-h3); }
+
+/* === Mark ================================================== */
+
+.su-checkbox__mark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Keep the check mark crisp even as the box wobbles. */
+  filter: none;
+}
+
+.su-checkbox__mark-check,
+.su-checkbox__mark-mixed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--su-duration-fast) ease-out,
+    transform var(--su-duration-fast) var(--su-ease-bounce);
+}
+
+.su-checkbox--checked:not(.su-checkbox--indeterminate) .su-checkbox__mark-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.su-checkbox--indeterminate .su-checkbox__mark-mixed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.su-checkbox--checked:not(.su-checkbox--indeterminate) .su-checkbox__box {
+  background: var(--su-color-brand-soft);
+}
+
+/* === Interaction =========================================== */
+
+.su-checkbox:hover:not(.su-checkbox--disabled) .su-checkbox__box {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+}
+
+.su-checkbox:active:not(.su-checkbox--disabled) .su-checkbox__box {
+  filter: url(#su-hand-a);
+  box-shadow: var(--su-shadow-xs);
+}
+
+.su-checkbox__input:focus-visible + .su-checkbox__mark {
+  /* Project the focus ring onto the box. */
+}
+
+.su-checkbox:has(.su-checkbox__input:focus-visible) .su-checkbox__box {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-checkbox--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: var(--su-ink-faint);
+}
+
+.su-checkbox--disabled .su-checkbox__box {
+  filter: none;
+  box-shadow: none;
+}
+
+.su-checkbox__label {
+  line-height: var(--su-line-height-normal);
+}
+
+/* === Group ================================================= */
+
+.su-checkbox-group {
+  display: inline-flex;
+  gap: var(--su-space-3);
+}
+
+.su-checkbox-group--vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--su-space-2);
+}
+
+.su-checkbox-group--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--su-space-3);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-checkbox__box,
+  .su-checkbox__mark-check,
+  .su-checkbox__mark-mixed {
+    transition: none;
+  }
+}
