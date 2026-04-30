@@ -68,10 +68,18 @@ export default function HomePage() {
             — paired with RadioGroup for shared name, layout and exclusive selection.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/modal">
+            Modal
+          </Link>
+          <span className="home-component-desc">
+            — portalled dialog with focus trap, ESC + overlay close, and scroll lock.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 4 · 6 components shipped · Modal next.
+        Day 5 · 7 components shipped · Tooltip next.
       </p>
     </article>
   );

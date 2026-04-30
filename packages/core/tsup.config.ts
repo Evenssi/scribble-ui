@@ -30,6 +30,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Radio/Radio.css',
     to: 'dist/components/Radio/Radio.css',
   },
+  {
+    from: 'src/components/Modal/Modal.css',
+    to: 'dist/components/Modal/Modal.css',
+  },
 ];
 
 export default defineConfig({

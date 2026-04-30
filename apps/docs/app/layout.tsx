@@ -56,6 +56,9 @@ export default function RootLayout({
               <Link href="/components/radio" className="docs-nav-link">
                 Radio
               </Link>
+              <Link href="/components/modal" className="docs-nav-link">
+                Modal
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>
