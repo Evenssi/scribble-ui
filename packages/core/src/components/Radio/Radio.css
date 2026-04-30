@@ -1,0 +1,146 @@
+/* scribble-ui · Radio + RadioGroup
+ *
+ * Visually similar to Checkbox but with a circular box and a centered
+ * filled dot. The native input lives in the DOM (visually hidden but
+ * focusable) so keyboard arrow navigation among radios sharing a name
+ * works out of the box.
+ */
+
+.su-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.su-radio__box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: 50%;
+  box-shadow: var(--su-shadow-xs);
+
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out,
+    background var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default). */
+  filter: url(#su-hand-c);
+}
+
+/* Hide the native input but keep it focusable & tappable. */
+.su-radio__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.su-radio__input:disabled {
+  cursor: not-allowed;
+}
+
+/* === Sizes ================================================= */
+
+.su-radio--sm .su-radio__box { width: 14px; height: 14px; }
+.su-radio--sm                { font-size: var(--su-font-size-small); }
+
+.su-radio--md .su-radio__box { width: 18px; height: 18px; }
+.su-radio--md                { font-size: var(--su-font-size-body); }
+
+.su-radio--lg .su-radio__box { width: 22px; height: 22px; }
+.su-radio--lg                { font-size: var(--su-font-size-h3); }
+
+/* === Dot =================================================== */
+
+.su-radio__dot {
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: var(--su-color-brand-deep);
+  transform: scale(0);
+  transition: transform var(--su-duration-fast) var(--su-ease-bounce);
+  /* Keep the dot crisp even as the box wobbles. */
+  filter: none;
+  pointer-events: none;
+}
+
+.su-radio--checked .su-radio__dot {
+  transform: scale(1);
+}
+
+.su-radio--checked .su-radio__box {
+  background: var(--su-color-brand-soft);
+}
+
+/* === Interaction =========================================== */
+
+.su-radio:hover:not(.su-radio--disabled) .su-radio__box {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+}
+
+.su-radio:active:not(.su-radio--disabled) .su-radio__box {
+  filter: url(#su-hand-a);
+  box-shadow: var(--su-shadow-xs);
+}
+
+.su-radio:has(.su-radio__input:focus-visible) .su-radio__box {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-radio--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: var(--su-ink-faint);
+}
+
+.su-radio--disabled .su-radio__box {
+  filter: none;
+  box-shadow: none;
+}
+
+.su-radio__label {
+  line-height: var(--su-line-height-normal);
+}
+
+/* === Group ================================================= */
+
+.su-radio-group {
+  display: inline-flex;
+  gap: var(--su-space-3);
+}
+
+.su-radio-group--vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--su-space-2);
+}
+
+.su-radio-group--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--su-space-3);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-radio__box,
+  .su-radio__dot {
+    transition: none;
+  }
+}
