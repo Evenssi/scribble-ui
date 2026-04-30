@@ -82,6 +82,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Popover/Popover.css',
     to: 'dist/components/Popover/Popover.css',
   },
+  {
+    from: 'src/components/Drawer/Drawer.css',
+    to: 'dist/components/Drawer/Drawer.css',
+  },
 ];
 
 export default defineConfig({

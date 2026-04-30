@@ -172,10 +172,18 @@ export default function HomePage() {
             — interactive floating panel with title/footer, click-outside dismiss and auto-flip.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/drawer">
+            Drawer
+          </Link>
+          <span className="home-component-desc">
+            — side-anchored panel from any edge, with focus trap, scroll lock and slide-in.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 11 · 19 components shipped · Tabs next.
+        Day 12 · 20 components shipped · Tabs next.
       </p>
     </article>
   );

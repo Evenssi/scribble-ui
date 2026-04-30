@@ -95,6 +95,9 @@ export default function RootLayout({
               <Link href="/components/popover" className="docs-nav-link">
                 Popover
               </Link>
+              <Link href="/components/drawer" className="docs-nav-link">
+                Drawer
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

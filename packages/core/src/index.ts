@@ -23,3 +23,4 @@ export * from './components/Skeleton';
 export * from './components/Spinner';
 export * from './components/Progress';
 export * from './components/Popover';
+export * from './components/Drawer';
