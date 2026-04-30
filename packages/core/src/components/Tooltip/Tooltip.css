@@ -1,0 +1,130 @@
+/* scribble-ui · Tooltip
+ *
+ * A small floating bubble portalled into document.body. The bubble
+ * itself is positioned with absolute page coordinates by JS; this
+ * file handles the visual look (paper background, dashed border,
+ * hand-drawn wobble) and the placement-specific arrow.
+ *
+ * Class names are flat and prefixed with `su-tooltip` so consumers
+ * don't need a CSS-Modules-aware bundler.
+ */
+
+/* === Bubble ================================================ */
+
+.su-tooltip {
+  /* `position: absolute` + top/left are set inline by Tooltip.tsx. */
+  z-index: 1100; /* sit above Modal (1000) so a tooltip on a modal control still wins */
+
+  max-width: 280px;
+  font-family: var(--su-font-family-hand);
+  font-size: var(--su-font-size-small);
+  line-height: var(--su-line-height-normal);
+  color: var(--su-ink-primary);
+
+  /* Don't intercept hover/focus — the bubble must never be its own
+   * hover target, otherwise hover-triggered tooltips would never close. */
+  pointer-events: none;
+}
+
+.su-tooltip__inner {
+  position: relative;
+  padding: var(--su-space-2) var(--su-space-3);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-sm);
+
+  /* Hand-drawn wobble (Calm). Requires <HandDrawnFilters /> mounted. */
+  filter: url(#su-hand-c);
+}
+
+/* === Arrow ================================================= */
+/*
+ * The arrow is a 10x10 rotated square that pokes out of the bubble.
+ * The rotated diamond shows two of its sides (the edges that face
+ * the trigger) — those edges form the arrow tip. The other two
+ * edges are hidden behind the bubble body.
+ */
+
+.su-tooltip__arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  /* Calm wobble too — keeps the arrow from looking too perfect. */
+  filter: url(#su-hand-c);
+}
+
+/* Arrow placement — note: top means "bubble is on top of trigger",
+ * so the arrow sits at the *bottom* of the bubble, pointing down.
+ *
+ * The two `border-*-color: transparent` edges are the ones that face
+ * inward (into the bubble), so they're visually erased. The other
+ * two solid edges form the tip. */
+
+.su-tooltip--top .su-tooltip__arrow {
+  bottom: -6px;
+  left: calc(50% - 5px);
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(-3deg);
+}
+
+.su-tooltip--bottom .su-tooltip__arrow {
+  top: -6px;
+  left: calc(50% - 5px);
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  transform: rotate(-3deg);
+}
+
+.su-tooltip--left .su-tooltip__arrow {
+  right: -6px;
+  top: calc(50% - 5px);
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(-3deg);
+}
+
+.su-tooltip--right .su-tooltip__arrow {
+  left: -6px;
+  top: calc(50% - 5px);
+  border-right-color: transparent;
+  border-top-color: transparent;
+  transform: rotate(-3deg);
+}
+
+/* === Wrapper for disabled triggers ========================= */
+
+.su-tooltip__wrapper {
+  /* Behave like the wrapped element so layout doesn't shift, but
+   * still capture pointer + keyboard events for the tooltip. */
+  display: inline-block;
+  /* No focus ring on the wrapper itself — let the inner element
+   * keep its native focus styles. We only need the wrapper to be
+   * focusable when the inner element refuses focus, in which case
+   * the consumer should provide a visible focus style on it. */
+}
+
+.su-tooltip__wrapper:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 3px;
+  border-radius: var(--su-radius-tag);
+}
+
+/* === Reduced motion ========================================= */
+/*
+ * No animation here today, but if we ever add a fade-in we'll
+ * disable it with this block — keeping the hook in place so future
+ * additions don't forget the a11y guardrail.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .su-tooltip,
+  .su-tooltip__inner,
+  .su-tooltip__arrow {
+    transition: none;
+    animation: none;
+  }
+}

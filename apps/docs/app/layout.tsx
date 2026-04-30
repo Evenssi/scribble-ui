@@ -59,6 +59,9 @@ export default function RootLayout({
               <Link href="/components/modal" className="docs-nav-link">
                 Modal
               </Link>
+              <Link href="/components/tooltip" className="docs-nav-link">
+                Tooltip
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

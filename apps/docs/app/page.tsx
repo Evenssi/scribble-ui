@@ -76,10 +76,18 @@ export default function HomePage() {
             — portalled dialog with focus trap, ESC + overlay close, and scroll lock.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/tooltip">
+            Tooltip
+          </Link>
+          <span className="home-component-desc">
+            — portalled bubble with hover + focus triggers, auto-flip and click toggle.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 5 · 7 components shipped · Tooltip next.
+        Day 6 · 8 components shipped · Select next.
       </p>
     </article>
   );

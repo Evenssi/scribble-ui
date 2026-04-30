@@ -34,6 +34,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Modal/Modal.css',
     to: 'dist/components/Modal/Modal.css',
   },
+  {
+    from: 'src/components/Tooltip/Tooltip.css',
+    to: 'dist/components/Tooltip/Tooltip.css',
+  },
 ];
 
 export default defineConfig({
