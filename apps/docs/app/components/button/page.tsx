@@ -74,6 +74,33 @@ export default function ButtonDocPage() {
         </div>
       </section>
 
+      {/* === Status colors =================================== */}
+      <section className="doc-section">
+        <h2 className="doc-h2">Colors</h2>
+        <p className="doc-note">
+          Status variants reuse the same palette as Tag &amp; status surfaces,
+          so a destructive action looks unmistakably destructive without any
+          custom styling.
+        </p>
+        <div className="doc-demo">
+          <div className="doc-demo-row">
+            <Button variant="default">Default</Button>
+            <Button variant="primary">Primary</Button>
+            <Button variant="success">Success</Button>
+            <Button variant="warning">Warning</Button>
+            <Button variant="danger">Danger</Button>
+            <Button variant="info">Info</Button>
+          </div>
+          <div className="doc-demo-row">
+            <Button variant="success" icon={<PlusIcon />}>Approve</Button>
+            <Button variant="danger" icon={<PlusIcon />}>Delete</Button>
+            <Button variant="info" icon={<ArrowIcon />} iconPosition="right">
+              Learn more
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* === States ========================================== */}
       <section className="doc-section">
         <h2 className="doc-h2">States</h2>
@@ -167,9 +194,17 @@ export function Example() {
           <tbody>
             <tr>
               <td><code>variant</code></td>
-              <td><code>'default' | 'primary'</code></td>
+              <td>
+                <code>
+                  'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+                </code>
+              </td>
               <td><code>'default'</code></td>
-              <td>Visual variant. Primary uses the brand low-saturation green.</td>
+              <td>
+                Visual variant. <code>'primary'</code> uses the brand green;
+                the four status variants reuse the shared status palette so
+                the button reads semantically without extra styling.
+              </td>
             </tr>
             <tr>
               <td><code>size</code></td>

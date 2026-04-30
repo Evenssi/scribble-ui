@@ -45,6 +45,24 @@
   background: var(--su-color-brand);
 }
 
+/* Status colors — saturated tints work well on paper because of the
+ * thick ink-primary border + hard shadow. */
+.su-btn--success {
+  background: var(--su-color-success);
+}
+
+.su-btn--warning {
+  background: var(--su-color-warning);
+}
+
+.su-btn--danger {
+  background: var(--su-color-danger);
+}
+
+.su-btn--info {
+  background: var(--su-color-info);
+}
+
 /* === Sizes ================================================= */
 
 .su-btn--sm {

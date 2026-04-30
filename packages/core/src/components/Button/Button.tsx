@@ -7,7 +7,13 @@ import * as React from 'react';
 //   import 'scribble-ui/styles/tokens.css';
 //   import 'scribble-ui/styles/components.css';   // bundles all component CSS
 
-export type ButtonVariant = 'default' | 'primary';
+export type ButtonVariant =
+  | 'default'
+  | 'primary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonIconPosition = 'left' | 'right';
 
@@ -15,7 +21,10 @@ export interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   /**
    * Visual variant. Defaults to `'default'` (paper-white background).
-   * `'primary'` uses the brand low-saturation green.
+   * - `'primary'` uses the brand low-saturation green.
+   * - `'success' | 'warning' | 'danger' | 'info'` map to the matching
+   *   status palette so call-to-actions can match their semantic role
+   *   (e.g. a destructive "Delete" reads as `'danger'`).
    */
   variant?: ButtonVariant;
 
