@@ -98,6 +98,9 @@ export default function RootLayout({
               <Link href="/components/drawer" className="docs-nav-link">
                 Drawer
               </Link>
+              <Link href="/components/tabs" className="docs-nav-link">
+                Tabs
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

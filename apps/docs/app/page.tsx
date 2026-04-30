@@ -180,10 +180,19 @@ export default function HomePage() {
             — side-anchored panel from any edge, with focus trap, scroll lock and slide-in.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/tabs">
+            Tabs
+          </Link>
+          <span className="home-component-desc">
+            — accessible tabbed navigation with underline / card / pill variants
+            and roving-tabindex keyboard nav.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 12 · 20 components shipped · Tabs next.
+        Day 13 · 21 components shipped · Form next.
       </p>
     </article>
   );

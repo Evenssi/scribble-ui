@@ -1,0 +1,299 @@
+/* scribble-ui · Tabs
+ *
+ * The whole widget renders three layers of class hooks:
+ *
+ *   .su-tabs                       — outer container (variant + size + orientation modifiers)
+ *   .su-tabs__list                 — role=tablist row/column of triggers
+ *   .su-tabs__tab                  — single role=tab button (hand-drawn wobble lives here)
+ *   .su-tabs__panels / __panel     — content region(s)
+ *
+ * Class names are flat and prefixed with `su-tabs` so consumers don't
+ * need a CSS-Modules-aware bundler.
+ */
+
+/* === Outer container ======================================== */
+
+.su-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-3);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+/* Vertical orientation: list on the left, panels on the right. */
+.su-tabs--vertical {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--su-space-4);
+}
+
+/* === TabList (the row / column of triggers) ================= */
+
+.su-tabs__list {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--su-space-1);
+  /* Allow horizontal scroll when many tabs overflow on narrow screens. */
+  overflow-x: auto;
+  /* Hide the scrollbar visually; users can still swipe / shift-scroll. */
+  scrollbar-width: none;
+}
+
+.su-tabs__list::-webkit-scrollbar {
+  display: none;
+}
+
+.su-tabs--vertical .su-tabs__list {
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: visible;
+  /* Reasonable default min-width for the rail; consumers can override. */
+  min-width: 9rem;
+}
+
+/* === Tab (single trigger) =================================== */
+
+.su-tabs__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--su-space-2);
+
+  font-family: inherit;
+  font-weight: var(--su-font-weight-medium);
+  color: var(--su-ink-muted);
+
+  background: transparent;
+  border: none;
+  border-radius: var(--su-radius-tag);
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+.su-tabs__tab:hover:not(:disabled) {
+  color: var(--su-ink-primary);
+  filter: url(#su-hand-b);
+}
+
+.su-tabs__tab:active:not(:disabled) {
+  filter: url(#su-hand-a);
+}
+
+.su-tabs__tab:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-tabs__tab--active {
+  color: var(--su-ink-primary);
+  font-weight: var(--su-font-weight-bold);
+}
+
+.su-tabs__tab--disabled,
+.su-tabs__tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  /* Drop the wobble entirely when disabled — match Button's calm inert state. */
+  filter: none;
+}
+
+.su-tabs__tab-icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1em;
+  line-height: 1;
+  /* Keep slot icons crisp by neutralising the parent's wobble. */
+  filter: none;
+}
+
+.su-tabs__tab-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* === Sizes ================================================== */
+
+.su-tabs--size-sm .su-tabs__tab {
+  font-size: var(--su-font-size-small);
+  padding: var(--su-space-1) var(--su-space-2);
+  min-height: 28px;
+}
+
+.su-tabs--size-md .su-tabs__tab {
+  font-size: var(--su-font-size-body);
+  padding: var(--su-space-2) var(--su-space-3);
+  min-height: 36px;
+}
+
+.su-tabs--size-lg .su-tabs__tab {
+  font-size: var(--su-font-size-h3);
+  padding: var(--su-space-3) var(--su-space-4);
+  min-height: 44px;
+}
+
+/* === Variant · underline ==================================== */
+
+.su-tabs--underline .su-tabs__list {
+  /* Soft baseline rule the active marker rides on top of. */
+  border-bottom: var(--su-stroke-thin) solid
+    color-mix(in srgb, var(--su-ink-primary) 25%, transparent);
+  gap: var(--su-space-3);
+  /* Make room for the underline marker so it doesn't clip the baseline. */
+  padding-bottom: 2px;
+}
+
+.su-tabs--underline.su-tabs--vertical .su-tabs__list {
+  border-bottom: none;
+  border-right: var(--su-stroke-thin) solid
+    color-mix(in srgb, var(--su-ink-primary) 25%, transparent);
+  padding-bottom: 0;
+  padding-right: 2px;
+}
+
+.su-tabs--underline .su-tabs__tab--active::after {
+  content: '';
+  position: absolute;
+  left: var(--su-space-1);
+  right: var(--su-space-1);
+  bottom: -2px;
+  height: 2px;
+  background: var(--su-color-brand-deep);
+  border-radius: 2px;
+}
+
+.su-tabs--underline.su-tabs--vertical .su-tabs__tab--active::after {
+  left: auto;
+  right: -2px;
+  top: var(--su-space-1);
+  bottom: var(--su-space-1);
+  height: auto;
+  width: 2px;
+}
+
+/* === Variant · card (sticky-note tabs) ====================== */
+
+.su-tabs--card .su-tabs__list {
+  gap: var(--su-space-2);
+  /* Hide the implicit baseline so cards float on the canvas. */
+  border-bottom: none;
+  /* Pad to expose the offset shadow under the active card. */
+  padding-bottom: var(--su-space-1);
+}
+
+.su-tabs--card .su-tabs__tab {
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-thin) solid
+    color-mix(in srgb, var(--su-ink-primary) 50%, transparent);
+  border-radius: var(--su-radius-card);
+  color: var(--su-ink-muted);
+}
+
+.su-tabs--card .su-tabs__tab:hover:not(:disabled) {
+  border-color: var(--su-ink-primary);
+  background: color-mix(in srgb, var(--su-bg-paper) 90%, var(--su-note-yellow));
+}
+
+.su-tabs--card .su-tabs__tab--active {
+  background: var(--su-note-yellow);
+  border-color: var(--su-ink-primary);
+  border-width: var(--su-stroke-default);
+  color: var(--su-ink-primary);
+  box-shadow: var(--su-shadow-sm);
+}
+
+/* === Variant · pill (segmented capsules) ==================== */
+
+.su-tabs--pill .su-tabs__list {
+  gap: var(--su-space-1);
+  padding: var(--su-space-1);
+  background: color-mix(in srgb, var(--su-bg-paper) 80%, var(--su-bg-grid));
+  border: var(--su-stroke-thin) solid
+    color-mix(in srgb, var(--su-ink-primary) 25%, transparent);
+  border-radius: 999px;
+  /* Don't stretch full-width by default; let consumers wrap if they want. */
+  align-self: flex-start;
+}
+
+.su-tabs--pill.su-tabs--vertical .su-tabs__list {
+  border-radius: var(--su-radius-card);
+}
+
+.su-tabs--pill .su-tabs__tab {
+  border-radius: 999px;
+  color: var(--su-ink-muted);
+}
+
+.su-tabs--pill .su-tabs__tab:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--su-bg-paper) 60%, transparent);
+}
+
+.su-tabs--pill .su-tabs__tab--active {
+  background: var(--su-color-brand-deep);
+  color: var(--su-bg-paper);
+}
+
+.su-tabs--pill .su-tabs__tab--active:hover:not(:disabled) {
+  background: var(--su-color-brand-deep);
+  color: var(--su-bg-paper);
+}
+
+/* === Panels ================================================= */
+
+.su-tabs__panels {
+  display: block;
+  /* In vertical mode the parent flex layout already lays this out next to
+   * the list; we just need to grab the remaining space. */
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.su-tabs__panel {
+  outline: none;
+  /* Tiny breathing room so dashed focus ring doesn't kiss the content. */
+  padding: var(--su-space-1);
+}
+
+.su-tabs__panel:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+  border-radius: var(--su-radius-tag);
+}
+
+/* `hidden` already removes the panel from layout; this is a defensive
+ * belt-and-braces hook for consumer overrides that might forget. */
+.su-tabs__panel--hidden {
+  display: none;
+}
+
+/* === Motion ================================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .su-tabs__tab {
+    transition:
+      color var(--su-duration-fast) ease-out,
+      background var(--su-duration-fast) ease-out,
+      border-color var(--su-duration-fast) ease-out,
+      box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+      filter var(--su-duration-fast) ease-out;
+  }
+
+  .su-tabs--card .su-tabs__tab--active {
+    transform: translate(-1px, -1px) rotate(-0.4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .su-tabs__tab,
+  .su-tabs--card .su-tabs__tab--active {
+    transition: none;
+    transform: none;
+  }
+}

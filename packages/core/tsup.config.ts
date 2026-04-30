@@ -86,6 +86,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Drawer/Drawer.css',
     to: 'dist/components/Drawer/Drawer.css',
   },
+  {
+    from: 'src/components/Tabs/Tabs.css',
+    to: 'dist/components/Tabs/Tabs.css',
+  },
 ];
 
 export default defineConfig({
