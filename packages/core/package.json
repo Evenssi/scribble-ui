@@ -1,0 +1,54 @@
+{
+  "name": "scribble-ui",
+  "version": "0.0.0",
+  "description": "A hand-drawn React component library — sticky notes meet whiteboard sketches.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./styles/tokens.css": "./dist/styles/tokens.css",
+    "./styles/reset.css": "./dist/styles/reset.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.4.0"
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "ui",
+    "ui-library",
+    "hand-drawn",
+    "sketch",
+    "excalidraw-style",
+    "design-system"
+  ],
+  "license": "MIT"
+}

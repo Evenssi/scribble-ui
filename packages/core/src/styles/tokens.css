@@ -1,0 +1,103 @@
+/* scribble-ui · design tokens
+ * Single source of truth for colors, radii, shadows, typography and spacing.
+ * All variables are prefixed with --su- to avoid host-app collisions.
+ *
+ * Import once at your app entry:
+ *   import 'scribble-ui/styles/tokens.css';
+ */
+
+@import './reset.css';
+
+:root {
+  /* === Color · Neutrals ===================================== */
+  --su-bg-canvas: #fafaf7;          /* warm off-white background */
+  --su-bg-paper: #ffffff;           /* card / sticky note layer */
+  --su-bg-grid: #eae7dc;            /* grid paper line color */
+  --su-ink-primary: #1e1e1e;        /* main stroke / body text (never pure black) */
+  --su-ink-muted: #5f5f5f;          /* secondary text */
+  --su-ink-faint: #999999;          /* placeholder / disabled */
+
+  /* === Color · Brand ======================================== */
+  --su-color-brand: #81c784;        /* low-saturation green */
+  --su-color-brand-deep: #4caf50;   /* emphasized state */
+  --su-color-brand-soft: #c8e6c9;   /* tinted background */
+
+  /* === Color · Sticky-note palette ========================== */
+  --su-note-yellow: #fff9c4;
+  --su-note-orange: #ffe0b2;
+  --su-note-pink: #f8bbd0;
+  --su-note-blue: #bbdefb;
+  --su-note-mint: #b2dfdb;
+  --su-note-purple: #e1bee7;
+  --su-note-green: #a5d6a7;
+
+  /* === Color · Status (low-saturation) ====================== */
+  --su-color-success: #81c784;
+  --su-color-warning: #ffb74d;
+  --su-color-danger: #e57373;
+  --su-color-info: #64b5f6;
+
+  --su-status-success-bg: #e8f5e9;
+  --su-status-danger-bg: #ffebee;
+
+  /* === Border radius (asymmetric on every corner) =========== */
+  --su-radius-btn: 8px 10px 6px 12px;
+  --su-radius-card: 12px 14px 10px 16px;
+  --su-radius-panel: 20px 24px 18px 22px;
+  --su-radius-tag: 8px;
+
+  /* === Shadows (hard offset only — never blurred) =========== */
+  --su-shadow-xs: 1px 1px 0 0 var(--su-ink-primary);
+  --su-shadow-sm: 2px 2px 0 0 var(--su-ink-primary);
+  --su-shadow-md: 3px 3px 0 0 var(--su-ink-primary);
+  --su-shadow-lg: 5px 5px 0 0 var(--su-ink-primary);
+  --su-shadow-xl: 8px 8px 0 0 var(--su-ink-primary);
+
+  /* === Stroke widths ======================================== */
+  --su-stroke-thin: 1.5px;
+  --su-stroke-default: 2px;
+  --su-stroke-bold: 2.5px;
+
+  /* === Typography =========================================== */
+  --su-font-family-hand:
+    'Excalifont',
+    'Caveat',
+    'Comic Sans MS',
+    'Bradley Hand',
+    'Segoe Print',
+    'Chalkduster',
+    'Marker Felt',
+    'LXGW WenKai',
+    'PingFang SC',
+    'Microsoft YaHei',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  --su-font-size-h1: 36px;
+  --su-font-size-h2: 24px;
+  --su-font-size-h3: 20px;
+  --su-font-size-body: 16px;
+  --su-font-size-small: 14px;
+
+  --su-font-weight-regular: 400;
+  --su-font-weight-medium: 600;
+  --su-font-weight-bold: 700;
+
+  --su-line-height-tight: 1.2;
+  --su-line-height-normal: 1.4;
+  --su-line-height-loose: 1.6;
+
+  /* === Spacing (8-multiple, with 14px to keep things "off") = */
+  --su-space-1: 4px;
+  --su-space-2: 8px;
+  --su-space-3: 14px;
+  --su-space-4: 20px;
+  --su-space-5: 28px;
+  --su-space-6: 40px;
+
+  /* === Motion =============================================== */
+  --su-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --su-duration-fast: 150ms;
+  --su-duration-normal: 200ms;
+}
