@@ -1,0 +1,69 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.home-title {
+  font-size: 56px;
+  margin: 0;
+  line-height: var(--su-line-height-tight);
+}
+
+.home-slogan {
+  font-size: var(--su-font-size-h2);
+  color: var(--su-ink-muted);
+  margin: 0;
+}
+
+.home-lede {
+  font-size: var(--su-font-size-body);
+  margin: 16px 0 8px;
+  max-width: 640px;
+}
+
+.home-code {
+  background: var(--su-note-yellow);
+  padding: 1px 6px;
+  border-radius: var(--su-radius-tag);
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.95em;
+}
+
+.home-heading {
+  margin: 32px 0 8px;
+  font-size: var(--su-font-size-h2);
+  display: inline-block;
+  border-bottom: 2px dashed var(--su-ink-primary);
+  padding-bottom: 4px;
+}
+
+.home-component-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-component-link {
+  font-weight: var(--su-font-weight-bold);
+  text-decoration: none;
+  border-bottom: 2px solid var(--su-color-brand);
+}
+
+.home-component-link:hover {
+  background: var(--su-color-brand-soft);
+}
+
+.home-component-desc {
+  margin-left: 6px;
+  color: var(--su-ink-muted);
+}
+
+.home-status {
+  margin-top: 32px;
+  color: var(--su-ink-muted);
+  font-size: var(--su-font-size-small);
+}

@@ -13,7 +13,8 @@
       "require": "./dist/index.cjs"
     },
     "./styles/tokens.css": "./dist/styles/tokens.css",
-    "./styles/reset.css": "./dist/styles/reset.css"
+    "./styles/reset.css": "./dist/styles/reset.css",
+    "./styles/components.css": "./dist/styles/components.css"
   },
   "files": [
     "dist",

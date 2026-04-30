@@ -32,6 +32,7 @@ Then import the base styles once at your app entry:
 
 ```tsx
 import 'scribble-ui/styles/tokens.css';
+import 'scribble-ui/styles/components.css';
 ```
 
 ## Quick start

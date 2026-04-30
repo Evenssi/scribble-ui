@@ -20,6 +20,7 @@ yarn add scribble-ui
 
 ```tsx
 import 'scribble-ui/styles/tokens.css';
+import 'scribble-ui/styles/components.css';
 ```
 
 在根节点挂载一次 `<HandDrawnFilters />`，所有组件就能通过 SVG filter id 引用抖动效果：

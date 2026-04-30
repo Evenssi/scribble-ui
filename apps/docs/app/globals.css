@@ -1,0 +1,98 @@
+/* Docs site global styles — hand-drawn canvas with grid paper background. */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--su-bg-canvas);
+  color: var(--su-ink-primary);
+  font-family: var(--su-font-family-hand);
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-loose);
+}
+
+body {
+  background-color: var(--su-bg-canvas);
+  background-image:
+    linear-gradient(var(--su-bg-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--su-bg-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+/* === Shell layout ========================================== */
+
+.docs-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.docs-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  padding: 32px 20px;
+  border-right: 2px dashed var(--su-ink-primary);
+  background: var(--su-bg-paper);
+  overflow-y: auto;
+}
+
+.docs-brand {
+  display: block;
+  font-size: var(--su-font-size-h2);
+  font-weight: var(--su-font-weight-bold);
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+
+.docs-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.docs-nav-section {
+  margin: 16px 0 4px;
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.docs-nav-link {
+  padding: 6px 10px;
+  border-radius: var(--su-radius-tag);
+  text-decoration: none;
+  color: var(--su-ink-primary);
+  transition: background var(--su-duration-fast) ease;
+}
+
+.docs-nav-link:hover {
+  background: var(--su-note-yellow);
+}
+
+.docs-main {
+  padding: 48px 56px 80px;
+  max-width: 960px;
+}
+
+@media (max-width: 720px) {
+  .docs-shell {
+    grid-template-columns: 1fr;
+  }
+  .docs-sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 2px dashed var(--su-ink-primary);
+  }
+  .docs-main {
+    padding: 32px 20px 60px;
+  }
+}

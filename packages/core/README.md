@@ -20,6 +20,7 @@ Import the base styles **once** at your app entry:
 
 ```tsx
 import 'scribble-ui/styles/tokens.css';
+import 'scribble-ui/styles/components.css';
 ```
 
 Mount `<HandDrawnFilters />` once at the root so any component can reference the SVG filter ids:

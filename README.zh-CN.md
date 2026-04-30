@@ -32,6 +32,7 @@ yarn add scribble-ui
 
 ```tsx
 import 'scribble-ui/styles/tokens.css';
+import 'scribble-ui/styles/components.css';
 ```
 
 ## 快速上手

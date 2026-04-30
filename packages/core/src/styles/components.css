@@ -1,0 +1,13 @@
+/* scribble-ui · all component styles
+ *
+ * Aggregates all component-specific CSS so consumers can include
+ * everything in one shot:
+ *
+ *   import 'scribble-ui/styles/tokens.css';
+ *   import 'scribble-ui/styles/components.css';
+ *
+ * Tree-shaking individual component styles is intentionally not
+ * supported in Day 1 to keep the public API tiny.
+ */
+
+@import '../components/Button/Button.css';
