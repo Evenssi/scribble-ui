@@ -14,5 +14,10 @@
     "build:docs": "pnpm --filter docs build",
     "lint": "echo \"(lint not configured yet)\" && exit 0",
     "typecheck": "pnpm -r typecheck"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

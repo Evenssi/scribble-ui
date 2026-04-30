@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HandDrawnFilters } from 'scribble-ui';
 
-// Pull tokens + component styles from the workspace source. Next.js
-// SWC compiles `scribble-ui` thanks to `transpilePackages` in next.config.
-import 'scribble-ui/src/styles/tokens.css';
-import 'scribble-ui/src/styles/components.css';
+// Pull tokens + component styles from the published package entry.
+// `transpilePackages: ['scribble-ui']` lets Next.js SWC compile the
+// workspace JS source on the fly, while CSS is loaded from dist/.
+import 'scribble-ui/styles/tokens.css';
+import 'scribble-ui/styles/components.css';
 
 import './globals.css';
 
