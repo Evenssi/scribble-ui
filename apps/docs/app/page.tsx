@@ -36,10 +36,42 @@ export default function HomePage() {
             — text field with prefix/suffix slots, clearable, error states.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/card">
+            Card
+          </Link>
+          <span className="home-component-desc">
+            — paper or sticky-note surface with optional interactive mode.
+          </span>
+        </li>
+        <li>
+          <Link className="home-component-link" href="/components/tag">
+            Tag
+          </Link>
+          <span className="home-component-desc">
+            — small label with status & sticky-note colors, optional ✕ to remove.
+          </span>
+        </li>
+        <li>
+          <Link className="home-component-link" href="/components/checkbox">
+            Checkbox
+          </Link>
+          <span className="home-component-desc">
+            — controlled/uncontrolled, indeterminate, plus a CheckboxGroup helper.
+          </span>
+        </li>
+        <li>
+          <Link className="home-component-link" href="/components/radio">
+            Radio
+          </Link>
+          <span className="home-component-desc">
+            — paired with RadioGroup for shared name, layout and exclusive selection.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 3 · Button + Input shipped · more components landing soon.
+        Day 4 · 6 components shipped · Modal next.
       </p>
     </article>
   );
