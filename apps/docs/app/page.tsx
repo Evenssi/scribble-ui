@@ -124,10 +124,42 @@ export default function HomePage() {
             — imperative notifications with 6 placements, hover-pause and variants.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/avatar">
+            Avatar
+          </Link>
+          <span className="home-component-desc">
+            — circle/square sticky-note avatar with image fallback and auto initials.
+          </span>
+        </li>
+        <li>
+          <Link className="home-component-link" href="/components/badge">
+            Badge
+          </Link>
+          <span className="home-component-desc">
+            — standalone or wrapper badge with count, dot, max overflow and 4 placements.
+          </span>
+        </li>
+        <li>
+          <Link className="home-component-link" href="/components/skeleton">
+            Skeleton
+          </Link>
+          <span className="home-component-desc">
+            — text/rect/circle loading placeholder with pulse or wave animation.
+          </span>
+        </li>
+        <li>
+          <Link className="home-component-link" href="/components/spinner">
+            Spinner
+          </Link>
+          <span className="home-component-desc">
+            — ring, dots or hand-drawn pencil loader inheriting currentColor.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 8 · 13 components shipped · Tabs next.
+        Day 9 · 17 components shipped · Tabs next.
       </p>
     </article>
   );
