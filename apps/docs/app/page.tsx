@@ -127,7 +127,7 @@ export default function HomePage() {
       </ul>
 
       <p className="home-status">
-        Day 7 · 9 components shipped · Toast next.
+        Day 8 · 13 components shipped · Tabs next.
       </p>
     </article>
   );
