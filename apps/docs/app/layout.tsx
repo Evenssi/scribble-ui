@@ -77,6 +77,9 @@ export default function RootLayout({
               <Link href="/components/toast" className="docs-nav-link">
                 Toast
               </Link>
+              <Link href="/components/avatar" className="docs-nav-link">
+                Avatar
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

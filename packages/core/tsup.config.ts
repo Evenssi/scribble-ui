@@ -58,6 +58,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Toast/Toast.css',
     to: 'dist/components/Toast/Toast.css',
   },
+  {
+    from: 'src/components/Avatar/Avatar.css',
+    to: 'dist/components/Avatar/Avatar.css',
+  },
 ];
 
 export default defineConfig({
