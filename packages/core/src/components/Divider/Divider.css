@@ -1,0 +1,224 @@
+/* scribble-ui · Divider
+ *
+ * A hand-drawn horizontal or vertical separator. Three variants:
+ *   - solid / dashed: CSS border-style + the shared SVG-filter wobble,
+ *     so even a straight line reads as sketched.
+ *   - wavy: a repeating SVG background image (CSS `border-style: wavy`
+ *     does not exist outside of `text-decoration`).
+ *
+ * Class names are flat and prefixed with `su-divider` so consumers
+ * don't need a CSS-Modules-aware bundler.
+ *
+ * Token-rule exception: the SVG data URI used for the wavy variant
+ * hard-codes the ink color (`#1e1e1e`) because `url("data:…")` cannot
+ * resolve `var(--su-ink-primary)`. Keep this in sync with the token
+ * value in tokens.css if it ever changes.
+ *
+ * Divider is non-interactive — there is no hover / active / focus /
+ * disabled state, so only the default wobble level is applied.
+ */
+
+.su-divider {
+  /* Token-driven defaults; individual orientations override what they
+   * actually need (width / height / display). */
+  border: 0 solid var(--su-ink-primary);
+  color: var(--su-ink-primary);
+  /* Hand-drawn wobble (Calm level).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+/* === Orientation: horizontal (pure line) ====================== */
+
+.su-divider--horizontal:not(.su-divider--with-label) {
+  display: block;
+  width: 100%;
+  height: 0;
+  border-top-style: solid;
+  margin: var(--su-space-3) 0;
+}
+
+.su-divider--horizontal.su-divider--solid:not(.su-divider--with-label) {
+  border-top-style: solid;
+}
+
+.su-divider--horizontal.su-divider--dashed:not(.su-divider--with-label) {
+  border-top-style: dashed;
+}
+
+/* === Orientation: vertical (pure line) ======================== */
+
+.su-divider--vertical {
+  display: inline-block;
+  width: 0;
+  /* Sensible fallback height when the parent doesn't stretch us. */
+  height: 1em;
+  /* In a flex row, stretch to the row's cross-axis size. */
+  align-self: stretch;
+  border-left-style: solid;
+  margin: 0 var(--su-space-3);
+  vertical-align: middle;
+}
+
+.su-divider--vertical.su-divider--solid {
+  border-left-style: solid;
+}
+
+.su-divider--vertical.su-divider--dashed {
+  border-left-style: dashed;
+}
+
+/* === Thickness ================================================ */
+
+.su-divider--horizontal.su-divider--thin:not(.su-divider--with-label) {
+  border-top-width: var(--su-stroke-thin);
+}
+.su-divider--horizontal.su-divider--default:not(.su-divider--with-label) {
+  border-top-width: var(--su-stroke-default);
+}
+.su-divider--horizontal.su-divider--bold:not(.su-divider--with-label) {
+  border-top-width: var(--su-stroke-bold);
+}
+
+.su-divider--vertical.su-divider--thin {
+  border-left-width: var(--su-stroke-thin);
+}
+.su-divider--vertical.su-divider--default {
+  border-left-width: var(--su-stroke-default);
+}
+.su-divider--vertical.su-divider--bold {
+  border-left-width: var(--su-stroke-bold);
+}
+
+/* === Wavy variant =============================================
+ * SVG data URIs cannot resolve CSS variables, so the stroke color
+ * is the literal value of --su-ink-primary (#1e1e1e). The viewBox
+ * and stroke-width are tuned per thickness preset.
+ */
+
+.su-divider--wavy:not(.su-divider--with-label) {
+  border: none;
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+.su-divider--horizontal.su-divider--wavy:not(.su-divider--with-label) {
+  display: block;
+  width: 100%;
+  height: 6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 6' width='20' height='6'><path d='M0 3 Q 5 0 10 3 T 20 3' fill='none' stroke='%231e1e1e' stroke-width='1.5' stroke-linecap='round'/></svg>");
+}
+
+.su-divider--horizontal.su-divider--wavy.su-divider--thin:not(.su-divider--with-label) {
+  height: 5px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 6' width='20' height='6'><path d='M0 3 Q 5 0 10 3 T 20 3' fill='none' stroke='%231e1e1e' stroke-width='1' stroke-linecap='round'/></svg>");
+}
+
+.su-divider--horizontal.su-divider--wavy.su-divider--bold:not(.su-divider--with-label) {
+  height: 8px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 6' width='20' height='6'><path d='M0 3 Q 5 0 10 3 T 20 3' fill='none' stroke='%231e1e1e' stroke-width='2.25' stroke-linecap='round'/></svg>");
+}
+
+.su-divider--vertical.su-divider--wavy {
+  border: none;
+  width: 6px;
+  background-repeat: repeat-y;
+  background-position: center;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 20' width='6' height='20'><path d='M3 0 Q 0 5 3 10 T 3 20' fill='none' stroke='%231e1e1e' stroke-width='1.5' stroke-linecap='round'/></svg>");
+}
+
+.su-divider--vertical.su-divider--wavy.su-divider--thin {
+  width: 5px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 20' width='6' height='20'><path d='M3 0 Q 0 5 3 10 T 3 20' fill='none' stroke='%231e1e1e' stroke-width='1' stroke-linecap='round'/></svg>");
+}
+
+.su-divider--vertical.su-divider--wavy.su-divider--bold {
+  width: 8px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 20' width='6' height='20'><path d='M3 0 Q 0 5 3 10 T 3 20' fill='none' stroke='%231e1e1e' stroke-width='2.25' stroke-linecap='round'/></svg>");
+}
+
+/* === With label =============================================== */
+
+.su-divider--with-label {
+  display: flex;
+  align-items: center;
+  gap: var(--su-space-3);
+  width: 100%;
+  margin: var(--su-space-3) 0;
+  /* The wrapper is just layout — the wobble lives on the line segments
+   * so the label text stays crisp. */
+  filter: none;
+}
+
+.su-divider__line {
+  display: block;
+  height: 0;
+  border-top: var(--su-stroke-default) solid var(--su-ink-primary);
+  filter: url(#su-hand-c);
+}
+
+/* Per-variant line style for the labelled form. */
+.su-divider--with-label.su-divider--solid .su-divider__line {
+  border-top-style: solid;
+}
+.su-divider--with-label.su-divider--dashed .su-divider__line {
+  border-top-style: dashed;
+}
+.su-divider--with-label.su-divider--wavy .su-divider__line {
+  border: none;
+  height: 6px;
+  background-repeat: repeat-x;
+  background-position: center;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 6' width='20' height='6'><path d='M0 3 Q 5 0 10 3 T 20 3' fill='none' stroke='%231e1e1e' stroke-width='1.5' stroke-linecap='round'/></svg>");
+}
+
+/* Per-thickness in the labelled form. */
+.su-divider--with-label.su-divider--thin .su-divider__line {
+  border-top-width: var(--su-stroke-thin);
+}
+.su-divider--with-label.su-divider--default .su-divider__line {
+  border-top-width: var(--su-stroke-default);
+}
+.su-divider--with-label.su-divider--bold .su-divider__line {
+  border-top-width: var(--su-stroke-bold);
+}
+
+.su-divider--with-label.su-divider--wavy.su-divider--thin .su-divider__line {
+  height: 5px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 6' width='20' height='6'><path d='M0 3 Q 5 0 10 3 T 20 3' fill='none' stroke='%231e1e1e' stroke-width='1' stroke-linecap='round'/></svg>");
+}
+
+.su-divider--with-label.su-divider--wavy.su-divider--bold .su-divider__line {
+  height: 8px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 6' width='20' height='6'><path d='M0 3 Q 5 0 10 3 T 20 3' fill='none' stroke='%231e1e1e' stroke-width='2.25' stroke-linecap='round'/></svg>");
+}
+
+.su-divider__label {
+  flex: 0 0 auto;
+  font-family: var(--su-font-family-hand);
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  white-space: nowrap;
+  /* Label text never wobbles — only the lines on either side do. */
+  filter: none;
+}
+
+/* === Label alignment ========================================== */
+
+.su-divider--label-center .su-divider__line {
+  flex: 1 1 0;
+}
+
+.su-divider--label-start .su-divider__line:first-child {
+  flex: 0 0 var(--su-space-4);
+}
+.su-divider--label-start .su-divider__line:last-child {
+  flex: 1 1 0;
+}
+
+.su-divider--label-end .su-divider__line:first-child {
+  flex: 1 1 0;
+}
+.su-divider--label-end .su-divider__line:last-child {
+  flex: 0 0 var(--su-space-4);
+}

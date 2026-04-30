@@ -50,6 +50,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Textarea/Textarea.css',
     to: 'dist/components/Textarea/Textarea.css',
   },
+  {
+    from: 'src/components/Divider/Divider.css',
+    to: 'dist/components/Divider/Divider.css',
+  },
 ];
 
 export default defineConfig({

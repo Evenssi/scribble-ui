@@ -71,6 +71,9 @@ export default function RootLayout({
               <Link href="/components/textarea" className="docs-nav-link">
                 Textarea
               </Link>
+              <Link href="/components/divider" className="docs-nav-link">
+                Divider
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

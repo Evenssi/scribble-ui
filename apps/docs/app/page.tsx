@@ -108,6 +108,14 @@ export default function HomePage() {
             — multi-line input with auto-resize, character count and helper text.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/divider">
+            Divider
+          </Link>
+          <span className="home-component-desc">
+            — horizontal/vertical separator with solid, dashed or hand-drawn wavy lines.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
