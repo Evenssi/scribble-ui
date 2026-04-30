@@ -70,6 +70,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Skeleton/Skeleton.css',
     to: 'dist/components/Skeleton/Skeleton.css',
   },
+  {
+    from: 'src/components/Spinner/Spinner.css',
+    to: 'dist/components/Spinner/Spinner.css',
+  },
 ];
 
 export default defineConfig({

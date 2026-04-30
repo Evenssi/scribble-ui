@@ -1,0 +1,158 @@
+/* scribble-ui · Spinner
+ *
+ * A pure-CSS animated loading indicator in three flavors.
+ *
+ * Per the subagent rules, this component does NOT layer the
+ * `url(#su-hand-c)` wobble filter on top of its motion — stacking a
+ * jittering filter onto a continuously rotating SVG produces a borderline
+ * seizure-class shimmer. Animation-only components are explicitly exempt
+ * from the wobble.
+ *
+ * Color flows through `currentColor`, so callers theme by setting `color`
+ * on the spinner itself or on any ancestor.
+ */
+
+.su-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  color: currentColor;
+  font-family: var(--su-font-family-hand);
+  line-height: var(--su-line-height-tight);
+  vertical-align: middle;
+}
+
+.su-spinner__visual {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Defensive: if a parent forgot to neutralise its hand-drawn filter
+   * the spinner itself still renders crisp. */
+  filter: none;
+}
+
+/* All inline SVGs render as block to avoid extra inline baseline
+ * whitespace and to make `transform-origin: center` resolve against
+ * the SVG's own geometry rather than the surrounding inline box. */
+.su-spinner__ring,
+.su-spinner__dots,
+.su-spinner__pencil {
+  display: block;
+}
+
+.su-spinner__label {
+  font-size: var(--su-font-size-small);
+  color: inherit;
+}
+
+/* Visually-hidden label for screen readers (classic "sr-only" pattern). */
+.su-spinner__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* === Variant: ring ==========================================
+ *
+ * The animation is applied to the inner <circle> rather than the
+ * <svg> root. Rotating the root SVG sometimes resolves
+ * `transform-origin: center` against the inline box instead of the
+ * SVG geometry (a long-standing WebKit/Blink quirk), which can make
+ * the arc appear to wobble or stand still depending on layout.
+ * Animating the circle with an explicit pixel origin (12px 12px in
+ * the 24×24 viewBox) is rock-solid across browsers. */
+
+.su-spinner__ring circle {
+  transform-origin: 12px 12px;
+  animation: su-spinner-rotate 1s linear infinite;
+}
+
+@keyframes su-spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Variant: dots ========================================== */
+
+.su-spinner__dot {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: su-spinner-dot 1.2s ease-in-out infinite both;
+}
+
+.su-spinner__dot--1 {
+  animation-delay: -0.32s;
+}
+
+.su-spinner__dot--2 {
+  animation-delay: -0.16s;
+}
+
+.su-spinner__dot--3 {
+  animation-delay: 0s;
+}
+
+@keyframes su-spinner-dot {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.4);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* === Variant: pencil ======================================== */
+
+.su-spinner__pencil path {
+  /* `pathLength="40"` on the SVG normalises the dash math regardless of
+   * the rendered px size. The animation draws the line in, then erases
+   * it, then loops. */
+  animation: su-spinner-pencil 1.4s ease-in-out infinite;
+}
+
+@keyframes su-spinner-pencil {
+  0% {
+    stroke-dashoffset: 40;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -40;
+  }
+}
+
+/* === Reduced motion ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Freeze every variant in a "still legible" pose so users who opted
+   * out of motion still see the indicator instead of nothing. */
+  .su-spinner__ring circle,
+  .su-spinner__dot,
+  .su-spinner__pencil path {
+    animation: none;
+  }
+
+  .su-spinner__dot {
+    /* Hold all three dots at full opacity / scale so the indicator is
+     * unambiguously present. */
+    transform: none;
+    opacity: 1;
+  }
+
+  .su-spinner__pencil path {
+    /* Show the full scribble. */
+    stroke-dashoffset: 0;
+  }
+}

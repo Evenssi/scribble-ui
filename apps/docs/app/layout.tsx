@@ -86,6 +86,9 @@ export default function RootLayout({
               <Link href="/components/skeleton" className="docs-nav-link">
                 Skeleton
               </Link>
+              <Link href="/components/spinner" className="docs-nav-link">
+                Spinner
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>
