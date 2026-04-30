@@ -1,0 +1,99 @@
+/* scribble-ui · Button
+ *
+ * Day 1 placeholder: renders with token-based base styles only.
+ * Day 2 will wire in the hand-drawn SVG filter; the hook is reserved
+ * below as a commented declaration.
+ *
+ * Class names are intentionally prefixed with `su-btn` to avoid
+ * collisions with host application styles (this package does not
+ * use CSS Modules so consumers don't need a Module-aware bundler).
+ */
+
+.su-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--su-space-2);
+
+  font-family: var(--su-font-family-hand);
+  font-weight: var(--su-font-weight-bold);
+  color: var(--su-ink-primary);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-bold) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-btn);
+  box-shadow: var(--su-shadow-md);
+
+  cursor: pointer;
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce);
+
+  /* Day 2: enable hand-drawn wobble.
+   * Uncomment after <HandDrawnFilters /> is mounted at the app root. */
+  /* filter: url(#su-hand-c); */
+}
+
+/* === Variants ============================================== */
+
+.su-btn--default {
+  background: var(--su-bg-paper);
+}
+
+.su-btn--primary {
+  background: var(--su-color-brand);
+}
+
+/* === Sizes ================================================= */
+
+.su-btn--sm {
+  font-size: var(--su-font-size-small);
+  padding: 6px 14px;
+  min-height: 32px;
+}
+
+.su-btn--md {
+  font-size: var(--su-font-size-h3);
+  padding: 10px 22px;
+  min-height: 44px;
+}
+
+.su-btn--lg {
+  font-size: var(--su-font-size-h2);
+  padding: 14px 28px;
+  min-height: 56px;
+}
+
+/* === Interaction =========================================== */
+
+.su-btn:hover:not(:disabled) {
+  transform: translate(-1px, -1px) rotate(-0.5deg);
+  box-shadow: var(--su-shadow-lg);
+}
+
+.su-btn:active:not(:disabled) {
+  transform: translate(2px, 2px) rotate(0.3deg);
+  box-shadow: var(--su-shadow-xs);
+}
+
+.su-btn:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  box-shadow: var(--su-shadow-sm);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-btn,
+  .su-btn:hover:not(:disabled),
+  .su-btn:active:not(:disabled) {
+    transition: none;
+    transform: none;
+  }
+}
