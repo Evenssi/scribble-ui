@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup';
-import { copyFileSync, mkdirSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 
 const cssFiles: Array<{ from: string; to: string }> = [
@@ -9,6 +9,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
   {
     from: 'src/components/Button/Button.css',
     to: 'dist/components/Button/Button.css',
+  },
+  {
+    from: 'src/components/Input/Input.css',
+    to: 'dist/components/Input/Input.css',
   },
 ];
 
@@ -20,6 +24,12 @@ export default defineConfig({
   outExtension({ format }) {
     return { js: format === 'esm' ? '.mjs' : '.cjs' };
   },
+  // Mark the bundle as a client module so RSC consumers (Next.js App
+  // Router) don't try to render any of our hook-using components on
+  // the server. Same trick used by Radix UI / shadcn.
+  // We write the directive in onSuccess instead of `banner`, because
+  // tsup's banner gets reordered around `'use strict'` and ends up
+  // mid-file, where it stops being a valid React directive.
   dts: true,
   sourcemap: true,
   clean: true,
@@ -38,5 +48,15 @@ export default defineConfig({
       copyFileSync(from, to);
     }
     console.log(`✅ copied ${cssFiles.length} CSS files to dist/`);
+
+    // Prepend the `"use client"` directive to every JS bundle so the
+    // package can be consumed from React Server Components.
+    for (const file of ['dist/index.mjs', 'dist/index.cjs']) {
+      const body = readFileSync(file, 'utf8');
+      if (!body.startsWith('"use client"')) {
+        writeFileSync(file, `"use client";\n${body}`);
+      }
+    }
+    console.log('✅ prepended "use client" directive');
   },
 });
