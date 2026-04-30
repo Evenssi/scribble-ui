@@ -27,11 +27,12 @@
   cursor: pointer;
   transition:
     transform var(--su-duration-fast) var(--su-ease-bounce),
-    box-shadow var(--su-duration-fast) var(--su-ease-bounce);
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
 
-  /* Day 2: enable hand-drawn wobble.
-   * Uncomment after <HandDrawnFilters /> is mounted at the app root. */
-  /* filter: url(#su-hand-c); */
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
 }
 
 /* === Variants ============================================== */
@@ -69,11 +70,14 @@
 .su-btn:hover:not(:disabled) {
   transform: translate(-1px, -1px) rotate(-0.5deg);
   box-shadow: var(--su-shadow-lg);
+  /* Hover bumps the wobble level for a more energetic sketch. */
+  filter: url(#su-hand-b);
 }
 
 .su-btn:active:not(:disabled) {
   transform: translate(2px, 2px) rotate(0.3deg);
   box-shadow: var(--su-shadow-xs);
+  filter: url(#su-hand-a);
 }
 
 .su-btn:focus-visible {
@@ -86,6 +90,9 @@
   opacity: 0.55;
   transform: none;
   box-shadow: var(--su-shadow-sm);
+  /* Drop the wobble entirely when disabled to make the inert state
+   * unmistakably calm and to save one repaint per frame. */
+  filter: none;
 }
 
 /* Respect users who prefer reduced motion */
