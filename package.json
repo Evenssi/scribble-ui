@@ -1,0 +1,18 @@
+{
+  "name": "scribble-ui-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo root for scribble-ui — a hand-drawn React component library.",
+  "packageManager": "pnpm@10.23.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter docs dev",
+    "build": "pnpm -r build",
+    "build:core": "pnpm --filter scribble-ui build",
+    "build:docs": "pnpm --filter docs build",
+    "lint": "echo \"(lint not configured yet)\" && exit 0",
+    "typecheck": "pnpm -r typecheck"
+  }
+}
