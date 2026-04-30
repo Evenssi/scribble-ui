@@ -65,6 +65,49 @@
   min-height: 56px;
 }
 
+/* === Block / Loading layout ================================ */
+
+.su-btn--block {
+  display: flex;
+  width: 100%;
+}
+
+.su-btn--loading {
+  cursor: progress;
+}
+
+/* === Slots (icon, label, spinner) ========================== */
+
+.su-btn__icon,
+.su-btn__label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.su-btn__icon {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.su-btn__spinner {
+  animation: su-btn-spin 900ms linear infinite;
+  /* Counter-spin the parent's hand-drawn filter so the stroke arc
+   * remains crisp while rotating. */
+  filter: none;
+}
+
+@keyframes su-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .su-btn__spinner {
+    animation: none;
+  }
+}
+
 /* === Interaction =========================================== */
 
 .su-btn:hover:not(:disabled) {
