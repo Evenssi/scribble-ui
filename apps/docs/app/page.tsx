@@ -198,10 +198,26 @@ export default function HomePage() {
             drag and keyboard nav.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/empty">
+            Empty
+          </Link>
+          <span className="home-component-desc">
+            — hand-drawn placeholder for blank lists, search misses and first-run states.
+          </span>
+        </li>
+        <li>
+          <Link className="home-component-link" href="/components/result">
+            Result
+          </Link>
+          <span className="home-component-desc">
+            — full-page feedback surface for success, failure and HTTP error routes.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 14 · 22 components shipped · Form next.
+        Day 15 · 24 components shipped · Form next.
       </p>
     </article>
   );

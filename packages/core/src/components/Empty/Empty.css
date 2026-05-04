@@ -1,0 +1,176 @@
+/* scribble-ui · Empty
+ *
+ * Placeholder shown when a list, search, or data region has nothing
+ * to render. Visually it's a stacked column of illustration + title
+ * + optional description + optional action slot. When `bordered` is
+ * true the whole stack sits on a sticky-note style enclosure.
+ *
+ * Empty is not an interactive element, so it has no hover/active/
+ * disabled filter transitions — just a calm, static hand-drawn wobble.
+ *
+ * Class names are flat and prefixed with `su-empty` so consumers don't
+ * need a CSS-Modules-aware bundler.
+ */
+
+.su-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--su-space-2);
+
+  color: var(--su-ink-primary);
+  text-align: center;
+
+  /* Let Empty size-scale with typography: children use em units. */
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-normal);
+}
+
+/* === Sizes ================================================= */
+/* Sizes affect both the illustration bounding box and the text
+ * scale. Inner elements derive their size from `font-size` via
+ * em units, so bumping the root size cascades cleanly. */
+
+.su-empty--size-sm {
+  font-size: var(--su-font-size-small);
+  gap: var(--su-space-1);
+  padding: var(--su-space-3);
+}
+
+.su-empty--size-md {
+  font-size: var(--su-font-size-body);
+  gap: var(--su-space-2);
+  padding: var(--su-space-4);
+}
+
+.su-empty--size-lg {
+  font-size: var(--su-font-size-h3);
+  gap: var(--su-space-3);
+  padding: var(--su-space-5);
+}
+
+/* === Bordered (sticky-note enclosure) ====================== */
+
+.su-empty--bordered {
+  background: var(--su-note-yellow);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-md);
+  /* A tiny tilt reinforces the sticky-note feel. */
+  transform: rotate(-0.5deg);
+  /* The enclosure itself wobbles; children opt out via `filter: none`
+   * where needed so strokes stay crisp. */
+  filter: url(#su-hand-c);
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+}
+
+/* === Illustration slot ===================================== */
+
+.su-empty__image {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--su-ink-primary);
+  /* Give the hand-drawn SVGs their own wobble so lines look hand-inked
+   * even when the outer container is plain (non-bordered). */
+  filter: url(#su-hand-c);
+}
+
+/* The inner <svg> scales with a height driven by the size modifier.
+ * Using em keeps it proportional to the root font-size of the Empty. */
+.su-empty__svg {
+  display: block;
+  width: auto;
+  max-width: 100%;
+}
+
+.su-empty--size-sm .su-empty__svg {
+  height: 4em;       /* ~56px at 14px base */
+}
+.su-empty--size-md .su-empty__svg {
+  height: 6em;       /* ~96px at 16px base */
+}
+.su-empty--size-lg .su-empty__svg {
+  height: 7.2em;     /* ~144px at 20px base */
+}
+
+/* When the caller passes a custom `image`, constrain it to the same
+ * bounding box so layouts stay predictable. */
+.su-empty__image > :not(.su-empty__svg) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.su-empty--size-sm .su-empty__image > :not(.su-empty__svg) {
+  max-height: 4em;
+  font-size: 2.5em;
+}
+.su-empty--size-md .su-empty__image > :not(.su-empty__svg) {
+  max-height: 6em;
+  font-size: 3.5em;
+}
+.su-empty--size-lg .su-empty__image > :not(.su-empty__svg) {
+  max-height: 7.2em;
+  font-size: 4.5em;
+}
+
+/* === Title / description =================================== */
+
+.su-empty__title {
+  font-family: var(--su-font-family-hand);
+  font-weight: var(--su-font-weight-bold);
+  color: var(--su-ink-primary);
+  margin-top: var(--su-space-1);
+  /* Neutralise any inherited filter so the text stays razor-sharp. */
+  filter: none;
+}
+
+.su-empty--size-sm .su-empty__title {
+  font-size: 1em;             /* ~14px */
+}
+.su-empty--size-md .su-empty__title {
+  font-size: 1.125em;         /* ~18px */
+}
+.su-empty--size-lg .su-empty__title {
+  font-size: 1.375em;         /* ~27.5px */
+}
+
+.su-empty__description {
+  color: var(--su-ink-muted);
+  font-size: 0.95em;
+  max-width: 34em;
+  margin: 0 auto;
+  filter: none;
+}
+
+/* === Action slot =========================================== */
+
+.su-empty__action {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--su-space-2);
+  margin-top: var(--su-space-2);
+  filter: none;
+}
+
+/* === Extra slot (consumer-provided children) =============== */
+
+.su-empty__extra {
+  margin-top: var(--su-space-2);
+  color: var(--su-ink-muted);
+  font-size: 0.9em;
+  filter: none;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-empty--bordered {
+    transition: none;
+    transform: none;
+  }
+}

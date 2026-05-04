@@ -1,0 +1,153 @@
+/* Shared `.doc-*` page styles — copied verbatim from the Button doc
+ * so the Empty demos inherit the same typography, demo frame and
+ * API-table look. */
+
+.doc {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.doc-title {
+  font-size: 48px;
+  margin: 0;
+  line-height: var(--su-line-height-tight);
+}
+
+.doc-lede {
+  font-size: var(--su-font-size-body);
+  color: var(--su-ink-muted);
+  margin: 0;
+  max-width: 640px;
+}
+
+.doc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.doc-h2 {
+  font-size: var(--su-font-size-h2);
+  margin: 16px 0 4px;
+  display: inline-block;
+  border-bottom: 2px dashed var(--su-ink-primary);
+  padding-bottom: 4px;
+}
+
+.doc-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-md);
+}
+
+.doc-demo--column {
+  align-items: stretch;
+}
+
+.doc-demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.doc-code {
+  margin: 0;
+  padding: 16px 20px;
+  background: #f5f3ec;
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-sm);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--su-ink-primary);
+}
+
+.doc-code code {
+  font-family: inherit;
+  white-space: pre;
+}
+
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-sm);
+  overflow: hidden;
+}
+
+.doc-table th,
+.doc-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1.5px dashed var(--su-bg-grid);
+  font-size: var(--su-font-size-small);
+  vertical-align: top;
+}
+
+.doc-table th {
+  background: var(--su-note-yellow);
+  font-weight: var(--su-font-weight-bold);
+}
+
+.doc-table tr:last-child td {
+  border-bottom: none;
+}
+
+.doc-table code {
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.95em;
+  background: #f5f3ec;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.doc-note {
+  margin: 8px 0 0;
+  color: var(--su-ink-muted);
+  font-size: var(--su-font-size-small);
+}
+
+/* === Empty-specific demo layout ================================ */
+/* Empty renders full-width by default; give it some breathing room
+ * inside the demo frame and make multi-empty rows wrap nicely. */
+
+.doc-empty-stage {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.doc-empty-row {
+  gap: 32px;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.doc-empty-row > * {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.doc-empty-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: var(--su-font-size-body);
+}
+
+.doc-empty-list ul {
+  margin: 0;
+  padding-left: 1.2em;
+}

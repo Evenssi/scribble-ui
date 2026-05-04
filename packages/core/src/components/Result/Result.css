@@ -1,0 +1,187 @@
+/* scribble-ui · Result
+ *
+ * A full-page feedback surface: big hand-drawn status glyph + title +
+ * sub-title + optional action row + optional sticky-note content slot.
+ *
+ * The accent color is injected per-status via a component-scoped
+ * custom property (`--su-result-accent`) so the glyph, the hand-drawn
+ * digits and any status-aware children can all read the same value.
+ *
+ * Class names are flat and prefixed with `su-result`.
+ */
+
+.su-result {
+  /* Component-scoped accent — defaults to the brand deep ink. Each
+   * `.su-result--status-*` rule overrides this. Declared on the block
+   * (not in :root) so we don't pollute the global token set. */
+  --su-result-accent: var(--su-color-brand-deep);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--su-space-3);
+
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: var(--su-space-5) var(--su-space-4);
+
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+/* === Status accents ======================================== */
+
+.su-result--status-success {
+  --su-result-accent: var(--su-color-success);
+}
+
+.su-result--status-error {
+  --su-result-accent: var(--su-color-danger);
+}
+
+.su-result--status-warning {
+  --su-result-accent: var(--su-color-warning);
+}
+
+.su-result--status-info {
+  --su-result-accent: var(--su-color-info);
+}
+
+.su-result--status-404 {
+  --su-result-accent: var(--su-color-brand-deep);
+}
+
+.su-result--status-403 {
+  --su-result-accent: var(--su-color-danger);
+}
+
+.su-result--status-500 {
+  --su-result-accent: var(--su-color-warning);
+}
+
+/* === Icon ==================================================== */
+
+.su-result__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  color: var(--su-result-accent);
+  margin-bottom: var(--su-space-1);
+
+  /* Hand-drawn wobble — Calm level. Requires <HandDrawnFilters />. */
+  filter: url(#su-hand-c);
+}
+
+.su-result__glyph {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Big hand-written HTTP code (404 / 403 / 500). Lives inside a dashed
+ * sticky-note frame so it reads as a "torn page" rather than a glyph. */
+.su-result__http {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5rem;
+  padding: var(--su-space-1) var(--su-space-3);
+  border: var(--su-stroke-default) dashed var(--su-result-accent);
+  border-radius: var(--su-radius-card);
+  background: color-mix(
+    in srgb,
+    var(--su-bg-paper) 92%,
+    var(--su-result-accent)
+  );
+  color: var(--su-result-accent);
+  font-family: var(--su-font-family-hand);
+  font-weight: var(--su-font-weight-bold);
+  font-size: 2.25rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  transform: rotate(-1deg);
+}
+
+/* === Title ==================================================== */
+
+.su-result__title {
+  margin: 0;
+  font-size: var(--su-font-size-h2);
+  font-weight: var(--su-font-weight-bold);
+  line-height: var(--su-line-height-tight);
+  color: var(--su-ink-primary);
+}
+
+/* === Sub-title ================================================ */
+
+.su-result__subtitle {
+  margin: 0;
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-normal);
+  /* Muted body copy — matches Input helper text. */
+  color: color-mix(in oklab, var(--su-ink-primary) 70%, transparent);
+}
+
+/* === Extra (action row) ======================================= */
+
+.su-result__extra {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--su-space-2);
+  margin-top: var(--su-space-2);
+}
+
+/* === Content (sticky-note supplement) ========================= */
+
+.su-result__content {
+  width: 100%;
+  margin-top: var(--su-space-3);
+  padding: var(--su-space-3) var(--su-space-4);
+  text-align: left;
+
+  /* Sticky-note surface. `--su-color-surface-note` is not yet a token,
+   * so we fall back to the existing yellow note tint — keeps the page
+   * visually grounded without inventing new tokens. */
+  background: var(--su-note-yellow);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-sm);
+
+  /* Matches the hand-drawn aesthetic of the block itself. */
+  filter: url(#su-hand-c);
+  transform: rotate(-0.3deg);
+}
+
+/* === Entrance animation (respects reduced-motion) ============= */
+
+@media (prefers-reduced-motion: no-preference) {
+  .su-result {
+    animation: su-result-enter var(--su-duration-normal) var(--su-ease-bounce)
+      both;
+  }
+}
+
+@keyframes su-result-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .su-result,
+  .su-result__content {
+    animation: none;
+    transition: none;
+  }
+}

@@ -94,6 +94,14 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Carousel/Carousel.css',
     to: 'dist/components/Carousel/Carousel.css',
   },
+  {
+    from: 'src/components/Empty/Empty.css',
+    to: 'dist/components/Empty/Empty.css',
+  },
+  {
+    from: 'src/components/Result/Result.css',
+    to: 'dist/components/Result/Result.css',
+  },
 ];
 
 export default defineConfig({

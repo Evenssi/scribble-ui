@@ -26,3 +26,5 @@ export * from './components/Popover';
 export * from './components/Drawer';
 export * from './components/Tabs';
 export * from './components/Carousel';
+export * from './components/Empty';
+export * from './components/Result';
