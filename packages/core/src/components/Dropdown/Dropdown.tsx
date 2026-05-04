@@ -356,11 +356,14 @@ export function Dropdown({
 
   // Focus the active item after it renders, so ArrowDown/ArrowUp work
   // from the very first keypress even though we just portalled in.
+  // We gate on `anchor` being ready too, because the surface only
+  // mounts once we have a real position — focusing before that would
+  // hit a node at (0,0) and auto-scroll the page to the top.
   React.useEffect(() => {
-    if (!open || !activeKey) return;
+    if (!open || !activeKey || !anchor) return;
     const node = itemRefs.current.get(activeKey);
     node?.focus();
-  }, [open, activeKey]);
+  }, [open, activeKey, anchor]);
 
   // --- hover delay timers --------------------------------------------------
   const openTimerRef = React.useRef<number | null>(null);
@@ -486,9 +489,11 @@ export function Dropdown({
 
   // When `open` is driven externally (e.g. by a consumer flipping the
   // `open` prop) we never went through openFromTriggerRect/openFromPoint,
-  // so `anchor` is still null and the menu would paint at (0,0) in the
-  // top-left corner. Derive the anchor from the trigger rect on the
-  // same layout pass so the menu shows up next to its trigger.
+  // so `anchor` is still null. Derive the anchor from the trigger rect
+  // synchronously in a layout effect. We intentionally do NOT render
+  // the menu surface when open && anchor==null (see the surface render
+  // below) so users never see a stray (0,0) frame or get their page
+  // scroll-jumped when we focus the first menu item.
   useIsomorphicLayoutEffect(() => {
     if (!open || anchor) return;
     const node = triggerRef.current;
@@ -743,7 +748,7 @@ export function Dropdown({
     container === undefined ? (mounted ? document.body : null) : container;
 
   const surface =
-    mounted && open && portalTarget
+    mounted && open && anchor && portalTarget
       ? createPortal(
           <div
             ref={menuRef}
