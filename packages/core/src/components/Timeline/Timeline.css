@@ -1,0 +1,252 @@
+/* scribble-ui · Timeline
+ *
+ * A vertical, hand-drawn timeline. Each item renders a rail (connector
+ * + node) next to a body (time + content). Three layouts are supported:
+ *
+ *   .su-timeline--left        rail on the left, body on the right
+ *   .su-timeline--right       mirrored — rail on the right, body on the left
+ *   .su-timeline--alternate   rail in the middle, items alternate sides
+ *
+ * The vertical connector is drawn on `.su-timeline__rail` as a
+ * `border-left` that runs the full item height. The node sits on top
+ * of that line, absolutely centered on the rail. We hide the connector
+ * below the last item so the line terminates cleanly.
+ *
+ * Timeline is a data-display widget — it has no hover / active / focus
+ * / disabled transitions. Only the Calm wobble (`#su-hand-c`) is
+ * applied to the node and its connector for a static sketched feel.
+ *
+ * Class names are flat and prefixed with `su-timeline` so consumers
+ * don't need a CSS-Modules-aware bundler.
+ */
+
+/* === Outer list =============================================== */
+
+.su-timeline {
+  display: flex;
+  flex-direction: column;
+  /* The list is used for layout; kill the browser defaults. */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+/* Visual reverse — keep DOM order intact for screen readers. */
+.su-timeline--reverse {
+  flex-direction: column-reverse;
+}
+
+/* === Item ===================================================== */
+
+.su-timeline__item {
+  position: relative;
+  display: grid;
+  /* Reasonable minimum so short entries still show a useful stretch
+   * of connector line between the node and the next node. */
+  min-height: 3em;
+  /* Status-aware accent color, consumed by the node + connector below.
+   * Default = ink-primary (quiet); status variants override this. */
+  --su-timeline-accent: var(--su-ink-primary);
+  --su-timeline-connector-style: solid;
+}
+
+/* ---- Layout: left (default) ---------------------------------- */
+
+.su-timeline--left .su-timeline__item {
+  grid-template-columns: 1.75em 1fr;
+  gap: var(--su-space-3);
+}
+
+.su-timeline--left .su-timeline__rail {
+  grid-column: 1;
+}
+
+.su-timeline--left .su-timeline__body {
+  grid-column: 2;
+}
+
+/* ---- Layout: right ------------------------------------------- */
+
+.su-timeline--right .su-timeline__item {
+  grid-template-columns: 1fr 1.75em;
+  gap: var(--su-space-3);
+}
+
+.su-timeline--right .su-timeline__rail {
+  grid-column: 2;
+}
+
+.su-timeline--right .su-timeline__body {
+  grid-column: 1;
+  text-align: right;
+}
+
+/* ---- Layout: alternate --------------------------------------- */
+
+.su-timeline--alternate .su-timeline__item {
+  grid-template-columns: 1fr 1.75em 1fr;
+  gap: var(--su-space-3);
+}
+
+.su-timeline--alternate .su-timeline__rail {
+  grid-column: 2;
+}
+
+/* Odd items → left side, even items → right side.
+ * When `reverse` is active we use column-reverse on the list, but
+ * nth-child still targets DOM order; from the user's POV the sides
+ * still alternate, which is what we want. */
+.su-timeline--alternate .su-timeline__item:nth-child(odd) .su-timeline__body {
+  grid-column: 1;
+  text-align: right;
+}
+
+.su-timeline--alternate .su-timeline__item:nth-child(even) .su-timeline__body {
+  grid-column: 3;
+  text-align: left;
+}
+
+/* === Rail (connector + node slot) ============================= */
+
+.su-timeline__rail {
+  position: relative;
+  display: block;
+  width: 1.75em;
+  /* Stretch the rail to cover the whole grid row so the connector
+   * line reaches from this node down to the next one. */
+  align-self: stretch;
+  min-height: 100%;
+}
+
+/* The vertical connector line — sits on top of the rail column,
+ * centered horizontally, and reaches from the node center down to
+ * the bottom of the item. The wobble gives it a hand-inked feel. */
+.su-timeline__rail::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  /* Start just below the node (node is 0.9em tall, so ~0.45em is
+   * its center; leave a 0.2em gap for visual breathing room). */
+  top: calc(0.45em + 0.6em);
+  bottom: calc(-1 * var(--su-space-3));
+  width: 0;
+  border-left: var(--su-stroke-thin) var(--su-timeline-connector-style)
+    var(--su-timeline-accent);
+  transform: translateX(-50%);
+  filter: url(#su-hand-c);
+}
+
+/* The last item has nowhere to connect to — drop its connector. */
+.su-timeline__item:last-child .su-timeline__rail::before {
+  display: none;
+}
+
+/* Dashed marks the connector *going down from this item* — exactly
+ * the semantics the prop documents. Solid above, dashed below. */
+.su-timeline__item--dashed {
+  --su-timeline-connector-style: dashed;
+}
+
+/* === Node (dot) =============================================== */
+
+.su-timeline__dot {
+  position: absolute;
+  left: 50%;
+  top: 0.45em;
+  width: 0.9em;
+  height: 0.9em;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--su-timeline-accent);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  border-radius: 50%;
+  /* Calm hand-drawn wobble on the node outline. */
+  filter: url(#su-hand-c);
+}
+
+/* When a custom dot is provided we keep the same footprint for
+ * alignment, but drop the coloured disc + border so the glyph reads
+ * clearly. The caller's node supplies the visuals. */
+.su-timeline__item--custom-dot .su-timeline__dot {
+  background: var(--su-bg-paper);
+  border-color: var(--su-timeline-accent);
+  /* Let the custom glyph breathe — slightly larger slot. */
+  width: 1.25em;
+  height: 1.25em;
+  top: calc(0.45em - 0.175em);
+  filter: url(#su-hand-c);
+}
+
+.su-timeline__dot-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 0.85em;
+  line-height: 1;
+  /* Keep the inner glyph crisp — the wobble lives on the outer ring. */
+  filter: none;
+  color: var(--su-ink-primary);
+}
+
+/* When a custom dot is in play, the connector should still start
+ * below the larger node slot. */
+.su-timeline__item--custom-dot .su-timeline__rail::before {
+  top: calc(0.45em - 0.175em + 1.25em + 0.2em);
+}
+
+/* === Body (time + content) ==================================== */
+
+.su-timeline__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-1);
+  padding-bottom: var(--su-space-3);
+  min-width: 0;
+}
+
+.su-timeline__time {
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  font-weight: var(--su-font-weight-medium);
+  line-height: var(--su-line-height-tight);
+}
+
+.su-timeline__time-text {
+  font: inherit;
+  color: inherit;
+}
+
+.su-timeline__content {
+  font-size: var(--su-font-size-body);
+  color: var(--su-ink-primary);
+  line-height: var(--su-line-height-normal);
+}
+
+/* === Status accents =========================================== */
+/* Each status rewrites the component-scoped --su-timeline-accent,
+ * which cascades to both the node fill and the connector stroke
+ * below it. Tokens are the single source of truth — no hex here. */
+
+.su-timeline__item--status-default {
+  --su-timeline-accent: var(--su-ink-primary);
+}
+.su-timeline__item--status-success {
+  --su-timeline-accent: var(--su-color-success);
+}
+.su-timeline__item--status-warning {
+  --su-timeline-accent: var(--su-color-warning);
+}
+.su-timeline__item--status-error {
+  --su-timeline-accent: var(--su-color-danger);
+}
+.su-timeline__item--status-info {
+  --su-timeline-accent: var(--su-color-info);
+}

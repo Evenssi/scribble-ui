@@ -214,10 +214,18 @@ export default function HomePage() {
             — full-page feedback surface for success, failure and HTTP error routes.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/timeline">
+            Timeline
+          </Link>
+          <span className="home-component-desc">
+            — vertical event ribbon with left / right / alternate modes and 5 status dots.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 15 · 24 components shipped · Form next.
+        Day 16 · 25 components shipped · Form next.
       </p>
     </article>
   );

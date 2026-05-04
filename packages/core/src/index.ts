@@ -28,3 +28,4 @@ export * from './components/Tabs';
 export * from './components/Carousel';
 export * from './components/Empty';
 export * from './components/Result';
+export * from './components/Timeline';

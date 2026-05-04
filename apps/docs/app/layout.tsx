@@ -110,6 +110,9 @@ export default function RootLayout({
               <Link href="/components/result" className="docs-nav-link">
                 Result
               </Link>
+              <Link href="/components/timeline" className="docs-nav-link">
+                Timeline
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

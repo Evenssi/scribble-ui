@@ -102,6 +102,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Result/Result.css',
     to: 'dist/components/Result/Result.css',
   },
+  {
+    from: 'src/components/Timeline/Timeline.css',
+    to: 'dist/components/Timeline/Timeline.css',
+  },
 ];
 
 export default defineConfig({
