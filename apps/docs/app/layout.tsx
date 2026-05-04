@@ -101,6 +101,9 @@ export default function RootLayout({
               <Link href="/components/tabs" className="docs-nav-link">
                 Tabs
               </Link>
+              <Link href="/components/carousel" className="docs-nav-link">
+                Carousel
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

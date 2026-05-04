@@ -1,0 +1,378 @@
+/* scribble-ui · Carousel
+ *
+ * Hand-drawn content rotator. The visible border & shadow live on the
+ * viewport element so the SVG filter can wobble the *frame* without
+ * mangling the slide content inside.
+ *
+ * Class names are flat and prefixed with `su-carousel` to avoid
+ * collisions with host application styles.
+ */
+
+.su-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-3);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  /* Let keyboard users see the outline on the whole region. */
+  outline: none;
+}
+
+.su-carousel:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+/* === Viewport (the framed area that clips the slides) =========== */
+
+.su-carousel__viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-bold) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-md);
+  touch-action: pan-y; /* let vertical scrolling pass through */
+  user-select: none;
+
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+.su-carousel:hover .su-carousel__viewport {
+  box-shadow: var(--su-shadow-lg);
+  filter: url(#su-hand-b);
+}
+
+.su-carousel--dragging .su-carousel__viewport,
+.su-carousel:active .su-carousel__viewport {
+  /* Keep the frame calm while moving — a stronger wobble here amplifies
+   * the visual "shake" during translateX and makes the motion feel
+   * janky. Stay on the mid-level filter. */
+  filter: url(#su-hand-b);
+}
+
+.su-carousel--dragging .su-carousel__viewport {
+  cursor: grabbing;
+}
+
+/* === Track (slide mode — horizontal flex row) =================== */
+
+/* When dragging, suppress transition so the track tracks the pointer
+ * 1:1. Once isDragging flips back to false on pointerup, the default
+ * transition on .su-carousel__track kicks in and eases the track to
+ * either the new slide (if threshold met) or back to 0 (snap back). */
+.su-carousel--dragging .su-carousel__track {
+  transition: none;
+}
+
+/* Carousel uses its own motion tokens rather than the global
+ * --su-ease-bounce / --su-duration-normal pair. The global bounce curve
+ * (cubic-bezier(0.34, 1.56, 0.64, 1)) overshoots by ~15%, which is great
+ * for 4px button nudges but ugly on a full-viewport translateX — you'd
+ * see the whole slide shoot past and spring back. Here we want a calm,
+ * decelerating glide that settles without wobble. */
+.su-carousel__track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  /* Smooth deceleration — "expo out"-ish, fast start, soft landing. */
+  transition: transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+  /* Avoid subpixel seams between adjacent slides during the glide. */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* When the user releases a drag we want a slightly snappier snap-back /
+ * commit so the motion tracks the flick velocity rather than feeling
+ * sluggish. This class is toggled off naturally once the transition
+ * ends, because `isDragging` is already false at that point. */
+.su-carousel:not(.su-carousel--dragging) .su-carousel__track {
+  transition: transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.su-carousel__slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  position: relative;
+  /* Slide contents should not inherit the frame's wobble — keeps
+   * images, text and sticky-note cards crisp. */
+  filter: none;
+}
+
+/* Children images fill by default; consumers can override with
+ * their own styles on the slide content. */
+.su-carousel__slide > img,
+.su-carousel__slide > picture > img,
+.su-carousel__slide > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* === Fade mode ================================================== */
+
+.su-carousel__stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.su-carousel__slide--fade {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  /* Matches the slide track's motion feel: calm, decelerating. */
+  transition: opacity 480ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+}
+
+.su-carousel__slide--fade.su-carousel__slide--active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* === Arrows ===================================================== */
+
+.su-carousel__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  font-size: var(--su-font-size-h2);
+  color: var(--su-ink-primary);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: 50% 48% 52% 50%; /* hand-drawn circle */
+  box-shadow: var(--su-shadow-sm);
+
+  cursor: pointer;
+  z-index: 2;
+
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+
+  filter: url(#su-hand-c);
+}
+
+.su-carousel__arrow--prev {
+  left: var(--su-space-3);
+}
+
+.su-carousel__arrow--next {
+  right: var(--su-space-3);
+}
+
+.su-carousel--arrows-outside .su-carousel__arrow--prev {
+  left: calc(-1 * var(--su-space-5));
+}
+
+.su-carousel--arrows-outside .su-carousel__arrow--next {
+  right: calc(-1 * var(--su-space-5));
+}
+
+.su-carousel__arrow:hover:not(:disabled) {
+  transform: translateY(calc(-50% - 1px)) rotate(-1deg);
+  box-shadow: var(--su-shadow-md);
+  filter: url(#su-hand-b);
+}
+
+.su-carousel__arrow:active:not(:disabled) {
+  transform: translateY(calc(-50% + 1px)) rotate(0.5deg);
+  box-shadow: var(--su-shadow-xs);
+  filter: url(#su-hand-a);
+}
+
+.su-carousel__arrow:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-carousel__arrow:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  box-shadow: var(--su-shadow-xs);
+  filter: none;
+}
+
+/* === Indicators ================================================= */
+
+.su-carousel__indicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--su-space-2);
+  min-height: 24px;
+}
+
+.su-carousel__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--su-ink-primary);
+
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+
+  filter: url(#su-hand-c);
+}
+
+.su-carousel__indicator:hover {
+  transform: translateY(-1px);
+  filter: url(#su-hand-b);
+}
+
+.su-carousel__indicator:active {
+  transform: translateY(1px);
+  filter: url(#su-hand-a);
+}
+
+.su-carousel__indicator:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+  border-radius: var(--su-radius-tag);
+}
+
+.su-carousel__indicator:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  filter: none;
+}
+
+/* --- Mark shapes ------------------------------------------------- */
+
+.su-carousel__indicator-mark {
+  display: inline-block;
+  background: transparent;
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  transition:
+    background var(--su-duration-fast) ease-out,
+    transform var(--su-duration-fast) var(--su-ease-bounce);
+}
+
+/* Dot */
+.su-carousel__indicator--dot .su-carousel__indicator-mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 50% 48% 52% 50%; /* wobbly circle */
+}
+
+.su-carousel__indicator--dot.su-carousel__indicator--active
+  .su-carousel__indicator-mark {
+  background: var(--su-color-brand);
+  transform: scale(1.15);
+}
+
+/* Dash — a short hand-drawn stroke */
+.su-carousel__indicator--dash .su-carousel__indicator-mark {
+  width: 22px;
+  height: 4px;
+  border-radius: 3px 4px 3px 4px;
+  background: var(--su-ink-primary);
+  border: none;
+  opacity: 0.45;
+}
+
+.su-carousel__indicator--dash.su-carousel__indicator--active
+  .su-carousel__indicator-mark {
+  width: 32px;
+  background: var(--su-color-brand-deep);
+  opacity: 1;
+}
+
+/* Number / fraction (rendered directly in the indicators container) */
+.su-carousel__indicators--number {
+  filter: none;
+}
+
+.su-carousel__fraction {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: var(--su-font-size-h3);
+  font-weight: var(--su-font-weight-bold);
+  color: var(--su-ink-primary);
+  padding: 4px 12px;
+  background: var(--su-note-yellow);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-xs);
+  filter: url(#su-hand-c);
+}
+
+.su-carousel__fraction-current {
+  color: var(--su-color-brand-deep);
+}
+
+.su-carousel__fraction-sep {
+  color: var(--su-ink-muted);
+}
+
+.su-carousel__fraction-total {
+  color: var(--su-ink-muted);
+}
+
+/* === Outside arrow placement needs a gutter ===================== */
+
+.su-carousel--arrows-outside {
+  padding-left: var(--su-space-5);
+  padding-right: var(--su-space-5);
+}
+
+/* === Respect users who prefer reduced motion ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-carousel__track,
+  .su-carousel__slide--fade,
+  .su-carousel__viewport,
+  .su-carousel__arrow,
+  .su-carousel__arrow:hover:not(:disabled),
+  .su-carousel__arrow:active:not(:disabled),
+  .su-carousel__indicator,
+  .su-carousel__indicator:hover,
+  .su-carousel__indicator:active,
+  .su-carousel__indicator-mark {
+    transition: none;
+    transform: none;
+  }
+
+  .su-carousel__arrow:hover:not(:disabled) {
+    transform: translateY(-50%);
+  }
+
+  .su-carousel__arrow:active:not(:disabled) {
+    transform: translateY(-50%);
+  }
+
+  .su-carousel__indicator--dot.su-carousel__indicator--active
+    .su-carousel__indicator-mark {
+    transform: none;
+  }
+}

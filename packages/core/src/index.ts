@@ -25,3 +25,4 @@ export * from './components/Progress';
 export * from './components/Popover';
 export * from './components/Drawer';
 export * from './components/Tabs';
+export * from './components/Carousel';

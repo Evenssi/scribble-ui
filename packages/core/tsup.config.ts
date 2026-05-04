@@ -90,6 +90,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Tabs/Tabs.css',
     to: 'dist/components/Tabs/Tabs.css',
   },
+  {
+    from: 'src/components/Carousel/Carousel.css',
+    to: 'dist/components/Carousel/Carousel.css',
+  },
 ];
 
 export default defineConfig({

@@ -189,10 +189,19 @@ export default function HomePage() {
             and roving-tabindex keyboard nav.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/carousel">
+            Carousel
+          </Link>
+          <span className="home-component-desc">
+            — hand-drawn content rotator with slide / fade transitions, autoplay,
+            drag and keyboard nav.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 13 · 21 components shipped · Form next.
+        Day 14 · 22 components shipped · Form next.
       </p>
     </article>
   );
