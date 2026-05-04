@@ -371,12 +371,19 @@ export function Dropdown({
   // Focus the active item after it renders, so ArrowDown/ArrowUp work
   // from the very first keypress even though we just portalled in.
   // We gate on `anchor` being ready too, because the surface only
-  // mounts once we have a real position — focusing before that would
-  // hit a node at (0,0) and auto-scroll the page to the top.
+  // mounts once we have a real position.
+  //
+  // `preventScroll: true` is critical: on the very first open of a
+  // controlled Dropdown, there's a brief intermediate frame where the
+  // surface has been portalled but `position` still holds the initial
+  // (0,0) from useState — a vanilla `focus()` would scroll the page
+  // to the top of the document trying to bring that (0,0) node into
+  // view. The menu is portalled and positioned absolutely, so we
+  // never want focusing an item to move the viewport anyway.
   React.useEffect(() => {
     if (!open || !activeKey || !anchor) return;
     const node = itemRefs.current.get(activeKey);
-    node?.focus();
+    node?.focus({ preventScroll: true });
   }, [open, activeKey, anchor]);
 
   // --- hover delay timers --------------------------------------------------
