@@ -484,6 +484,25 @@ export function Dropdown({
     );
   }, [anchor, placement, offset]);
 
+  // When `open` is driven externally (e.g. by a consumer flipping the
+  // `open` prop) we never went through openFromTriggerRect/openFromPoint,
+  // so `anchor` is still null and the menu would paint at (0,0) in the
+  // top-left corner. Derive the anchor from the trigger rect on the
+  // same layout pass so the menu shows up next to its trigger.
+  useIsomorphicLayoutEffect(() => {
+    if (!open || anchor) return;
+    const node = triggerRef.current;
+    if (!node) return;
+    setAnchor(rectFromDOMRect(node.getBoundingClientRect()));
+  }, [open, anchor]);
+
+  // Clear the stale anchor on close so the next external-open pass
+  // re-measures instead of reusing last session's pointer coords (which
+  // would be wrong for contextMenu triggers especially).
+  React.useEffect(() => {
+    if (!open) setAnchor(null);
+  }, [open]);
+
   useIsomorphicLayoutEffect(() => {
     if (!open) return;
     updatePosition();
