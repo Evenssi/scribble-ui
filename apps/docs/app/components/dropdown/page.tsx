@@ -299,6 +299,15 @@ export default function DropdownDocPage() {
           keyboard shortcut or closing it programmatically after a
           confirm flow.
         </p>
+        <p className="doc-note">
+          Note: The outer toggle button sits outside the trigger and
+          menu, so a naive <code>onClick</code> would race with the
+          menu's click-outside handler (which fires on{' '}
+          <code>mousedown</code> capture and would close first, then
+          the click would re-open). We stop that event in the capture
+          phase via <code>onMouseDownCapture</code>, so the toggle
+          owns the gesture end-to-end.
+        </p>
         <div className="doc-demo">
           <div className="doc-demo-row">
             <Dropdown
@@ -310,6 +319,7 @@ export default function DropdownDocPage() {
             </Dropdown>
             <Button
               variant="primary"
+              onMouseDownCapture={(e) => e.stopPropagation()}
               onClick={() => setControlledOpen((v) => !v)}
             >
               {controlledOpen ? 'Close' : 'Open'} from outside
