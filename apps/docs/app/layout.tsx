@@ -116,6 +116,9 @@ export default function RootLayout({
               <Link href="/components/backtop" className="docs-nav-link">
                 BackTop
               </Link>
+              <Link href="/components/dropdown" className="docs-nav-link">
+                Dropdown
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

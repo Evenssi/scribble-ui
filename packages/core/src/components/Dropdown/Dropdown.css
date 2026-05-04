@@ -1,0 +1,281 @@
+/* scribble-ui · Dropdown
+ *
+ * A trigger-driven menu surface, portalled into the page body and
+ * positioned by Dropdown.tsx. Visually a sticky-note panel (paper
+ * background, hand-drawn border, hard offset shadow) — a sibling to
+ * Popover's surface, but tuned for a dense list of menu items.
+ *
+ * Class names are flat and prefixed with `su-dropdown` so consumers
+ * don't need a CSS-Modules-aware bundler.
+ */
+
+/* === Surface =============================================== */
+
+.su-dropdown {
+  /* `position: absolute` + top/left set inline by Dropdown.tsx. */
+  z-index: 1100; /* above Modal (1000), same tier as Popover/Select listbox */
+
+  min-width: 10rem;
+  max-width: min(20rem, calc(100vw - 32px));
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow:
+    var(--su-shadow-md),
+    6px 6px 0 0 color-mix(in srgb, var(--su-ink-primary) 18%, transparent);
+
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+
+  /* Hand-drawn wobble (Calm). Requires <HandDrawnFilters /> mounted.
+   * The surface itself is a static panel, so we deliberately do NOT
+   * bump the filter on hover/active — only the items do that. */
+  filter: url(#su-hand-c);
+
+  overflow: hidden;
+}
+
+.su-dropdown:focus {
+  outline: none;
+}
+
+/* === List container ======================================== */
+
+.su-dropdown__list {
+  margin: 0;
+  padding: var(--su-space-1) 0;
+  list-style: none;
+  /* Don't wobble each row — the surface already wobbles as a whole. */
+  filter: none;
+}
+
+/* === Item ==================================================== */
+
+.su-dropdown__item {
+  /* Reset native button chrome. */
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  width: 100%;
+
+  padding: var(--su-space-2) var(--su-space-3);
+  background: transparent;
+  border: 0;
+  color: var(--su-ink-primary);
+
+  font-family: inherit;
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-normal);
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+
+  transition: background var(--su-duration-fast) ease-out;
+
+  /* Each item keeps filter off so the label reads crisp. The outer
+   * surface provides the overall wobble. */
+  filter: none;
+}
+
+.su-dropdown__item:focus {
+  outline: none;
+}
+
+/* Hover / highlight (keyboard & pointer) share the same visual so the
+ * active item always reads the same regardless of input modality. */
+.su-dropdown__item:hover:not(:disabled):not(.su-dropdown__item--disabled),
+.su-dropdown__item--active:not(.su-dropdown__item--disabled) {
+  background: color-mix(in srgb, var(--su-color-brand) 16%, transparent);
+}
+
+/* Pressed state — mirrors Button's active swap in spirit but applied
+ * to the background so the whole row reads "committed" without the
+ * row jumping around. */
+.su-dropdown__item:active:not(:disabled):not(.su-dropdown__item--disabled) {
+  background: color-mix(in srgb, var(--su-color-brand) 28%, transparent);
+}
+
+.su-dropdown__item:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: -4px;
+  border-radius: var(--su-radius-tag);
+}
+
+/* Danger variant — red-tinted label, and the hover/active backgrounds
+ * switch to the danger-tinted palette so a destructive item reads
+ * unmistakably destructive. */
+.su-dropdown__item--danger {
+  color: var(--su-color-danger);
+}
+
+.su-dropdown__item--danger:hover:not(:disabled):not(.su-dropdown__item--disabled),
+.su-dropdown__item--danger.su-dropdown__item--active:not(.su-dropdown__item--disabled) {
+  background: var(--su-status-danger-bg);
+  color: var(--su-color-danger);
+}
+
+.su-dropdown__item--danger:active:not(:disabled):not(.su-dropdown__item--disabled) {
+  background: color-mix(in srgb, var(--su-color-danger) 28%, transparent);
+}
+
+/* Disabled — muted, not-allowed, no hover / active reaction. We use
+ * the `--disabled` class rather than the native `disabled` attribute
+ * so the item stays reachable via arrow keys (WAI-ARIA pattern for
+ * menus); the a11y state is carried by `aria-disabled`. */
+.su-dropdown__item--disabled,
+.su-dropdown__item[aria-disabled='true'] {
+  color: var(--su-ink-faint);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.su-dropdown__item--disabled:hover,
+.su-dropdown__item[aria-disabled='true']:hover {
+  background: transparent;
+}
+
+/* === Item parts ============================================ */
+
+.su-dropdown__item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.1em;
+  height: 1.1em;
+  font-size: 1.05em;
+  line-height: 1;
+  color: var(--su-ink-muted);
+}
+
+.su-dropdown__item--danger .su-dropdown__item-icon {
+  color: var(--su-color-danger);
+}
+
+.su-dropdown__item-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.su-dropdown__item-extra {
+  flex: 0 0 auto;
+  margin-left: var(--su-space-3);
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-faint);
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.su-dropdown__item--danger .su-dropdown__item-extra {
+  color: color-mix(in srgb, var(--su-color-danger) 70%, transparent);
+}
+
+/* === Divider =============================================== */
+
+.su-dropdown__divider {
+  margin: var(--su-space-1) var(--su-space-2);
+  height: 0;
+  border: 0;
+  border-top: var(--su-stroke-thin) dashed
+    color-mix(in srgb, var(--su-ink-primary) 30%, transparent);
+  /* A separator is decorative within the menu; don't wobble it. */
+  filter: none;
+}
+
+/* === Entrance animation ===================================== */
+/*
+ * A couple-pixel translate + opacity fade, directional so the menu
+ * feels anchored to the side it sprouts from. Small-scale positional
+ * animation — bounce easing reads well here. No scale, to stay in
+ * sync with Popover / Tooltip's restraint.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .su-dropdown {
+    animation: su-dropdown-in var(--su-duration-normal) var(--su-ease-bounce);
+  }
+
+  .su-dropdown--bottom,
+  .su-dropdown--bottom-start,
+  .su-dropdown--bottom-end {
+    animation-name: su-dropdown-in-bottom;
+  }
+  .su-dropdown--top,
+  .su-dropdown--top-start,
+  .su-dropdown--top-end {
+    animation-name: su-dropdown-in-top;
+  }
+  .su-dropdown--right-start {
+    animation-name: su-dropdown-in-right;
+  }
+  .su-dropdown--left-start {
+    animation-name: su-dropdown-in-left;
+  }
+}
+
+@keyframes su-dropdown-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes su-dropdown-in-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes su-dropdown-in-top {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes su-dropdown-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes su-dropdown-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* === Reduced motion ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-dropdown,
+  .su-dropdown__item {
+    transition: none;
+    animation: none;
+  }
+}

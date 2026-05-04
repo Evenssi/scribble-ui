@@ -110,6 +110,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/BackTop/BackTop.css',
     to: 'dist/components/BackTop/BackTop.css',
   },
+  {
+    from: 'src/components/Dropdown/Dropdown.css',
+    to: 'dist/components/Dropdown/Dropdown.css',
+  },
 ];
 
 export default defineConfig({

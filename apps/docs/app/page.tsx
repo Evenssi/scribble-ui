@@ -230,10 +230,18 @@ export default function HomePage() {
             — floating back-to-top button with threshold visibility, smooth scroll and scoped containers.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/dropdown">
+            Dropdown
+          </Link>
+          <span className="home-component-desc">
+            — menu overlay with 8 placements, click / hover / contextMenu triggers and roving-tabindex keyboard nav.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 16 · 26 components shipped · Form next.
+        Day 16 · 27 components shipped · Form next.
       </p>
     </article>
   );
