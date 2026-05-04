@@ -106,6 +106,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Timeline/Timeline.css',
     to: 'dist/components/Timeline/Timeline.css',
   },
+  {
+    from: 'src/components/BackTop/BackTop.css',
+    to: 'dist/components/BackTop/BackTop.css',
+  },
 ];
 
 export default defineConfig({

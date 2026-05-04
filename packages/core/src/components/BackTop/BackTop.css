@@ -1,0 +1,139 @@
+/* scribble-ui · BackTop
+ *
+ * Floating, portalled scroll-to-top button.
+ *
+ * Layering notes:
+ *   Modal / Drawer overlay .......... 1000
+ *   Tooltip / Popover / Select ...... 1100
+ *   BackTop ......................... 900  (below modal so it never
+ *                                           overlaps an open dialog)
+ *
+ * Motion notes:
+ *   The fade + slide-in uses a measured ease-out (same curve as the
+ *   Carousel release snap — see Carousel.css line 86) rather than
+ *   --su-ease-bounce. A 10px translate on a fixed, viewport-level
+ *   element would feel jittery under a bounce curve; smooth decel
+ *   is the right choice for a utility affordance.
+ */
+
+.su-backtop {
+  /* Fixed against the viewport by default. For scoped containers we
+   * swap to `position: absolute` via .su-backtop--scoped so the
+   * offsets resolve against the custom portal host (which only needs
+   * `position: relative`). */
+  position: fixed;
+  /* `right` / `bottom` injected as inline style from props. */
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--su-ink-primary);
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-bold) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-btn);
+  box-shadow: var(--su-shadow-md);
+
+  font-family: var(--su-font-family-hand);
+  font-weight: var(--su-font-weight-bold);
+  font-size: var(--su-font-size-h3);
+  line-height: 1;
+
+  cursor: pointer;
+  /* Sits above normal content but below Modal (1000) / Tooltip (1100). */
+  z-index: 900;
+
+  /* Hidden state: no layout shift, removed from hit-testing, removed
+   * from the tab order via tabIndex=-1 in React. */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  pointer-events: none;
+
+  transition:
+    /* Match Carousel's slide curve for viewport-scale ease-out. */
+    opacity var(--su-duration-normal) cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform var(--su-duration-normal) cubic-bezier(0.22, 0.61, 0.36, 1),
+    visibility 0s linear var(--su-duration-normal),
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default). */
+  filter: url(#su-hand-c);
+}
+
+/* Scoped-container branch: used when BackTop is portalled into a
+ * non-body element (e.g. a scrollable pane). Requires the host to
+ * carry `position: relative` (or any non-static value). */
+.su-backtop--scoped {
+  position: absolute;
+}
+
+.su-backtop--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  /* Visibility flips immediately when becoming visible; only the
+   * fade-out delays it so the transition actually plays. */
+  transition:
+    opacity var(--su-duration-normal) cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform var(--su-duration-normal) cubic-bezier(0.22, 0.61, 0.36, 1),
+    visibility 0s linear 0s,
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+}
+
+/* === Icon slot ============================================= */
+
+.su-backtop__icon {
+  width: 1.25em;
+  height: 1.25em;
+  /* Let the button's filter own the wobble — don't double-apply. */
+  filter: none;
+}
+
+/* === Interaction =========================================== */
+
+.su-backtop:hover:not(:disabled) {
+  /* Small nudge — safe range for --su-ease-bounce (<=4px). */
+  transform: translate(-1px, -2px) rotate(-0.5deg);
+  box-shadow: var(--su-shadow-lg);
+  /* Hover bumps the wobble level, consistent with Button. */
+  filter: url(#su-hand-b);
+}
+
+.su-backtop:active:not(:disabled) {
+  transform: translate(2px, 2px) rotate(0.3deg);
+  box-shadow: var(--su-shadow-xs);
+  filter: url(#su-hand-a);
+}
+
+.su-backtop:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-backtop:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  box-shadow: var(--su-shadow-sm);
+  filter: none;
+}
+
+/* === Reduced motion ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-backtop,
+  .su-backtop--visible,
+  .su-backtop:hover:not(:disabled),
+  .su-backtop:active:not(:disabled) {
+    transition: none;
+    transform: none;
+  }
+}

@@ -113,6 +113,9 @@ export default function RootLayout({
               <Link href="/components/timeline" className="docs-nav-link">
                 Timeline
               </Link>
+              <Link href="/components/backtop" className="docs-nav-link">
+                BackTop
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>
