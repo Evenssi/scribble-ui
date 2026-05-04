@@ -82,6 +82,19 @@ export interface DropdownProps {
   menuClassName?: string;
   /** Inline style passed through to the menu root. */
   menuStyle?: React.CSSProperties;
+  /**
+   * Refs to elements that should NOT be treated as "outside" clicks —
+   * pointer-down events landing on (or inside) these elements will not
+   * auto-close the menu.
+   *
+   * Typical use: an external toggle button that drives `open` in
+   * controlled mode. Without this, the button's `mousedown` would be
+   * caught by the menu's document-level click-outside listener (which
+   * runs in the capture phase, before React's `onClick`), causing the
+   * menu to close right before the toggle re-opens — producing a
+   * "can't close / out-of-sync" feel.
+   */
+  clickOutsideIgnore?: ReadonlyArray<React.RefObject<HTMLElement | null>>;
 }
 
 // ---------------------------------------------------------------------------
@@ -285,6 +298,7 @@ export function Dropdown({
   container,
   menuClassName,
   menuStyle,
+  clickOutsideIgnore,
 }: DropdownProps) {
   // --- open state ----------------------------------------------------------
   const isControlled = openProp !== undefined;
@@ -456,6 +470,14 @@ export function Dropdown({
   }, [open, close]);
 
   // --- click outside -------------------------------------------------------
+  // We mirror `clickOutsideIgnore` into a ref so the document listener
+  // always sees the latest list without having to re-attach on every
+  // render (consumers typically pass a fresh array literal each time).
+  const ignoreRefsRef = React.useRef(clickOutsideIgnore);
+  React.useEffect(() => {
+    ignoreRefsRef.current = clickOutsideIgnore;
+  }, [clickOutsideIgnore]);
+
   React.useEffect(() => {
     if (!open) return;
     const onPointerDown = (event: MouseEvent) => {
@@ -464,6 +486,16 @@ export function Dropdown({
       const inTrigger = triggerRef.current?.contains(target);
       const inMenu = menuRef.current?.contains(target);
       if (inTrigger || inMenu) return;
+      // Consumer-declared "not really outside" elements (e.g. an
+      // external toggle button that owns the gesture). Checked after
+      // trigger/menu because those are the common case.
+      const ignoreList = ignoreRefsRef.current;
+      if (ignoreList) {
+        for (const ref of ignoreList) {
+          const node = ref.current;
+          if (node && node.contains(target)) return;
+        }
+      }
       close(false);
     };
     document.addEventListener('mousedown', onPointerDown, true);
@@ -472,14 +504,26 @@ export function Dropdown({
   }, [open, close]);
 
   // --- compute position on open + on scroll/resize/content change ----------
+  // On scroll/resize we re-read the trigger's live bounding rect so the
+  // menu follows it. The `anchor` state is still the gate for rendering
+  // the surface (and the cached source of truth for contextMenu's point
+  // anchor, where there's no trigger rect to re-measure).
   const updatePosition = React.useCallback(() => {
     if (!anchor) return;
     const menuEl = menuRef.current;
     if (!menuEl) return;
     const menuRect = menuEl.getBoundingClientRect();
+    // Rect anchors (click/hover/keyboard) come from the trigger DOM node
+    // and need to be re-measured on scroll. Point anchors (contextMenu)
+    // have width=height=0 and must be used verbatim — re-measuring the
+    // trigger would move the menu away from the click location.
+    const liveAnchor =
+      anchor.width > 0 && triggerRef.current
+        ? rectFromDOMRect(triggerRef.current.getBoundingClientRect())
+        : anchor;
     setPosition(
       computePosition(
-        anchor,
+        liveAnchor,
         { width: menuRect.width, height: menuRect.height },
         placement,
         offset

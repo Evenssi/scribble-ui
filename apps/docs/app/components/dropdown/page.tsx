@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, Dropdown, type DropdownMenuEntry } from 'scribble-ui';
 // Reuse the Button page's doc-* class set so all pages share one stylesheet.
 import '../button/page.css';
@@ -8,6 +8,11 @@ import '../button/page.css';
 export default function DropdownDocPage() {
   const [controlledOpen, setControlledOpen] = useState(false);
   const [lastAction, setLastAction] = useState<string>('—');
+  // External toggle button that drives the controlled Dropdown. We
+  // pass its ref into `clickOutsideIgnore` so the menu's document-
+  // level click-outside handler doesn't close + reopen on the same
+  // gesture.
+  const outsideToggleRef = useRef<HTMLButtonElement>(null);
 
   const basicMenu: DropdownMenuEntry[] = [
     { key: 'edit', label: 'Edit', onClick: () => setLastAction('Edit') },
@@ -304,9 +309,9 @@ export default function DropdownDocPage() {
           menu, so a naive <code>onClick</code> would race with the
           menu's click-outside handler (which fires on{' '}
           <code>mousedown</code> capture and would close first, then
-          the click would re-open). We stop that event in the capture
-          phase via <code>onMouseDownCapture</code>, so the toggle
-          owns the gesture end-to-end.
+          the click would re-open). Pass the toggle's ref via{' '}
+          <code>clickOutsideIgnore</code> and Dropdown will skip it
+          when deciding whether a pointer-down is "outside".
         </p>
         <div className="doc-demo">
           <div className="doc-demo-row">
@@ -314,12 +319,13 @@ export default function DropdownDocPage() {
               menu={controlledMenu}
               open={controlledOpen}
               onOpenChange={setControlledOpen}
+              clickOutsideIgnore={[outsideToggleRef]}
             >
               <Button>Account ▾</Button>
             </Dropdown>
             <Button
+              ref={outsideToggleRef}
               variant="primary"
-              onMouseDownCapture={(e) => e.stopPropagation()}
               onClick={() => setControlledOpen((v) => !v)}
             >
               {controlledOpen ? 'Close' : 'Open'} from outside
