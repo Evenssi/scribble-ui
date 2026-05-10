@@ -33,3 +33,4 @@ export * from './components/BackTop';
 export * from './components/Dropdown';
 export * from './components/Alert';
 export * from './components/Pagination';
+export * from './components/Breadcrumb';

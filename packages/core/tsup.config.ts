@@ -122,6 +122,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Pagination/Pagination.css',
     to: 'dist/components/Pagination/Pagination.css',
   },
+  {
+    from: 'src/components/Breadcrumb/Breadcrumb.css',
+    to: 'dist/components/Breadcrumb/Breadcrumb.css',
+  },
 ];
 
 export default defineConfig({

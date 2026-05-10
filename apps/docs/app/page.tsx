@@ -254,10 +254,18 @@ export default function HomePage() {
             — data-driven page navigator with smart ellipsis folding, simple / small variants and full a11y.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/breadcrumb">
+            Breadcrumb
+          </Link>
+          <span className="home-component-desc">
+            — hierarchical trail with items + composition APIs, custom separators and mid-path ellipsis.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 17 · 29 components shipped · Breadcrumb landing next.
+        Day 17 · 30 components shipped · Form next.
       </p>
     </article>
   );

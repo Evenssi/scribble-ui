@@ -1,0 +1,194 @@
+/* scribble-ui · Breadcrumb
+ *
+ * Hand-drawn breadcrumb trail. Each crumb is a tiny sticky-note:
+ * - interactive crumbs carry the shared hand-drawn wobble filter and
+ *   the 4-state filter ladder (calm → lively → peak → none);
+ * - the current-page crumb drops the card treatment and reads as
+ *   emphasized text, mirroring real signage ("you are here");
+ * - the separator is rendered through its own node and can be
+ *   overridden by any ReactNode.
+ *
+ * Class names are flat, prefixed with `su-breadcrumb`, so consumers
+ * don't need a CSS-Modules-aware bundler.
+ */
+
+/* === Root ================================================== */
+
+.su-breadcrumb-nav {
+  /* The <nav> itself is layout-only. All visual tokens live on the
+   * <ol> + per-crumb nodes so a parent toolbar can wrap us without
+   * fighting for spacing. */
+  display: inline-flex;
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  max-width: 100%;
+}
+
+.su-breadcrumb {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--su-space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-normal);
+}
+
+/* === Items ================================================= */
+
+.su-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.su-breadcrumb__crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-1);
+
+  padding: 4px 10px;
+  border-radius: var(--su-radius-tag);
+  color: var(--su-ink-muted);
+  text-decoration: none;
+
+  /* Slightly inset so the "sticky-note" treatment on interactive
+   * crumbs has somewhere to grow into on hover. */
+  transform: translateZ(0);
+
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    background var(--su-duration-fast) ease-out,
+    color var(--su-duration-fast) ease-out,
+    filter var(--su-duration-fast) ease-out;
+}
+
+/* --- Interactive (link) crumb — the sticky-note variant --- */
+
+.su-breadcrumb__crumb--link,
+.su-breadcrumb__crumb--custom {
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  box-shadow: var(--su-shadow-xs);
+  color: var(--su-ink-primary);
+  cursor: pointer;
+
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+/* The custom-render wrapper hands rendering off to a user-supplied
+ * anchor (e.g. Next.js <Link>). We keep the sticky-note chrome on the
+ * wrapper and let the inner node handle navigation. */
+.su-breadcrumb__crumb--custom > * {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-1);
+}
+
+.su-breadcrumb__crumb--link:hover,
+.su-breadcrumb__crumb--custom:hover {
+  background: var(--su-note-yellow);
+  box-shadow: var(--su-shadow-sm);
+  transform: translate(-1px, -1px) rotate(-0.6deg);
+  filter: url(#su-hand-b);
+}
+
+.su-breadcrumb__crumb--link:active,
+.su-breadcrumb__crumb--custom:active {
+  box-shadow: var(--su-shadow-xs);
+  transform: translate(1px, 1px) rotate(0.4deg);
+  filter: url(#su-hand-a);
+}
+
+.su-breadcrumb__crumb--link:focus-visible,
+.su-breadcrumb__crumb--custom:focus-within {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+/* --- Current-page crumb (always the last one) ------------- */
+
+.su-breadcrumb__crumb--current {
+  color: var(--su-ink-primary);
+  font-weight: var(--su-font-weight-bold);
+  background: transparent;
+  /* No border / shadow / filter — it's signage, not a button. */
+  filter: none;
+}
+
+/* --- Disabled / inert crumb ------------------------------- */
+
+.su-breadcrumb__crumb--disabled {
+  color: var(--su-ink-faint);
+  cursor: not-allowed;
+  background: transparent;
+  filter: none;
+}
+
+/* --- Ellipsis placeholder --------------------------------- */
+
+.su-breadcrumb__crumb--ellipsis {
+  color: var(--su-ink-muted);
+  padding: 0 var(--su-space-1);
+  letter-spacing: 0.1em;
+  user-select: none;
+  filter: none;
+}
+
+/* === Slots (icon, label) =================================== */
+
+.su-breadcrumb__icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1em;
+  line-height: 1;
+  /* Keep icon glyphs crisp — don't inherit the wrapper's wobble. */
+  filter: none;
+}
+
+.su-breadcrumb__label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  /* Truncate overly long crumbs instead of forcing a nav to wrap. */
+  max-width: 24ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* === Separator ============================================= */
+
+.su-breadcrumb__separator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--su-ink-muted);
+  font-size: 1.1em;
+  line-height: 1;
+  padding: 0 var(--su-space-1);
+  user-select: none;
+  /* Separator glyphs should be crisp — no wobble. */
+  filter: none;
+}
+
+/* === Motion policy ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-breadcrumb__crumb,
+  .su-breadcrumb__crumb--link:hover,
+  .su-breadcrumb__crumb--custom:hover,
+  .su-breadcrumb__crumb--link:active,
+  .su-breadcrumb__crumb--custom:active {
+    transition: none;
+    transform: none;
+  }
+}

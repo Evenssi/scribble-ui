@@ -125,6 +125,9 @@ export default function RootLayout({
               <Link href="/components/pagination" className="docs-nav-link">
                 Pagination
               </Link>
+              <Link href="/components/breadcrumb" className="docs-nav-link">
+                Breadcrumb
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>
