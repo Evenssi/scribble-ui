@@ -1,0 +1,118 @@
+/* scribble-ui · Form
+ *
+ * Purely visual shell around native <form> + stacked fields.
+ *
+ * Day 19 (Form Final Round, D plan): Form owns layout/size context only.
+ * Form.Item owns the label / required / error / helper slots. No state.
+ */
+
+.su-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-4);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+.su-form--sm {
+  gap: var(--su-space-3);
+}
+
+.su-form--lg {
+  gap: var(--su-space-5);
+}
+
+/* === Form.Item ============================================== */
+
+.su-form-item {
+  display: flex;
+  gap: var(--su-space-2);
+  min-width: 0;
+}
+
+.su-form-item--vertical {
+  flex-direction: column;
+}
+
+.su-form-item--horizontal {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--su-space-4);
+}
+
+/* In horizontal layout the label gets a dedicated column so stacked rows
+ * align visually even when labels vary in length. 7em is roughly enough
+ * for "Password", "Username", "Newsletter" — callers can override via
+ * labelClassName if they need something wider. */
+.su-form-item--horizontal > .su-form-item__label {
+  flex: 0 0 7em;
+  padding-top: 0.45em; /* nudge to baseline of a standard Input */
+  text-align: right;
+}
+
+.su-form-item__control {
+  /* Items share flex:1 in horizontal mode, but we keep min-width:0 for
+   * vertical too so long inline error strings don't push past the page. */
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-1);
+}
+
+/* === Label ================================================== */
+
+.su-form-item__label {
+  font-size: var(--su-font-size-body);
+  font-weight: 600;
+  color: var(--su-ink-primary);
+  line-height: 1.35;
+  /* Labels sit outside the hand-drawn filter — the wobble belongs to the
+   * control itself, not the text that describes it. */
+  filter: none;
+}
+
+.su-form-item--sm .su-form-item__label {
+  font-size: var(--su-font-size-small);
+}
+
+.su-form-item--lg .su-form-item__label {
+  font-size: var(--su-font-size-h3);
+}
+
+.su-form-item__required {
+  color: var(--su-color-danger);
+  margin-left: 0.25em;
+  font-size: 1.1em;
+  line-height: 1;
+  /* Keep the asterisk crisp — the label is not filtered, but just in case
+   * a parent applies one. */
+  filter: none;
+}
+
+/* === Helper / Error ========================================= */
+
+.su-form-item__helper,
+.su-form-item__error {
+  font-size: var(--su-font-size-small);
+  line-height: 1.4;
+  padding-left: var(--su-space-1);
+  filter: none;
+}
+
+.su-form-item__helper {
+  color: var(--su-ink-muted);
+}
+
+.su-form-item__error {
+  color: var(--su-color-danger);
+}
+
+/* When an item is in error, nudge the contained control toward the danger
+ * palette even if the child component didn't get `error={true}` passed
+ * explicitly. This is a belt-and-suspenders visual — most callers who set
+ * `<Form.Item error=...>` will already flip their child into error mode,
+ * but we give them one last hint via a subtle accent. */
+.su-form-item--error > .su-form-item__label {
+  color: var(--su-color-danger);
+}

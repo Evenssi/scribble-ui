@@ -137,6 +137,9 @@ export default function RootLayout({
               <Link href="/components/datepicker" className="docs-nav-link">
                 DatePicker
               </Link>
+              <Link href="/components/form" className="docs-nav-link">
+                Form
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

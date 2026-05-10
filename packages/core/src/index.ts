@@ -37,3 +37,4 @@ export * from './components/Breadcrumb';
 export * from './components/NumberInput';
 export * from './components/Slider';
 export * from './components/DatePicker';
+export * from './components/Form';

@@ -286,10 +286,19 @@ export default function HomePage() {
             — calendar dropdown with portalled popup, keyboard month/year nav, min/max disabling and locale labels.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/form">
+            Form
+          </Link>
+          <span className="home-component-desc">
+            — visual shell for labels, required marks, errors and helpers.
+            Bring your own state (react-hook-form + zod recommended).
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 18 · 33 components shipped · Form (RHF + zod) is the final round.
+        Day 19 · 34 components shipped · Form (final round) landed — bring-your-own-state via react-hook-form + zod.
       </p>
     </article>
   );
