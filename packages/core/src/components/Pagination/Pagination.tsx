@@ -131,7 +131,7 @@ export function getPageItems(
       clampedCurrent + clampedSibling,
       clampedBoundary + clampedSibling * 2 + 2
     ),
-    endPages.length > 0 ? endPages[0] - 2 : totalPages - 1
+    endPages.length > 0 ? (endPages[0] as number) - 2 : totalPages - 1
   );
 
   const items: PageItem[] = [];
