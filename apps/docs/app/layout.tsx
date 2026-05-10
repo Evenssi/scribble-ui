@@ -128,6 +128,9 @@ export default function RootLayout({
               <Link href="/components/breadcrumb" className="docs-nav-link">
                 Breadcrumb
               </Link>
+              <Link href="/components/numberinput" className="docs-nav-link">
+                NumberInput
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

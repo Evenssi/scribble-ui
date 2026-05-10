@@ -262,10 +262,18 @@ export default function HomePage() {
             — hierarchical trail with items + composition APIs, custom separators and mid-path ellipsis.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/numberinput">
+            NumberInput
+          </Link>
+          <span className="home-component-desc">
+            — numeric field with ± steppers, keyboard ↑/↓ + Shift/Alt modifiers, min/max clamp and precision.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 17 · 30 components shipped · Form next.
+        Day 18 · 31 components shipped · Slider + DatePicker shipping next.
       </p>
     </article>
   );

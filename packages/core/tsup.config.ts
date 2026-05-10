@@ -126,6 +126,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Breadcrumb/Breadcrumb.css',
     to: 'dist/components/Breadcrumb/Breadcrumb.css',
   },
+  {
+    from: 'src/components/NumberInput/NumberInput.css',
+    to: 'dist/components/NumberInput/NumberInput.css',
+  },
 ];
 
 export default defineConfig({

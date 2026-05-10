@@ -1,0 +1,225 @@
+/* scribble-ui · NumberInput
+ *
+ * Visual contract mirrors `<Input>` exactly: the hand-drawn border lives on
+ * the wrapper element so prefix / suffix / ± controls all sit inside the
+ * same wobbly outline. The native `<input type="text">` itself is borderless
+ * and transparent — we keep `type="text"` on purpose to avoid the native
+ * number spinner and the cross-browser inconsistencies that come with it.
+ *
+ * Class names are flat and prefixed with `su-number-input` so consumers
+ * don't need a CSS-Modules-aware bundler.
+ */
+
+.su-number-input {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--su-space-1);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+.su-number-input__wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-btn);
+  box-shadow: var(--su-shadow-xs);
+
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    border-color var(--su-duration-fast) ease-out,
+    filter var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+/* Focus: bump the wobble for a livelier sketch. `focus-within` lets the
+ * upgrade fire whether the user lands on the input or a step button. */
+.su-number-input__wrapper:focus-within {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+  border-color: var(--su-color-brand-deep);
+}
+
+/* When in error, focus still bumps the wobble but keeps the danger color. */
+.su-number-input__wrapper--error,
+.su-number-input__wrapper--error:focus-within {
+  border-color: var(--su-color-danger);
+}
+
+/* === Sizes ================================================== */
+
+.su-number-input__wrapper--sm {
+  font-size: var(--su-font-size-small);
+  padding: 4px 10px;
+  min-height: 32px;
+}
+
+.su-number-input__wrapper--md {
+  font-size: var(--su-font-size-body);
+  padding: 8px 14px;
+  min-height: 40px;
+}
+
+.su-number-input__wrapper--lg {
+  font-size: var(--su-font-size-h3);
+  padding: 12px 18px;
+  min-height: 52px;
+}
+
+/* === States ================================================= */
+
+.su-number-input__wrapper--disabled {
+  background: color-mix(in srgb, var(--su-bg-paper) 80%, var(--su-bg-grid));
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+  /* Drop the wobble entirely when disabled — match Button/Input. */
+  filter: none;
+}
+
+.su-number-input__wrapper--readonly {
+  background: color-mix(in srgb, var(--su-bg-paper) 92%, var(--su-bg-grid));
+}
+
+/* === Native control ========================================= */
+
+.su-number-input__control {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  /* Right-align numeric content reads better next to the unit suffix. */
+  text-align: left;
+}
+
+.su-number-input__control::placeholder {
+  color: var(--su-ink-faint);
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.su-number-input__control:disabled {
+  cursor: not-allowed;
+  color: var(--su-ink-faint);
+}
+
+/* Strip the WebKit/Blink number spinner just in case a host stylesheet
+ * forces the input into number mode — safety net only. */
+.su-number-input__control::-webkit-outer-spin-button,
+.su-number-input__control::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* === Slots (prefix / suffix) ================================ */
+
+.su-number-input__affix {
+  display: inline-flex;
+  align-items: center;
+  color: var(--su-ink-muted);
+  flex: 0 0 auto;
+  user-select: none;
+  /* Render slot glyphs crisply by neutralising the wrapper filter. */
+  filter: none;
+}
+
+/* === ± controls ============================================= */
+
+.su-number-input__controls {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  /* Step glyphs read crisper without the parent wobble. */
+  filter: none;
+}
+
+.su-number-input__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 14px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: var(--su-radius-tag);
+  background: transparent;
+  color: var(--su-ink-muted);
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition:
+    background var(--su-duration-fast) ease-out,
+    color var(--su-duration-fast) ease-out,
+    transform var(--su-duration-fast) var(--su-ease-bounce);
+}
+
+.su-number-input__step:hover:not(:disabled) {
+  background: var(--su-bg-grid);
+  color: var(--su-ink-primary);
+  transform: translate(-0.5px, -0.5px) rotate(-1deg);
+}
+
+.su-number-input__step:active:not(:disabled) {
+  transform: translate(1px, 1px) rotate(0.5deg);
+  color: var(--su-color-brand-deep);
+}
+
+.su-number-input__step:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+.su-number-input__step:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* sm: tighter step buttons to keep the 32px wrapper height. */
+.su-number-input__wrapper--sm .su-number-input__step {
+  width: 16px;
+  height: 11px;
+}
+
+/* lg: roomier step buttons. */
+.su-number-input__wrapper--lg .su-number-input__step {
+  width: 22px;
+  height: 18px;
+}
+
+/* === Helper text ============================================ */
+
+.su-number-input__helper {
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  padding-left: var(--su-space-1);
+  /* Helper sits outside the hand-drawn frame. */
+  filter: none;
+}
+
+.su-number-input__helper--error {
+  color: var(--su-color-danger);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .su-number-input__wrapper,
+  .su-number-input__step,
+  .su-number-input__step:hover:not(:disabled),
+  .su-number-input__step:active:not(:disabled) {
+    transition: none;
+    transform: none;
+  }
+}
