@@ -32,3 +32,4 @@ export * from './components/Timeline';
 export * from './components/BackTop';
 export * from './components/Dropdown';
 export * from './components/Alert';
+export * from './components/Pagination';

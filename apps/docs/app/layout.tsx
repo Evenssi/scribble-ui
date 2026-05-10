@@ -122,6 +122,9 @@ export default function RootLayout({
               <Link href="/components/alert" className="docs-nav-link">
                 Alert
               </Link>
+              <Link href="/components/pagination" className="docs-nav-link">
+                Pagination
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

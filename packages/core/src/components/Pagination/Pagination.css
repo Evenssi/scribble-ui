@@ -1,0 +1,245 @@
+/* scribble-ui · Pagination
+ *
+ * Each page / nav button is its own little sticky-note: hand-drawn
+ * wobble filter, asymmetric rounded corners, hard offset shadow. The
+ * active page gets the note-yellow background and a bolder stroke so
+ * it's unmistakably "where you are".
+ *
+ * Class names are flat and prefixed with `su-pagination` to avoid the
+ * need for CSS-Modules-aware tooling in host apps.
+ */
+
+.su-pagination {
+  display: inline-flex;
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+.su-pagination__list {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.su-pagination__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === Buttons (shared base) =================================== */
+
+.su-pagination__page,
+.su-pagination__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--su-font-family-hand);
+  font-weight: var(--su-font-weight-bold);
+  color: var(--su-ink-primary);
+  line-height: 1;
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-xs);
+
+  cursor: pointer;
+  padding: 0;
+
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out,
+    background var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm level by default).
+   * Requires <HandDrawnFilters /> to be mounted once at the app root. */
+  filter: url(#su-hand-c);
+}
+
+.su-pagination__page:hover:not(:disabled),
+.su-pagination__nav:hover:not(:disabled) {
+  transform: translate(-1px, -1px) rotate(-0.5deg);
+  box-shadow: var(--su-shadow-sm);
+  filter: url(#su-hand-b);
+  background: color-mix(in srgb, var(--su-bg-paper) 85%, var(--su-note-yellow));
+}
+
+.su-pagination__page:active:not(:disabled),
+.su-pagination__nav:active:not(:disabled) {
+  transform: translate(1px, 1px) rotate(0.3deg);
+  box-shadow: var(--su-shadow-xs);
+  filter: url(#su-hand-a);
+}
+
+.su-pagination__page:focus-visible,
+.su-pagination__nav:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-pagination__page:disabled,
+.su-pagination__nav:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+  box-shadow: none;
+  filter: none;
+}
+
+/* === Active page ============================================ */
+
+.su-pagination__page--active,
+.su-pagination__page--active:hover:not(:disabled) {
+  background: var(--su-note-yellow);
+  border-width: var(--su-stroke-bold);
+  box-shadow: var(--su-shadow-sm);
+  animation: su-pagination-wobble 3.2s var(--su-ease-bounce) infinite;
+  cursor: default;
+}
+
+@keyframes su-pagination-wobble {
+  0%,
+  100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+}
+
+/* Degenerate empty state (total=0) — look disabled but keep the box. */
+.su-pagination__page--empty {
+  background: color-mix(in srgb, var(--su-bg-paper) 80%, var(--su-bg-grid));
+  opacity: 0.6;
+}
+
+/* === Ellipsis =============================================== */
+
+.su-pagination__item--ellipsis {
+  color: var(--su-ink-muted);
+  user-select: none;
+  /* Ellipsis should not inherit the button wobble. */
+  filter: none;
+}
+
+.su-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--su-font-weight-bold);
+  letter-spacing: 0.1em;
+  padding: 0 var(--su-space-1);
+}
+
+/* === Simple mode readout ==================================== */
+
+.su-pagination__item--readout {
+  /* Don't stretch the readout — let neighbouring buttons breathe. */
+  padding: 0 var(--su-space-2);
+}
+
+.su-pagination__readout {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--su-space-1);
+  font-weight: var(--su-font-weight-bold);
+  color: var(--su-ink-primary);
+  /* Readout is text, not a wobbling surface. */
+  filter: none;
+}
+
+.su-pagination__readout strong {
+  font-size: 1.05em;
+}
+
+.su-pagination__readout-sep {
+  color: var(--su-ink-muted);
+  padding: 0 2px;
+}
+
+/* === Sizes ================================================== */
+
+.su-pagination--medium .su-pagination__page,
+.su-pagination--medium .su-pagination__nav {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 var(--su-space-2);
+  font-size: var(--su-font-size-body);
+}
+
+.su-pagination--medium .su-pagination__nav {
+  /* Icon-only square — drop the horizontal padding. */
+  width: 36px;
+  padding: 0;
+  font-size: var(--su-font-size-h3);
+}
+
+.su-pagination--medium .su-pagination__ellipsis {
+  min-width: 28px;
+  font-size: var(--su-font-size-body);
+}
+
+.su-pagination--small .su-pagination__page,
+.su-pagination--small .su-pagination__nav {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  font-size: var(--su-font-size-small);
+}
+
+.su-pagination--small .su-pagination__nav {
+  width: 28px;
+  padding: 0;
+  font-size: var(--su-font-size-body);
+}
+
+.su-pagination--small .su-pagination__ellipsis {
+  min-width: 22px;
+  font-size: var(--su-font-size-small);
+}
+
+.su-pagination--small .su-pagination__list {
+  gap: var(--su-space-1);
+}
+
+/* === Disabled group ========================================= */
+
+.su-pagination--disabled {
+  cursor: not-allowed;
+}
+
+.su-pagination--disabled .su-pagination__page,
+.su-pagination--disabled .su-pagination__nav {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  filter: none;
+  animation: none;
+}
+
+/* === Reduced motion ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-pagination__page,
+  .su-pagination__nav,
+  .su-pagination__page:hover:not(:disabled),
+  .su-pagination__nav:hover:not(:disabled),
+  .su-pagination__page:active:not(:disabled),
+  .su-pagination__nav:active:not(:disabled) {
+    transition: none;
+    transform: none;
+  }
+
+  .su-pagination__page--active,
+  .su-pagination__page--active:hover:not(:disabled) {
+    animation: none;
+    transform: none;
+  }
+}

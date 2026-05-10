@@ -118,6 +118,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Alert/Alert.css',
     to: 'dist/components/Alert/Alert.css',
   },
+  {
+    from: 'src/components/Pagination/Pagination.css',
+    to: 'dist/components/Pagination/Pagination.css',
+  },
 ];
 
 export default defineConfig({

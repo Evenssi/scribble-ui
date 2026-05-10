@@ -246,10 +246,18 @@ export default function HomePage() {
             — static inline feedback strip with 4 variants, closable and banner modes.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/pagination">
+            Pagination
+          </Link>
+          <span className="home-component-desc">
+            — data-driven page navigator with smart ellipsis folding, simple / small variants and full a11y.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 17 · 28 components shipped · Pagination + Breadcrumb landing next.
+        Day 17 · 29 components shipped · Breadcrumb landing next.
       </p>
     </article>
   );
