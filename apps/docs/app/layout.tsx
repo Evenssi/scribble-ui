@@ -131,6 +131,9 @@ export default function RootLayout({
               <Link href="/components/numberinput" className="docs-nav-link">
                 NumberInput
               </Link>
+              <Link href="/components/slider" className="docs-nav-link">
+                Slider
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

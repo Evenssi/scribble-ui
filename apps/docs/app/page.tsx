@@ -270,10 +270,18 @@ export default function HomePage() {
             — numeric field with ± steppers, keyboard ↑/↓ + Shift/Alt modifiers, min/max clamp and precision.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/slider">
+            Slider
+          </Link>
+          <span className="home-component-desc">
+            — single or range value picker with marks, sticky-note tooltip, vertical mode and full keyboard nav.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 18 · 31 components shipped · Slider + DatePicker shipping next.
+        Day 18 · 32 components shipped · DatePicker shipping next.
       </p>
     </article>
   );

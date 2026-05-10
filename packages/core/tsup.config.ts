@@ -130,6 +130,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/NumberInput/NumberInput.css',
     to: 'dist/components/NumberInput/NumberInput.css',
   },
+  {
+    from: 'src/components/Slider/Slider.css',
+    to: 'dist/components/Slider/Slider.css',
+  },
 ];
 
 export default defineConfig({

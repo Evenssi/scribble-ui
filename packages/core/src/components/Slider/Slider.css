@@ -1,0 +1,356 @@
+/* scribble-ui · Slider
+ *
+ * Hand-drawn looking slider with single-value and range (dual-thumb)
+ * modes. Renders a `<div role="slider">` per thumb instead of using a
+ * native `<input type="range">` so we can paint the rail / fill / thumbs
+ * with the shared SVG-filter wobble.
+ *
+ * The visible rail lives on `.su-slider__rail` (a thin paper-coloured
+ * line); the highlighted portion is `.su-slider__fill` overlaid on top.
+ * Both share the same hand-drawn filter so the seams move together.
+ *
+ * Class names are flat and prefixed with `su-slider` so consumers don't
+ * need a CSS-Modules-aware bundler.
+ */
+
+.su-slider {
+  --su-slider-track-thickness: 6px;
+  --su-slider-thumb-size: 18px;
+  /* Outer height covers the focus ring + tooltip headroom so consumers
+   * don't have to leave extra margin around the slider. */
+  --su-slider-pad-block: 18px;
+
+  position: relative;
+  display: flex;
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  user-select: none;
+  /* Stops Mobile Safari from triggering the page scroll while the user
+   * drags the thumb. */
+  touch-action: none;
+}
+
+/* === Sizes ================================================== */
+/* sm / md / lg govern thumb size + track thickness in lockstep so the
+ * thumb always looks "centered on a line". */
+
+.su-slider--sm {
+  --su-slider-track-thickness: 4px;
+  --su-slider-thumb-size: 14px;
+  font-size: var(--su-font-size-small);
+}
+
+.su-slider--md {
+  --su-slider-track-thickness: 6px;
+  --su-slider-thumb-size: 18px;
+  font-size: var(--su-font-size-body);
+}
+
+.su-slider--lg {
+  --su-slider-track-thickness: 8px;
+  --su-slider-thumb-size: 22px;
+  font-size: var(--su-font-size-h3);
+}
+
+/* === Horizontal layout ====================================== */
+
+.su-slider:not(.su-slider--vertical) {
+  width: 100%;
+  min-width: 120px;
+  /* Reserve vertical space for the thumb + focus outline + tooltip. */
+  padding-block: var(--su-slider-pad-block);
+}
+
+.su-slider:not(.su-slider--vertical) .su-slider__track {
+  position: relative;
+  width: 100%;
+  height: var(--su-slider-track-thickness);
+}
+
+/* === Vertical layout ========================================
+ * Implemented by re-orienting children rather than rotating the host —
+ * rotation makes the hit area unintuitive and breaks getBoundingClientRect
+ * driven hit-testing. */
+
+.su-slider--vertical {
+  display: inline-flex;
+  height: 200px;
+  /* Match the horizontal padding so the focus ring + tooltip have room. */
+  padding-inline: var(--su-slider-pad-block);
+}
+
+.su-slider--vertical .su-slider__track {
+  position: relative;
+  width: var(--su-slider-track-thickness);
+  height: 100%;
+}
+
+/* === Rail (the static line) ================================= */
+
+.su-slider__track {
+  cursor: pointer;
+}
+
+.su-slider__rail,
+.su-slider__fill {
+  position: absolute;
+  border-radius: 999px;
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  /* Hand-drawn wobble (Calm). Requires <HandDrawnFilters /> mounted. */
+  filter: url(#su-hand-c);
+  transition: filter var(--su-duration-fast) ease-out;
+}
+
+.su-slider:not(.su-slider--vertical) .su-slider__rail,
+.su-slider:not(.su-slider--vertical) .su-slider__fill {
+  top: 0;
+  bottom: 0;
+}
+
+.su-slider:not(.su-slider--vertical) .su-slider__rail {
+  left: 0;
+  right: 0;
+}
+
+.su-slider--vertical .su-slider__rail,
+.su-slider--vertical .su-slider__fill {
+  left: 0;
+  right: 0;
+}
+
+.su-slider--vertical .su-slider__rail {
+  top: 0;
+  bottom: 0;
+}
+
+.su-slider__rail {
+  background: var(--su-bg-paper);
+  box-shadow: var(--su-shadow-xs);
+}
+
+.su-slider__fill {
+  background: var(--su-color-brand-soft);
+  border-color: var(--su-color-brand-deep);
+}
+
+/* While dragging or hovering, bump the wobble of the active rail+fill so
+ * the slider feels responsive without changing its silhouette. */
+.su-slider:hover:not(.su-slider--disabled) .su-slider__rail,
+.su-slider:hover:not(.su-slider--disabled) .su-slider__fill {
+  filter: url(#su-hand-b);
+}
+
+.su-slider--dragging .su-slider__rail,
+.su-slider--dragging .su-slider__fill {
+  filter: url(#su-hand-a);
+}
+
+/* === Thumb ================================================== */
+
+.su-slider__thumb {
+  position: absolute;
+  width: var(--su-slider-thumb-size);
+  height: var(--su-slider-thumb-size);
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-bold) solid var(--su-ink-primary);
+  /* Slightly off-round corners read more like an inked circle than a
+   * geometric one. */
+  border-radius: 48% 52% 50% 50%;
+  box-shadow: var(--su-shadow-xs);
+
+  cursor: grab;
+  /* Keep the thumb crisp even as the rail wobbles around it. */
+  filter: url(#su-hand-c);
+  transition:
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    background var(--su-duration-fast) ease-out,
+    border-color var(--su-duration-fast) ease-out,
+    filter var(--su-duration-fast) ease-out;
+
+  /* Above the rail / fill so the thumb always wins hit-testing on the
+   * track edges. */
+  z-index: 2;
+}
+
+/* Center the thumb on its track coordinate. */
+.su-slider:not(.su-slider--vertical) .su-slider__thumb {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.su-slider--vertical .su-slider__thumb {
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.su-slider__thumb:hover {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+  background: var(--su-color-brand-soft);
+}
+
+.su-slider__thumb:active,
+.su-slider__thumb--dragging {
+  cursor: grabbing;
+  filter: url(#su-hand-a);
+  box-shadow: var(--su-shadow-xs);
+  background: var(--su-color-brand);
+  border-color: var(--su-color-brand-deep);
+}
+
+.su-slider__thumb:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+/* In range mode, the most-recently-touched thumb gets a stronger
+ * border so it's obvious which one keyboard input will move. */
+.su-slider__thumb--active {
+  background: var(--su-color-brand-soft);
+  border-color: var(--su-color-brand-deep);
+}
+
+/* === Tooltip ================================================ */
+
+.su-slider__tooltip {
+  position: absolute;
+  /* Center horizontally on the thumb; placement (above / right) is set
+   * per orientation below. */
+  pointer-events: none;
+  /* Float above neighbouring thumbs so two close labels don't get
+   * clipped by an overlapping circle. */
+  z-index: 3;
+  /* The tooltip itself is just a positioning shell — visual styles
+   * live on `.su-slider__tooltip-inner` so the wobble + paper bg can
+   * be applied without disturbing the layout. */
+  filter: none;
+}
+
+.su-slider:not(.su-slider--vertical) .su-slider__tooltip {
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.su-slider--vertical .su-slider__tooltip {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.su-slider__tooltip-inner {
+  display: inline-block;
+  padding: 2px var(--su-space-2);
+  background: var(--su-note-yellow);
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-xs);
+  font-family: var(--su-font-family-hand);
+  font-size: var(--su-font-size-small);
+  white-space: nowrap;
+  filter: url(#su-hand-c);
+}
+
+/* === Marks ================================================== */
+
+.su-slider__marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.su-slider__mark {
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
+.su-slider:not(.su-slider--vertical) .su-slider__mark {
+  top: 50%;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+  /* Push the label below the tick. */
+  align-items: center;
+}
+
+.su-slider--vertical .su-slider__mark {
+  left: 50%;
+  transform: translate(-50%, 50%);
+  flex-direction: row;
+}
+
+.su-slider__mark-tick {
+  display: block;
+  width: 2px;
+  height: calc(var(--su-slider-track-thickness) + 6px);
+  background: var(--su-ink-primary);
+  border-radius: 1px;
+  filter: url(#su-hand-c);
+}
+
+.su-slider--vertical .su-slider__mark-tick {
+  width: calc(var(--su-slider-track-thickness) + 6px);
+  height: 2px;
+}
+
+.su-slider__mark-label {
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  /* Labels sit outside the wobble so the type stays legible. */
+  filter: none;
+}
+
+.su-slider:not(.su-slider--vertical) .su-slider__mark-label {
+  margin-top: 6px;
+  /* Center the label under its tick — without nowrap, long labels would
+   * push the absolutely-positioned mark out of place. */
+  white-space: nowrap;
+}
+
+.su-slider--vertical .su-slider__mark-label {
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+/* === Disabled =============================================== */
+
+.su-slider--disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  color: var(--su-ink-faint);
+}
+
+.su-slider--disabled .su-slider__rail,
+.su-slider--disabled .su-slider__fill,
+.su-slider--disabled .su-slider__thumb,
+.su-slider--disabled .su-slider__mark-tick {
+  /* Drop the wobble entirely — match Button's calm inert state. */
+  filter: none;
+  box-shadow: none;
+}
+
+.su-slider--disabled .su-slider__thumb {
+  cursor: not-allowed;
+  background: var(--su-bg-paper);
+  border-color: var(--su-ink-faint);
+}
+
+.su-slider--disabled .su-slider__fill {
+  background: color-mix(in srgb, var(--su-bg-paper) 70%, var(--su-bg-grid));
+  border-color: var(--su-ink-faint);
+}
+
+.su-slider--disabled .su-slider__track {
+  cursor: not-allowed;
+}
+
+/* === Reduced motion ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-slider__thumb,
+  .su-slider__rail,
+  .su-slider__fill {
+    transition: none;
+  }
+}
