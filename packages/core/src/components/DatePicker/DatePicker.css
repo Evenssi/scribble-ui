@@ -1,0 +1,449 @@
+/* scribble-ui · DatePicker
+ *
+ * Trigger inherits the Input wrapper look (paper background, hand-drawn
+ * border, wobble filter) so it sits naturally next to inputs in a form.
+ * The calendar popup is portalled into <body> as a sticky-note panel.
+ *
+ * Class names are flat and prefixed with `su-datepicker` / `su-calendar`
+ * so consumers don't need a CSS-Modules-aware bundler.
+ */
+
+.su-datepicker {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--su-space-1);
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+  position: relative;
+}
+
+/* Shell wraps the trigger button + the absolutely-positioned clear
+ * button so we can keep them as siblings (avoids nesting interactive
+ * elements inside the trigger). */
+.su-datepicker__shell {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+
+/* === Trigger ================================================ */
+
+.su-datepicker__trigger {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--su-space-2);
+  width: 100%;
+
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-btn);
+  box-shadow: var(--su-shadow-xs);
+  color: var(--su-ink-primary);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    box-shadow var(--su-duration-fast) var(--su-ease-bounce),
+    border-color var(--su-duration-fast) ease-out,
+    filter var(--su-duration-fast) ease-out;
+
+  /* Hand-drawn wobble (Calm). */
+  filter: url(#su-hand-c);
+}
+
+/* Hover: lift like a clickable card; reserve the wobble bump for focus/open. */
+.su-datepicker__trigger:hover:not(:disabled):not(.su-datepicker__trigger--open) {
+  transform: translate(-1px, -1px) rotate(-0.3deg);
+  box-shadow: var(--su-shadow-sm);
+  filter: url(#su-hand-b);
+}
+
+.su-datepicker__trigger:active:not(:disabled) {
+  transform: translate(2px, 2px) rotate(0.2deg);
+  box-shadow: var(--su-shadow-xs);
+  filter: url(#su-hand-a);
+}
+
+.su-datepicker__trigger:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 4px;
+}
+
+.su-datepicker__trigger--open {
+  filter: url(#su-hand-b);
+  box-shadow: var(--su-shadow-sm);
+  border-color: var(--su-color-brand-deep);
+  transform: none;
+}
+
+.su-datepicker__trigger--error,
+.su-datepicker__trigger--error.su-datepicker__trigger--open {
+  border-color: var(--su-color-danger);
+}
+
+.su-datepicker__trigger--disabled,
+.su-datepicker__trigger:disabled {
+  background: color-mix(in srgb, var(--su-bg-paper) 80%, var(--su-bg-grid));
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+.su-datepicker__trigger--readonly {
+  background: color-mix(in srgb, var(--su-bg-paper) 92%, var(--su-bg-grid));
+}
+
+.su-datepicker__trigger--placeholder .su-datepicker__value {
+  color: var(--su-ink-faint);
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* When clearable + has value: leave room on the right for the ✕ button. */
+.su-datepicker__trigger--clearable {
+  padding-right: 36px;
+}
+
+/* === Sizes (match Input / Select) =========================== */
+
+.su-datepicker__trigger--sm {
+  font-size: var(--su-font-size-small);
+  padding: 4px 10px;
+  min-height: 32px;
+}
+
+.su-datepicker__trigger--md {
+  font-size: var(--su-font-size-body);
+  padding: 8px 14px;
+  min-height: 40px;
+}
+
+.su-datepicker__trigger--lg {
+  font-size: var(--su-font-size-h3);
+  padding: 12px 18px;
+  min-height: 52px;
+}
+
+/* === Trigger inner parts ==================================== */
+
+.su-datepicker__value {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Don't wobble the text on top of the wobbling border. */
+  filter: none;
+}
+
+.su-datepicker__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--su-ink-muted);
+  filter: none;
+}
+
+/* === Clear button (sibling overlay) ========================= */
+
+.su-datepicker__clear {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--su-ink-muted);
+  cursor: pointer;
+  filter: none;
+
+  transition:
+    background var(--su-duration-fast) ease-out,
+    color var(--su-duration-fast) ease-out;
+}
+
+.su-datepicker__clear:hover {
+  background: var(--su-bg-grid);
+  color: var(--su-ink-primary);
+}
+
+.su-datepicker__clear:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+/* === Helper text ============================================ */
+
+.su-datepicker__helper {
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  padding-left: var(--su-space-1);
+  filter: none;
+}
+
+.su-datepicker__helper--error {
+  color: var(--su-color-danger);
+}
+
+/* === Popup (portalled) ====================================== */
+
+.su-datepicker__popup {
+  /* `position: absolute` + top/left set inline by DatePicker.tsx. */
+  z-index: 1100; /* sit above Modal (1000), like Tooltip / Select listbox */
+
+  background: var(--su-note-yellow);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-md);
+
+  padding: var(--su-space-3);
+
+  /* Calm wobble for the panel itself; cells stay un-filtered to keep
+   * digit glyphs crisp. */
+  filter: url(#su-hand-c);
+
+  font-family: var(--su-font-family-hand);
+  color: var(--su-ink-primary);
+}
+
+/* === Calendar root ========================================== */
+
+.su-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-2);
+  width: 17.5em; /* ~280px at 16px body — keeps the grid square-ish */
+  filter: none;
+}
+
+/* === Header (nav arrows + title) ============================ */
+
+.su-calendar__header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--su-space-2);
+  padding: 0 var(--su-space-1) var(--su-space-1);
+  border-bottom: 1.5px dashed var(--su-ink-primary);
+}
+
+.su-calendar__title {
+  text-align: center;
+  font-weight: var(--su-font-weight-bold);
+  font-size: var(--su-font-size-h3);
+  line-height: var(--su-line-height-tight);
+  filter: none;
+}
+
+.su-calendar__nav {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1.5px solid var(--su-ink-primary);
+  border-radius: 50%;
+  background: var(--su-bg-paper);
+  color: var(--su-ink-primary);
+  cursor: pointer;
+  filter: url(#su-hand-c);
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out;
+}
+
+.su-calendar__nav:hover {
+  filter: url(#su-hand-b);
+  transform: rotate(-3deg);
+}
+
+.su-calendar__nav:active {
+  filter: url(#su-hand-a);
+  transform: rotate(2deg);
+}
+
+.su-calendar__nav:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+/* === Weekday header row ===================================== */
+
+.su-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  font-size: var(--su-font-size-small);
+  color: var(--su-ink-muted);
+  padding: 0 var(--su-space-1);
+}
+
+.su-calendar__weekday {
+  text-align: center;
+  padding: var(--su-space-1) 0;
+  font-weight: var(--su-font-weight-medium);
+}
+
+/* === Day grid =============================================== */
+
+.su-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  padding: 0 var(--su-space-1);
+}
+
+.su-calendar__day {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+
+  border: 1.5px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--su-ink-primary);
+  font-family: inherit;
+  font-size: var(--su-font-size-body);
+  cursor: pointer;
+  filter: none;
+
+  transition:
+    background var(--su-duration-fast) ease-out,
+    border-color var(--su-duration-fast) ease-out,
+    transform var(--su-duration-fast) var(--su-ease-bounce);
+}
+
+.su-calendar__day:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--su-color-brand) 22%, transparent);
+  transform: rotate(-2deg);
+}
+
+.su-calendar__day:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 1px;
+}
+
+.su-calendar__day--outside {
+  color: var(--su-ink-faint);
+  opacity: 0.45;
+}
+
+.su-calendar__day--today {
+  border-color: var(--su-color-brand-deep);
+  font-weight: var(--su-font-weight-bold);
+}
+
+.su-calendar__day--selected,
+.su-calendar__day--selected:hover {
+  background: var(--su-note-orange);
+  border-color: var(--su-ink-primary);
+  font-weight: var(--su-font-weight-bold);
+  filter: url(#su-hand-c);
+  transform: rotate(-1deg);
+}
+
+.su-calendar__day--disabled {
+  color: var(--su-ink-faint);
+  text-decoration: line-through;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.su-calendar__day--disabled:hover {
+  background: transparent;
+  transform: none;
+}
+
+/* === Footer (Today / Clear shortcuts) ======================= */
+
+.su-calendar__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--su-space-2);
+  margin-top: var(--su-space-1);
+  padding-top: var(--su-space-2);
+  border-top: 1.5px dashed var(--su-ink-primary);
+}
+
+.su-calendar__shortcut {
+  appearance: none;
+  flex: 1;
+  padding: 4px 10px;
+  border: 1.5px solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  background: var(--su-bg-paper);
+  color: var(--su-ink-primary);
+  font-family: inherit;
+  font-size: var(--su-font-size-small);
+  cursor: pointer;
+  filter: url(#su-hand-c);
+  transition:
+    transform var(--su-duration-fast) var(--su-ease-bounce),
+    filter var(--su-duration-fast) ease-out,
+    box-shadow var(--su-duration-fast) ease-out;
+}
+
+.su-calendar__shortcut:hover:not(:disabled) {
+  filter: url(#su-hand-b);
+  transform: translate(-1px, -1px) rotate(-0.5deg);
+  box-shadow: var(--su-shadow-xs);
+}
+
+.su-calendar__shortcut:active:not(:disabled) {
+  filter: url(#su-hand-a);
+  transform: translate(1px, 1px);
+}
+
+.su-calendar__shortcut:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+.su-calendar__shortcut:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: none;
+  transform: none;
+}
+
+/* === Reduced motion ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-datepicker__trigger,
+  .su-datepicker__clear,
+  .su-calendar__nav,
+  .su-calendar__day,
+  .su-calendar__shortcut {
+    transition: none;
+  }
+  .su-datepicker__trigger:hover:not(:disabled):not(.su-datepicker__trigger--open),
+  .su-datepicker__trigger:active:not(:disabled),
+  .su-calendar__nav:hover,
+  .su-calendar__nav:active,
+  .su-calendar__day:hover:not(:disabled),
+  .su-calendar__day--selected,
+  .su-calendar__shortcut:hover:not(:disabled),
+  .su-calendar__shortcut:active:not(:disabled) {
+    transform: none;
+  }
+}

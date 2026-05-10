@@ -278,10 +278,18 @@ export default function HomePage() {
             — single or range value picker with marks, sticky-note tooltip, vertical mode and full keyboard nav.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/datepicker">
+            DatePicker
+          </Link>
+          <span className="home-component-desc">
+            — calendar dropdown with portalled popup, keyboard month/year nav, min/max disabling and locale labels.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 18 · 32 components shipped · DatePicker shipping next.
+        Day 18 · 33 components shipped · Form (RHF + zod) is the final round.
       </p>
     </article>
   );

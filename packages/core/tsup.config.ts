@@ -134,6 +134,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Slider/Slider.css',
     to: 'dist/components/Slider/Slider.css',
   },
+  {
+    from: 'src/components/DatePicker/DatePicker.css',
+    to: 'dist/components/DatePicker/DatePicker.css',
+  },
 ];
 
 export default defineConfig({

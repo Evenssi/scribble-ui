@@ -134,6 +134,9 @@ export default function RootLayout({
               <Link href="/components/slider" className="docs-nav-link">
                 Slider
               </Link>
+              <Link href="/components/datepicker" className="docs-nav-link">
+                DatePicker
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>
