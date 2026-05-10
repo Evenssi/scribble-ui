@@ -1,0 +1,172 @@
+/* scribble-ui · Alert
+ *
+ * A static, inline feedback surface: sticky-note background + a
+ * solid accent stripe on the left edge + a hand-drawn glyph. The
+ * component is non-interactive at rest, so we keep the calm
+ * `#su-hand-c` wobble without any hover/active upgrades; the close
+ * button has its own focus + hover treatment and stays filter-free
+ * for glyph crispness.
+ *
+ * Two component-scoped custom properties drive the visuals:
+ *   --su-alert-accent   — stripe color + glyph color
+ *   --su-alert-surface  — note-style background tint
+ * Each `.su-alert--variant-*` rule overrides them. They are declared
+ * on the block so they don't pollute the global token set.
+ */
+
+.su-alert {
+  /* Component-scoped defaults (info). Each variant overrides both. */
+  --su-alert-accent: var(--su-color-info);
+  --su-alert-surface: var(--su-note-blue);
+
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--su-space-3);
+
+  padding: var(--su-space-3) var(--su-space-4);
+  padding-left: calc(var(--su-space-4) + var(--su-space-1));
+
+  background: var(--su-alert-surface);
+  color: var(--su-ink-primary);
+  font-family: var(--su-font-family-hand);
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-normal);
+
+  border: var(--su-stroke-thin) solid var(--su-ink-primary);
+  border-left: var(--su-stroke-bold) solid var(--su-alert-accent);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-sm);
+
+  /* Hand-drawn wobble (Calm level by default) — matches Tag / Result's
+   * static surfaces. Requires <HandDrawnFilters />. */
+  filter: url(#su-hand-c);
+}
+
+/* === Variants ============================================== */
+
+.su-alert--variant-info {
+  --su-alert-accent: var(--su-color-info);
+  --su-alert-surface: var(--su-note-blue);
+}
+
+.su-alert--variant-success {
+  --su-alert-accent: var(--su-color-success);
+  --su-alert-surface: var(--su-note-green);
+}
+
+.su-alert--variant-warning {
+  --su-alert-accent: var(--su-color-warning);
+  --su-alert-surface: var(--su-note-yellow);
+}
+
+.su-alert--variant-error {
+  --su-alert-accent: var(--su-color-danger);
+  --su-alert-surface: var(--su-note-pink);
+}
+
+/* === Banner mode ============================================
+ * A wide, flat strip. Drops the rounded corners, the hard offset
+ * shadow and the wobble so the surface sits flush against the
+ * layout edge (page tops, sticky footers). */
+
+.su-alert--banner {
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+  width: 100%;
+}
+
+/* === Icon ================================================== */
+
+.su-alert__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  flex: 0 0 auto;
+  color: var(--su-alert-accent);
+  /* Neutralise the parent wobble so the glyph stays crisp. */
+  filter: none;
+  /* Nudge to align with the first line of the title. */
+  margin-top: 0.1em;
+}
+
+.su-alert__glyph {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* === Body ================================================== */
+
+.su-alert__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--su-space-1);
+}
+
+.su-alert__title {
+  font-weight: var(--su-font-weight-bold);
+  font-size: var(--su-font-size-h3);
+  line-height: var(--su-line-height-tight);
+  color: var(--su-ink-primary);
+}
+
+/* When both title + description render, nudge the description into
+ * a muted body color so the title leads the eye. */
+.su-alert--has-title .su-alert__description {
+  color: var(--su-ink-muted);
+}
+
+.su-alert__description {
+  font-size: var(--su-font-size-body);
+  line-height: var(--su-line-height-normal);
+  color: var(--su-ink-primary);
+}
+
+/* === Close button ========================================== */
+
+.su-alert__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin: 0;
+  margin-top: 0.1em;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--su-ink-muted);
+  cursor: pointer;
+  flex: 0 0 auto;
+
+  /* Keep ✕ crisp — no inherited wobble. */
+  filter: none;
+  transition:
+    background var(--su-duration-fast) ease-out,
+    color var(--su-duration-fast) ease-out;
+}
+
+.su-alert__close:hover {
+  background: color-mix(in srgb, var(--su-ink-primary) 12%, transparent);
+  color: var(--su-ink-primary);
+}
+
+.su-alert__close:focus-visible {
+  outline: 2px dashed var(--su-color-brand-deep);
+  outline-offset: 2px;
+}
+
+/* === Reduced motion ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .su-alert__close {
+    transition: none;
+  }
+}

@@ -119,6 +119,9 @@ export default function RootLayout({
               <Link href="/components/dropdown" className="docs-nav-link">
                 Dropdown
               </Link>
+              <Link href="/components/alert" className="docs-nav-link">
+                Alert
+              </Link>
             </nav>
           </aside>
           <main className="docs-main">{children}</main>

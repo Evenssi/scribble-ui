@@ -114,6 +114,10 @@ const cssFiles: Array<{ from: string; to: string }> = [
     from: 'src/components/Dropdown/Dropdown.css',
     to: 'dist/components/Dropdown/Dropdown.css',
   },
+  {
+    from: 'src/components/Alert/Alert.css',
+    to: 'dist/components/Alert/Alert.css',
+  },
 ];
 
 export default defineConfig({

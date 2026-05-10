@@ -238,10 +238,18 @@ export default function HomePage() {
             — menu overlay with 8 placements, click / hover / contextMenu triggers and roving-tabindex keyboard nav.
           </span>
         </li>
+        <li>
+          <Link className="home-component-link" href="/components/alert">
+            Alert
+          </Link>
+          <span className="home-component-desc">
+            — static inline feedback strip with 4 variants, closable and banner modes.
+          </span>
+        </li>
       </ul>
 
       <p className="home-status">
-        Day 16 · 27 components shipped · Form next.
+        Day 17 · 28 components shipped · Pagination + Breadcrumb landing next.
       </p>
     </article>
   );
