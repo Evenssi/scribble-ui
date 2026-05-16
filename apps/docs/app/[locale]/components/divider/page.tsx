@@ -1,22 +1,28 @@
+import { notFound } from 'next/navigation';
 import { Divider } from 'scribble-ui';
-// Reuse the Button page's doc-* class set so every docs page shares one stylesheet.
 
-export default function DividerDocPage() {
+import { isLocale } from '../../../../i18n/config';
+import { getDictionary } from '../../../../i18n/getDictionary';
+
+export default async function DividerDocPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  if (!isLocale(params.locale)) notFound();
+  const dict = await getDictionary(params.locale);
+  const t = dict.components.divider;
+  if (!t) notFound();
+
   return (
     <article className="doc">
-      <h1 className="doc-title">Divider</h1>
-      <p className="doc-lede">
-        A hand-drawn separator. Pick a stroke variant (solid, dashed, wavy),
-        nudge the thickness, and optionally drop a label in the middle to
-        break sections without resorting to extra typography.
-      </p>
+      <h1 className="doc-title">{t.title}</h1>
+      <p className="doc-lede">{t.lede}</p>
 
       {/* === Basic =========================================== */}
       <section className="doc-section">
-        <h2 className="doc-h2">Basic</h2>
-        <p className="doc-note">
-          A bare horizontal divider — defaults to solid + default thickness.
-        </p>
+        <h2 className="doc-h2">{t.sections.basic}</h2>
+        <p className="doc-note">{t.notes.basic}</p>
         <div className="doc-demo">
           <p>Above the line.</p>
           <Divider />
@@ -26,11 +32,8 @@ export default function DividerDocPage() {
 
       {/* === Variants ======================================== */}
       <section className="doc-section">
-        <h2 className="doc-h2">Variants</h2>
-        <p className="doc-note">
-          Solid and dashed lean on CSS borders + the shared SVG-filter wobble.
-          Wavy is painted with a repeating SVG so the curve stays crisp.
-        </p>
+        <h2 className="doc-h2">{t.sections.variants}</h2>
+        <p className="doc-note">{t.notes.variants}</p>
         <div className="doc-demo doc-demo--column">
           <p>solid</p>
           <Divider variant="solid" />
@@ -43,12 +46,8 @@ export default function DividerDocPage() {
 
       {/* === Thickness ======================================= */}
       <section className="doc-section">
-        <h2 className="doc-h2">Thickness</h2>
-        <p className="doc-note">
-          Three presets mapped to the stroke tokens (<code>thin</code> /{' '}
-          <code>default</code> / <code>bold</code>). For the wavy variant
-          the SVG path's stroke-width is bumped instead of the border.
-        </p>
+        <h2 className="doc-h2">{t.sections.thickness}</h2>
+        <p className="doc-note">{t.notes.thickness}</p>
         <div className="doc-demo doc-demo--column">
           <p>thin</p>
           <Divider thickness="thin" />
@@ -65,11 +64,8 @@ export default function DividerDocPage() {
 
       {/* === With label ====================================== */}
       <section className="doc-section">
-        <h2 className="doc-h2">With label</h2>
-        <p className="doc-note">
-          Pass <code>children</code> to drop a label in the middle. Use{' '}
-          <code>labelAlign</code> to push it to the start or end.
-        </p>
+        <h2 className="doc-h2">{t.sections.withLabel}</h2>
+        <p className="doc-note">{t.notes.withLabel}</p>
         <div className="doc-demo doc-demo--column">
           <Divider>OR</Divider>
           <Divider labelAlign="start">Today</Divider>
@@ -81,11 +77,8 @@ export default function DividerDocPage() {
 
       {/* === Vertical ======================================== */}
       <section className="doc-section">
-        <h2 className="doc-h2">Vertical</h2>
-        <p className="doc-note">
-          Drop a vertical divider into a flex row. The divider stretches to
-          the row's cross-axis size via <code>align-self: stretch</code>.
-        </p>
+        <h2 className="doc-h2">{t.sections.vertical}</h2>
+        <p className="doc-note">{t.notes.vertical}</p>
         <div className="doc-demo">
           <div className="doc-demo-row" style={{ alignItems: 'stretch' }}>
             <span>Left</span>
@@ -101,7 +94,7 @@ export default function DividerDocPage() {
 
       {/* === Code ============================================ */}
       <section className="doc-section">
-        <h2 className="doc-h2">Code</h2>
+        <h2 className="doc-h2">{t.sections.code}</h2>
         <pre className="doc-code">
           <code>{`import { Divider } from 'scribble-ui';
 
@@ -134,14 +127,14 @@ export function Example() {
 
       {/* === API ============================================= */}
       <section className="doc-section">
-        <h2 className="doc-h2">API</h2>
+        <h2 className="doc-h2">{t.sections.api}</h2>
         <table className="doc-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Default</th>
-              <th>Description</th>
+              <th>{t.api.headers.name}</th>
+              <th>{t.api.headers.type}</th>
+              <th>{t.api.headers.default}</th>
+              <th>{t.api.headers.description}</th>
             </tr>
           </thead>
           <tbody>
@@ -149,59 +142,41 @@ export function Example() {
               <td><code>orientation</code></td>
               <td><code>'horizontal' | 'vertical'</code></td>
               <td><code>'horizontal'</code></td>
-              <td>
-                Layout orientation. Vertical dividers stretch to fill the
-                cross-axis of a flex row; horizontal ones span the full width.
-              </td>
+              <td>{t.api.rows.orientation?.description}</td>
             </tr>
             <tr>
               <td><code>variant</code></td>
               <td><code>'solid' | 'dashed' | 'wavy'</code></td>
               <td><code>'solid'</code></td>
-              <td>
-                Stroke style. Solid and dashed use CSS borders + the
-                hand-drawn wobble; wavy is painted with a repeating SVG.
-              </td>
+              <td>{t.api.rows.variant?.description}</td>
             </tr>
             <tr>
               <td><code>thickness</code></td>
               <td><code>'thin' | 'default' | 'bold'</code></td>
               <td><code>'default'</code></td>
-              <td>
-                Stroke thickness preset, mapped to the{' '}
-                <code>--su-stroke-*</code> tokens.
-              </td>
+              <td>{t.api.rows.thickness?.description}</td>
             </tr>
             <tr>
               <td><code>children</code></td>
               <td><code>ReactNode</code></td>
               <td><code>—</code></td>
-              <td>
-                Optional inline label. Splits a horizontal divider into two
-                segments around the text. Ignored when{' '}
-                <code>orientation</code> is <code>'vertical'</code>.
-              </td>
+              <td>{t.api.rows.children?.description}</td>
             </tr>
             <tr>
               <td><code>labelAlign</code></td>
               <td><code>'start' | 'center' | 'end'</code></td>
               <td><code>'center'</code></td>
-              <td>Where the label sits along the divider.</td>
+              <td>{t.api.rows.labelAlign?.description}</td>
             </tr>
             <tr>
               <td><code>className</code></td>
               <td><code>string</code></td>
               <td><code>—</code></td>
-              <td>Extra class names appended after the built-in classes.</td>
+              <td>{t.api.rows.className?.description}</td>
             </tr>
           </tbody>
         </table>
-        <p className="doc-note">
-          The component renders a <code>&lt;div role="separator"&gt;</code>{' '}
-          with <code>aria-orientation</code> set, forwards a ref to the
-          underlying <code>HTMLDivElement</code> and accepts every native
-          div attribute (<code>aria-*</code>, <code>data-*</code>, etc.).
-        </p>
+        <p className="doc-note">{t.notes.apiFooter}</p>
       </section>
     </article>
   );

@@ -23,6 +23,14 @@ import { buttonZh } from './components/button';
 import { cardZh } from './components/card';
 import { carouselZh } from './components/carousel';
 import { checkboxZh } from './components/checkbox';
+import { datepickerZh } from './components/datepicker';
+import { dividerZh } from './components/divider';
+import { drawerZh } from './components/drawer';
+import { dropdownZh } from './components/dropdown';
+import { emptyZh } from './components/empty';
+import { formZh } from './components/form';
+import { inputZh } from './components/input';
+import { modalZh } from './components/modal';
 
 /** 与路由 slug 一一对应的组件键（小写）。 */
 export const componentSlugs = [
@@ -210,5 +218,13 @@ export const zhCN: Dictionary = {
     card: cardZh,
     carousel: carouselZh,
     checkbox: checkboxZh,
+    datepicker: datepickerZh,
+    divider: dividerZh,
+    drawer: drawerZh,
+    dropdown: dropdownZh,
+    empty: emptyZh,
+    form: formZh,
+    input: inputZh,
+    modal: modalZh,
   },
 };

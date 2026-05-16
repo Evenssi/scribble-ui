@@ -16,6 +16,14 @@ import { buttonEn } from './components/button';
 import { cardEn } from './components/card';
 import { carouselEn } from './components/carousel';
 import { checkboxEn } from './components/checkbox';
+import { datepickerEn } from './components/datepicker';
+import { dividerEn } from './components/divider';
+import { drawerEn } from './components/drawer';
+import { dropdownEn } from './components/dropdown';
+import { emptyEn } from './components/empty';
+import { formEn } from './components/form';
+import { inputEn } from './components/input';
+import { modalEn } from './components/modal';
 
 export const enUS: Dictionary = {
   meta: {
@@ -105,5 +113,13 @@ export const enUS: Dictionary = {
     card: cardEn,
     carousel: carouselEn,
     checkbox: checkboxEn,
+    datepicker: datepickerEn,
+    divider: dividerEn,
+    drawer: drawerEn,
+    dropdown: dropdownEn,
+    empty: emptyEn,
+    form: formEn,
+    input: inputEn,
+    modal: modalEn,
   },
 };
