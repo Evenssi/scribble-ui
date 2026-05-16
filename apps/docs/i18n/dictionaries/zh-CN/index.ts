@@ -14,6 +14,8 @@
  * 第 1 轮：meta / nav / home 100% 双语满译；components 字段为空对象，第 2 轮逐页扩。
  */
 
+import { buttonZh } from './components/button';
+
 /** 与路由 slug 一一对应的组件键（小写）。 */
 export const componentSlugs = [
   'alert',
@@ -190,5 +192,7 @@ export const zhCN: Dictionary = {
    * 第 2 轮逐页填入。
    * Partial 让第 1 轮不需要给所有 34 个 slug 写空对象，避免噪音。
    */
-  components: {},
+  components: {
+    button: buttonZh,
+  },
 };

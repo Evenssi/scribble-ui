@@ -7,6 +7,7 @@
  */
 
 import type { Dictionary } from '../zh-CN';
+import { buttonEn } from './components/button';
 
 export const enUS: Dictionary = {
   meta: {
@@ -86,5 +87,7 @@ export const enUS: Dictionary = {
     },
   },
 
-  components: {},
+  components: {
+    button: buttonEn,
+  },
 };
