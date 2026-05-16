@@ -182,7 +182,7 @@ export const zhCN: Dictionary = {
       ' 的文档站。这是一套小巧的 React 组件库，偏爱温暖的米白胜过商务蓝、不规则边角胜过完美矩形、硬朗投影胜过 Material 高度。',
     components: '组件',
     statusLine:
-      'Day 19 · 已交付 34 个组件 · 现已按 7 个分类（基础 · 布局 · 导航 · 数据录入 · 数据展示 · 反馈 · 其他）组织，与 Ant Design / Arco 的分类约定保持一致。',
+      '按 7 个分类（基础 · 布局 · 导航 · 数据录入 · 数据展示 · 反馈 · 其他）组织，与 Ant Design / Arco 的分类约定保持一致。',
     items: {
       alert: { name: 'Alert', desc: '— 内联反馈条，4 种变体，可关闭，可切换 banner 模式。' },
       avatar: { name: 'Avatar', desc: '— 圆形 / 方形便利贴风格头像，支持图片回退与首字母自动派生。' },

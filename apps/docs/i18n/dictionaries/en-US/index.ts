@@ -81,7 +81,7 @@ export const enUS: Dictionary = {
       ', a small React component library that prefers warm off-white over corporate blue, asymmetric corners over perfect rectangles, and hard offset shadows over Material elevation.',
     components: 'Components',
     statusLine:
-      'Day 19 · 34 components shipped · now grouped into 7 categories (General · Layout · Navigation · Data Entry · Data Display · Feedback · Other) aligned with Ant Design / Arco conventions.',
+      'Organized into 7 categories (General · Layout · Navigation · Data Entry · Data Display · Feedback · Other), aligned with Ant Design / Arco conventions.',
     items: {
       alert: { name: 'Alert', desc: '— static inline feedback strip with 4 variants, closable and banner modes.' },
       avatar: { name: 'Avatar', desc: '— circle/square sticky-note avatar with image fallback and auto initials.' },
