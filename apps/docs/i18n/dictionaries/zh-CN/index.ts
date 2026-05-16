@@ -31,6 +31,14 @@ import { emptyZh } from './components/empty';
 import { formZh } from './components/form';
 import { inputZh } from './components/input';
 import { modalZh } from './components/modal';
+import { numberinputZh } from './components/numberinput';
+import { paginationZh } from './components/pagination';
+import { popoverZh } from './components/popover';
+import { progressZh } from './components/progress';
+import { radioZh } from './components/radio';
+import { resultZh } from './components/result';
+import { selectZh } from './components/select';
+import { skeletonZh } from './components/skeleton';
 
 /** 与路由 slug 一一对应的组件键（小写）。 */
 export const componentSlugs = [
@@ -226,5 +234,13 @@ export const zhCN: Dictionary = {
     form: formZh,
     input: inputZh,
     modal: modalZh,
+    numberinput: numberinputZh,
+    pagination: paginationZh,
+    popover: popoverZh,
+    progress: progressZh,
+    radio: radioZh,
+    result: resultZh,
+    select: selectZh,
+    skeleton: skeletonZh,
   },
 };

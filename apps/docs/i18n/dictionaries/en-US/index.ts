@@ -24,6 +24,14 @@ import { emptyEn } from './components/empty';
 import { formEn } from './components/form';
 import { inputEn } from './components/input';
 import { modalEn } from './components/modal';
+import { numberinputEn } from './components/numberinput';
+import { paginationEn } from './components/pagination';
+import { popoverEn } from './components/popover';
+import { progressEn } from './components/progress';
+import { radioEn } from './components/radio';
+import { resultEn } from './components/result';
+import { selectEn } from './components/select';
+import { skeletonEn } from './components/skeleton';
 
 export const enUS: Dictionary = {
   meta: {
@@ -121,5 +129,13 @@ export const enUS: Dictionary = {
     form: formEn,
     input: inputEn,
     modal: modalEn,
+    numberinput: numberinputEn,
+    pagination: paginationEn,
+    popover: popoverEn,
+    progress: progressEn,
+    radio: radioEn,
+    result: resultEn,
+    select: selectEn,
+    skeleton: skeletonEn,
   },
 };
