@@ -39,6 +39,15 @@ import { radioZh } from './components/radio';
 import { resultZh } from './components/result';
 import { selectZh } from './components/select';
 import { skeletonZh } from './components/skeleton';
+import { sliderZh } from './components/slider';
+import { spinnerZh } from './components/spinner';
+import { switchZh } from './components/switch';
+import { tabsZh } from './components/tabs';
+import { tagZh } from './components/tag';
+import { textareaZh } from './components/textarea';
+import { timelineZh } from './components/timeline';
+import { toastZh } from './components/toast';
+import { tooltipZh } from './components/tooltip';
 
 /** 与路由 slug 一一对应的组件键（小写）。 */
 export const componentSlugs = [
@@ -242,5 +251,14 @@ export const zhCN: Dictionary = {
     result: resultZh,
     select: selectZh,
     skeleton: skeletonZh,
+    slider: sliderZh,
+    spinner: spinnerZh,
+    switch: switchZh,
+    tabs: tabsZh,
+    tag: tagZh,
+    textarea: textareaZh,
+    timeline: timelineZh,
+    toast: toastZh,
+    tooltip: tooltipZh,
   },
 };

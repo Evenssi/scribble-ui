@@ -32,6 +32,15 @@ import { radioEn } from './components/radio';
 import { resultEn } from './components/result';
 import { selectEn } from './components/select';
 import { skeletonEn } from './components/skeleton';
+import { sliderEn } from './components/slider';
+import { spinnerEn } from './components/spinner';
+import { switchEn } from './components/switch';
+import { tabsEn } from './components/tabs';
+import { tagEn } from './components/tag';
+import { textareaEn } from './components/textarea';
+import { timelineEn } from './components/timeline';
+import { toastEn } from './components/toast';
+import { tooltipEn } from './components/tooltip';
 
 export const enUS: Dictionary = {
   meta: {
@@ -137,5 +146,14 @@ export const enUS: Dictionary = {
     result: resultEn,
     select: selectEn,
     skeleton: skeletonEn,
+    slider: sliderEn,
+    spinner: spinnerEn,
+    switch: switchEn,
+    tabs: tabsEn,
+    tag: tagEn,
+    textarea: textareaEn,
+    timeline: timelineEn,
+    toast: toastEn,
+    tooltip: tooltipEn,
   },
 };
