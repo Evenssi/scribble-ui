@@ -114,13 +114,10 @@ export default async function LocaleLayout({
         {/* Mount once so any component can reference #su-hand-c/b/a */}
         <HandDrawnFilters />
 
-        <DocsTopbar locale={locale} t={topbar} />
+        <DocsTopbar locale={locale} brand={nav.brand} t={topbar} />
 
         <div className="docs-shell">
           <aside className="docs-sidebar">
-            <Link href={`/${locale}`} className="docs-brand">
-              {nav.brand}
-            </Link>
             <nav className="docs-nav">
               <p className="docs-nav-section">{nav.gettingStarted}</p>
               <Link href={`/${locale}`} className="docs-nav-link">

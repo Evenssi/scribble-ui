@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import type { Locale } from '../i18n/config';
 import { LocaleSwitcher } from './LocaleSwitcher';
 
@@ -5,6 +7,8 @@ import './DocsTopbar.css';
 
 type Props = {
   locale: Locale;
+  /** Brand text shown on the top-left, links back to the locale home. */
+  brand: string;
   /** `dict.topbar` from the dictionary, pre-resolved by the layout. */
   t: {
     localeSwitcher: {
@@ -16,15 +20,19 @@ type Props = {
 };
 
 /**
- * Sticky top bar with a right-aligned language switcher overlay.
+ * Sticky top bar with a left-aligned brand and a right-aligned language
+ * switcher. Both ends share the same flex row so they're vertically
+ * centered against each other automatically (`align-items: center`).
  *
- * Server component — renders once per request and only the
- * `<LocaleSwitcher>` islands ship JS to the browser.
+ * Server component — renders once per request; only the
+ * `<LocaleSwitcher>` island ships JS to the browser.
  */
-export function DocsTopbar({ locale, t }: Props) {
+export function DocsTopbar({ locale, brand, t }: Props) {
   return (
     <header className="docs-topbar" aria-label="Site header">
-      <div className="docs-topbar__spacer" />
+      <Link href={`/${locale}`} className="docs-topbar__brand">
+        {brand}
+      </Link>
       <div className="docs-topbar__actions">
         <LocaleSwitcher
           currentLocale={locale}

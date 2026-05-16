@@ -4,7 +4,7 @@
   z-index: 50;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   height: 56px;
   padding: 0 24px;
   background: var(--su-bg-paper);
@@ -12,8 +12,20 @@
   backdrop-filter: blur(2px);
 }
 
-.docs-topbar__spacer {
-  flex: 1;
+/* Brand link: visually balanced against the locale-switcher pills on
+ * the right edge. `line-height: 1` keeps the glyphs vertically centered
+ * with the pills (whose own line-height is also 1ish). */
+.docs-topbar__brand {
+  font-size: var(--su-font-size-large);
+  font-weight: var(--su-font-weight-bold);
+  line-height: 1;
+  color: var(--su-ink-primary);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.docs-topbar__brand:hover {
+  color: var(--su-accent);
 }
 
 .docs-topbar__actions {
@@ -26,5 +38,8 @@
   .docs-topbar {
     height: 48px;
     padding: 0 12px;
+  }
+  .docs-topbar__brand {
+    font-size: var(--su-font-size-base);
   }
 }
