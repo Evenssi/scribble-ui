@@ -7,7 +7,15 @@
  */
 
 import type { Dictionary } from '../zh-CN';
+import { alertEn } from './components/alert';
+import { avatarEn } from './components/avatar';
+import { backtopEn } from './components/backtop';
+import { badgeEn } from './components/badge';
+import { breadcrumbEn } from './components/breadcrumb';
 import { buttonEn } from './components/button';
+import { cardEn } from './components/card';
+import { carouselEn } from './components/carousel';
+import { checkboxEn } from './components/checkbox';
 
 export const enUS: Dictionary = {
   meta: {
@@ -88,6 +96,14 @@ export const enUS: Dictionary = {
   },
 
   components: {
+    alert: alertEn,
+    avatar: avatarEn,
+    backtop: backtopEn,
+    badge: badgeEn,
+    breadcrumb: breadcrumbEn,
     button: buttonEn,
+    card: cardEn,
+    carousel: carouselEn,
+    checkbox: checkboxEn,
   },
 };

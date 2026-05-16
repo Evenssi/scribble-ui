@@ -14,7 +14,15 @@
  * 第 1 轮：meta / nav / home 100% 双语满译；components 字段为空对象，第 2 轮逐页扩。
  */
 
+import { alertZh } from './components/alert';
+import { avatarZh } from './components/avatar';
+import { backtopZh } from './components/backtop';
+import { badgeZh } from './components/badge';
+import { breadcrumbZh } from './components/breadcrumb';
 import { buttonZh } from './components/button';
+import { cardZh } from './components/card';
+import { carouselZh } from './components/carousel';
+import { checkboxZh } from './components/checkbox';
 
 /** 与路由 slug 一一对应的组件键（小写）。 */
 export const componentSlugs = [
@@ -193,6 +201,14 @@ export const zhCN: Dictionary = {
    * Partial 让第 1 轮不需要给所有 34 个 slug 写空对象，避免噪音。
    */
   components: {
+    alert: alertZh,
+    avatar: avatarZh,
+    backtop: backtopZh,
+    badge: badgeZh,
+    breadcrumb: breadcrumbZh,
     button: buttonZh,
+    card: cardZh,
+    carousel: carouselZh,
+    checkbox: checkboxZh,
   },
 };
