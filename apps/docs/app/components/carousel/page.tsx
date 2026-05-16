@@ -2,7 +2,6 @@
 
 import { useState, type CSSProperties } from 'react';
 import { Button, Carousel, type CarouselItem } from 'scribble-ui';
-import '../button/page.css';
 
 /** Sticky-note tinted slide — inline so the docs site stays dep-free. */
 function StickySlide({

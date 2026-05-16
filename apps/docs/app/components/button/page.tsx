@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Button } from 'scribble-ui';
-import './page.css';
 
 /**
  * Tiny inline icons used in the docs demo. Real consumers will plug in

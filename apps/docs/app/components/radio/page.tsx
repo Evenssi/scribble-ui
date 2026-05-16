@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Radio, RadioGroup } from 'scribble-ui';
-import '../button/page.css';
 
 export default function RadioDocPage() {
   const [tier, setTier] = useState<string>('free');

@@ -65,7 +65,56 @@ a {
   letter-spacing: 0.05em;
 }
 
+/* === Collapsible nav group (native <details>) ============== */
+
+.docs-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Second-level links: indent as a block, no trunk/branch decoration. */
+.docs-nav-group > .docs-nav-link {
+  margin-left: 24px;
+}
+
+/* Hide the default disclosure triangle (Safari + Chrome + FF). */
+.docs-nav-summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 4px;
+  border-radius: var(--su-radius-tag);
+  transition: background var(--su-duration-fast) ease;
+}
+
+.docs-nav-summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Hand-drawn chevron that rotates when open. */
+.docs-nav-summary::before {
+  content: '▸';
+  display: inline-block;
+  font-size: 10px;
+  color: var(--su-ink-muted);
+  transition: transform var(--su-duration-fast) ease;
+}
+
+.docs-nav-group[open] > .docs-nav-summary::before {
+  transform: rotate(90deg);
+}
+
+.docs-nav-summary:hover {
+  background: var(--su-note-yellow);
+  color: var(--su-ink-primary);
+}
+
 .docs-nav-link {
+  display: block;
   padding: 6px 10px;
   border-radius: var(--su-radius-tag);
   text-decoration: none;
@@ -80,6 +129,129 @@ a {
 .docs-main {
   padding: 48px 56px 80px;
   max-width: 960px;
+}
+
+/* === Shared docs page styles (`.doc-*`) ====================
+ * Used by every component page under apps/docs/app/components.
+ * Hosted in globals.css so a cold SSR landing on any page (not
+ * just Button/Empty) renders the demo frames, headings, code
+ * blocks and API tables consistently.
+ */
+
+.doc {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.doc-title {
+  font-size: 48px;
+  margin: 0;
+  line-height: var(--su-line-height-tight);
+}
+
+.doc-lede {
+  font-size: var(--su-font-size-body);
+  color: var(--su-ink-muted);
+  margin: 0;
+  max-width: 640px;
+}
+
+.doc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.doc-h2 {
+  font-size: var(--su-font-size-h2);
+  margin: 16px 0 4px;
+  display: inline-block;
+  border-bottom: 2px dashed var(--su-ink-primary);
+  padding-bottom: 4px;
+}
+
+.doc-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-md);
+}
+
+.doc-demo--column {
+  align-items: stretch;
+}
+
+.doc-demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.doc-code {
+  margin: 0;
+  padding: 16px 20px;
+  background: #f5f3ec;
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-card);
+  box-shadow: var(--su-shadow-sm);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--su-ink-primary);
+}
+
+.doc-code code {
+  font-family: inherit;
+  white-space: pre;
+}
+
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-sm);
+  overflow: hidden;
+}
+
+.doc-table th,
+.doc-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1.5px dashed var(--su-bg-grid);
+  font-size: var(--su-font-size-small);
+  vertical-align: top;
+}
+
+.doc-table th {
+  background: var(--su-note-yellow);
+  font-weight: var(--su-font-weight-bold);
+}
+
+.doc-table tr:last-child td {
+  border-bottom: none;
+}
+
+.doc-table code {
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.95em;
+  background: #f5f3ec;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.doc-note {
+  margin: 8px 0 0;
+  color: var(--su-ink-muted);
+  font-size: var(--su-font-size-small);
 }
 
 @media (max-width: 720px) {

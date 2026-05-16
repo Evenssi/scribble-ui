@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Slider } from 'scribble-ui';
-import '../button/page.css';
 
 export default function SliderDocPage() {
   // Single-value controlled demo (used in the "Controlled" section).

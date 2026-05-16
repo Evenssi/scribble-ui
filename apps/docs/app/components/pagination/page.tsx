@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Button, Pagination } from 'scribble-ui';
-import '../button/page.css';
 
 export default function PaginationDocPage() {
   // Basic controlled demo — drives the "reset to first" button below.

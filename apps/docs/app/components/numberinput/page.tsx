@@ -3,7 +3,6 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { NumberInput } from 'scribble-ui';
 // Reuse the Button page's doc-* class set so all docs pages share one stylesheet.
-import '../button/page.css';
 
 export default function NumberInputDocPage() {
   // === Controlled demo ====================================================

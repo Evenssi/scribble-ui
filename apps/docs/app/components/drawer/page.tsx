@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { Button, Drawer } from 'scribble-ui';
-// Reuse the Button page's doc-* class set so all pages share one stylesheet.
-import '../button/page.css';
 
 export default function DrawerDocPage() {
   // Each demo gets its own open state so they don't interfere with one another.

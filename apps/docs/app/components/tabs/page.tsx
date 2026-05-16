@@ -9,7 +9,6 @@ import {
   TabPanels,
   Tabs,
 } from 'scribble-ui';
-import '../button/page.css';
 
 /** Tiny inline icon used by the demos to keep the docs site dep-free. */
 function PaperIcon() {

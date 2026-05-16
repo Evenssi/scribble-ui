@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { Button, Tooltip } from 'scribble-ui';
-// Reuse the Button page's doc-* class set so all pages share one stylesheet.
-import '../button/page.css';
 
 export default function TooltipDocPage() {
   const [controlledOpen, setControlledOpen] = useState(false);

@@ -13,7 +13,6 @@ import {
   DatePicker,
 } from 'scribble-ui';
 // Reuse the Button page's doc-* class set so all component pages share styles.
-import '../button/page.css';
 
 // ---------------------------------------------------------------------------
 // Demo 1 — native controlled with useState + manual validation

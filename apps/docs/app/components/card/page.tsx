@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { Button, Card, Tag } from 'scribble-ui';
-// Reuse the Button page's doc-* class set so all pages share one stylesheet.
-import '../button/page.css';
 
 export default function CardDocPage() {
   const [picked, setPicked] = useState<string | null>(null);

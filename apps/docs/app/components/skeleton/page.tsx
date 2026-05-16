@@ -1,7 +1,6 @@
 'use client';
 
 import { Skeleton } from 'scribble-ui';
-import '../button/page.css';
 
 export default function SkeletonDocPage() {
   return (

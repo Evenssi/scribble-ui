@@ -38,19 +38,72 @@
   padding-bottom: 4px;
 }
 
+.home-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.home-group-title {
+  margin: 0 0 4px;
+  font-size: var(--su-font-size-h3, 20px);
+  font-weight: var(--su-font-weight-bold);
+  color: var(--su-ink-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 10px;
+  background: var(--su-note-yellow);
+  border-radius: var(--su-radius-tag);
+  align-self: flex-start;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.home-group-title::-webkit-details-marker {
+  display: none;
+}
+
+/* Hand-drawn chevron that rotates when open. */
+.home-group-title::before {
+  content: '▸';
+  font-size: 11px;
+  color: var(--su-ink-muted);
+  transition: transform var(--su-duration-fast) ease;
+}
+
+.home-group[open] > .home-group-title::before {
+  transform: rotate(90deg);
+}
+
+.home-group-count {
+  color: var(--su-ink-muted);
+  font-weight: var(--su-font-weight-normal, 400);
+  font-size: 0.85em;
+}
+
 .home-component-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+}
+
+.home-component-list > li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .home-component-link {
   font-weight: var(--su-font-weight-bold);
   text-decoration: none;
   border-bottom: 2px solid var(--su-color-brand);
+  align-self: flex-start;
 }
 
 .home-component-link:hover {
@@ -58,7 +111,7 @@
 }
 
 .home-component-desc {
-  margin-left: 6px;
+  margin-left: 0;
   color: var(--su-ink-muted);
 }
 

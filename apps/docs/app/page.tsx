@@ -1,6 +1,217 @@
 import Link from 'next/link';
 import './page.css';
 
+type Item = { href: string; name: string; desc: string };
+type Group = { title: string; items: Item[] };
+
+const groups: Group[] = [
+  {
+    title: 'General',
+    items: [
+      {
+        href: '/components/button',
+        name: 'Button',
+        desc: '— wobbly, sticky-note styled call to action.',
+      },
+    ],
+  },
+  {
+    title: 'Layout',
+    items: [
+      {
+        href: '/components/card',
+        name: 'Card',
+        desc: '— paper or sticky-note surface with optional interactive mode.',
+      },
+      {
+        href: '/components/divider',
+        name: 'Divider',
+        desc: '— horizontal/vertical separator with solid, dashed or hand-drawn wavy lines.',
+      },
+    ],
+  },
+  {
+    title: 'Navigation',
+    items: [
+      {
+        href: '/components/tabs',
+        name: 'Tabs',
+        desc: '— accessible tabbed navigation with underline / card / pill variants and roving-tabindex keyboard nav.',
+      },
+      {
+        href: '/components/breadcrumb',
+        name: 'Breadcrumb',
+        desc: '— hierarchical trail with items + composition APIs, custom separators and mid-path ellipsis.',
+      },
+      {
+        href: '/components/pagination',
+        name: 'Pagination',
+        desc: '— data-driven page navigator with smart ellipsis folding, simple / small variants and full a11y.',
+      },
+      {
+        href: '/components/dropdown',
+        name: 'Dropdown',
+        desc: '— menu overlay with 8 placements, click / hover / contextMenu triggers and roving-tabindex keyboard nav.',
+      },
+    ],
+  },
+  {
+    title: 'Data Entry',
+    items: [
+      {
+        href: '/components/form',
+        name: 'Form',
+        desc: '— visual shell for labels, required marks, errors and helpers. Bring your own state (react-hook-form + zod recommended).',
+      },
+      {
+        href: '/components/input',
+        name: 'Input',
+        desc: '— text field with prefix/suffix slots, clearable, error states.',
+      },
+      {
+        href: '/components/textarea',
+        name: 'Textarea',
+        desc: '— multi-line input with auto-resize, character count and helper text.',
+      },
+      {
+        href: '/components/numberinput',
+        name: 'NumberInput',
+        desc: '— numeric field with ± steppers, keyboard ↑/↓ + Shift/Alt modifiers, min/max clamp and precision.',
+      },
+      {
+        href: '/components/select',
+        name: 'Select',
+        desc: '— portalled listbox dropdown with keyboard nav, typeahead and auto-flip.',
+      },
+      {
+        href: '/components/checkbox',
+        name: 'Checkbox',
+        desc: '— controlled/uncontrolled, indeterminate, plus a CheckboxGroup helper.',
+      },
+      {
+        href: '/components/radio',
+        name: 'Radio',
+        desc: '— paired with RadioGroup for shared name, layout and exclusive selection.',
+      },
+      {
+        href: '/components/switch',
+        name: 'Switch',
+        desc: '— accessible on/off toggle with bouncy thumb and three sizes.',
+      },
+      {
+        href: '/components/slider',
+        name: 'Slider',
+        desc: '— single or range value picker with marks, sticky-note tooltip, vertical mode and full keyboard nav.',
+      },
+      {
+        href: '/components/datepicker',
+        name: 'DatePicker',
+        desc: '— calendar dropdown with portalled popup, keyboard month/year nav, min/max disabling and locale labels.',
+      },
+    ],
+  },
+  {
+    title: 'Data Display',
+    items: [
+      {
+        href: '/components/tag',
+        name: 'Tag',
+        desc: '— small label with status & sticky-note colors, optional ✕ to remove.',
+      },
+      {
+        href: '/components/avatar',
+        name: 'Avatar',
+        desc: '— circle/square sticky-note avatar with image fallback and auto initials.',
+      },
+      {
+        href: '/components/badge',
+        name: 'Badge',
+        desc: '— standalone or wrapper badge with count, dot, max overflow and 4 placements.',
+      },
+      {
+        href: '/components/carousel',
+        name: 'Carousel',
+        desc: '— hand-drawn content rotator with slide / fade transitions, autoplay, drag and keyboard nav.',
+      },
+      {
+        href: '/components/timeline',
+        name: 'Timeline',
+        desc: '— vertical event ribbon with left / right / alternate modes and 5 status dots.',
+      },
+      {
+        href: '/components/tooltip',
+        name: 'Tooltip',
+        desc: '— portalled bubble with hover + focus triggers, auto-flip and click toggle.',
+      },
+      {
+        href: '/components/popover',
+        name: 'Popover',
+        desc: '— interactive floating panel with title/footer, click-outside dismiss and auto-flip.',
+      },
+      {
+        href: '/components/empty',
+        name: 'Empty',
+        desc: '— hand-drawn placeholder for blank lists, search misses and first-run states.',
+      },
+    ],
+  },
+  {
+    title: 'Feedback',
+    items: [
+      {
+        href: '/components/alert',
+        name: 'Alert',
+        desc: '— static inline feedback strip with 4 variants, closable and banner modes.',
+      },
+      {
+        href: '/components/toast',
+        name: 'Toast',
+        desc: '— imperative notifications with 6 placements, hover-pause and variants.',
+      },
+      {
+        href: '/components/modal',
+        name: 'Modal',
+        desc: '— portalled dialog with focus trap, ESC + overlay close, and scroll lock.',
+      },
+      {
+        href: '/components/drawer',
+        name: 'Drawer',
+        desc: '— side-anchored panel from any edge, with focus trap, scroll lock and slide-in.',
+      },
+      {
+        href: '/components/progress',
+        name: 'Progress',
+        desc: '— line or circle progress with status colors, labels and indeterminate mode.',
+      },
+      {
+        href: '/components/spinner',
+        name: 'Spinner',
+        desc: '— ring, dots or hand-drawn pencil loader inheriting currentColor.',
+      },
+      {
+        href: '/components/skeleton',
+        name: 'Skeleton',
+        desc: '— text/rect/circle loading placeholder with pulse or wave animation.',
+      },
+      {
+        href: '/components/result',
+        name: 'Result',
+        desc: '— full-page feedback surface for success, failure and HTTP error routes.',
+      },
+    ],
+  },
+  {
+    title: 'Other',
+    items: [
+      {
+        href: '/components/backtop',
+        name: 'BackTop',
+        desc: '— floating back-to-top button with threshold visibility, smooth scroll and scoped containers.',
+      },
+    ],
+  },
+];
+
 export default function HomePage() {
   return (
     <article className="home">
@@ -19,286 +230,30 @@ export default function HomePage() {
       </p>
 
       <h2 className="home-heading">Components</h2>
-      <ul className="home-component-list">
-        <li>
-          <Link className="home-component-link" href="/components/button">
-            Button
-          </Link>
-          <span className="home-component-desc">
-            — wobbly, sticky-note styled call to action.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/input">
-            Input
-          </Link>
-          <span className="home-component-desc">
-            — text field with prefix/suffix slots, clearable, error states.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/card">
-            Card
-          </Link>
-          <span className="home-component-desc">
-            — paper or sticky-note surface with optional interactive mode.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/tag">
-            Tag
-          </Link>
-          <span className="home-component-desc">
-            — small label with status & sticky-note colors, optional ✕ to remove.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/checkbox">
-            Checkbox
-          </Link>
-          <span className="home-component-desc">
-            — controlled/uncontrolled, indeterminate, plus a CheckboxGroup helper.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/radio">
-            Radio
-          </Link>
-          <span className="home-component-desc">
-            — paired with RadioGroup for shared name, layout and exclusive selection.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/modal">
-            Modal
-          </Link>
-          <span className="home-component-desc">
-            — portalled dialog with focus trap, ESC + overlay close, and scroll lock.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/tooltip">
-            Tooltip
-          </Link>
-          <span className="home-component-desc">
-            — portalled bubble with hover + focus triggers, auto-flip and click toggle.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/select">
-            Select
-          </Link>
-          <span className="home-component-desc">
-            — portalled listbox dropdown with keyboard nav, typeahead and auto-flip.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/switch">
-            Switch
-          </Link>
-          <span className="home-component-desc">
-            — accessible on/off toggle with bouncy thumb and three sizes.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/textarea">
-            Textarea
-          </Link>
-          <span className="home-component-desc">
-            — multi-line input with auto-resize, character count and helper text.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/divider">
-            Divider
-          </Link>
-          <span className="home-component-desc">
-            — horizontal/vertical separator with solid, dashed or hand-drawn wavy lines.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/toast">
-            Toast
-          </Link>
-          <span className="home-component-desc">
-            — imperative notifications with 6 placements, hover-pause and variants.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/avatar">
-            Avatar
-          </Link>
-          <span className="home-component-desc">
-            — circle/square sticky-note avatar with image fallback and auto initials.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/badge">
-            Badge
-          </Link>
-          <span className="home-component-desc">
-            — standalone or wrapper badge with count, dot, max overflow and 4 placements.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/skeleton">
-            Skeleton
-          </Link>
-          <span className="home-component-desc">
-            — text/rect/circle loading placeholder with pulse or wave animation.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/spinner">
-            Spinner
-          </Link>
-          <span className="home-component-desc">
-            — ring, dots or hand-drawn pencil loader inheriting currentColor.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/progress">
-            Progress
-          </Link>
-          <span className="home-component-desc">
-            — line or circle progress with status colors, labels and indeterminate mode.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/popover">
-            Popover
-          </Link>
-          <span className="home-component-desc">
-            — interactive floating panel with title/footer, click-outside dismiss and auto-flip.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/drawer">
-            Drawer
-          </Link>
-          <span className="home-component-desc">
-            — side-anchored panel from any edge, with focus trap, scroll lock and slide-in.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/tabs">
-            Tabs
-          </Link>
-          <span className="home-component-desc">
-            — accessible tabbed navigation with underline / card / pill variants
-            and roving-tabindex keyboard nav.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/carousel">
-            Carousel
-          </Link>
-          <span className="home-component-desc">
-            — hand-drawn content rotator with slide / fade transitions, autoplay,
-            drag and keyboard nav.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/empty">
-            Empty
-          </Link>
-          <span className="home-component-desc">
-            — hand-drawn placeholder for blank lists, search misses and first-run states.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/result">
-            Result
-          </Link>
-          <span className="home-component-desc">
-            — full-page feedback surface for success, failure and HTTP error routes.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/timeline">
-            Timeline
-          </Link>
-          <span className="home-component-desc">
-            — vertical event ribbon with left / right / alternate modes and 5 status dots.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/backtop">
-            BackTop
-          </Link>
-          <span className="home-component-desc">
-            — floating back-to-top button with threshold visibility, smooth scroll and scoped containers.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/dropdown">
-            Dropdown
-          </Link>
-          <span className="home-component-desc">
-            — menu overlay with 8 placements, click / hover / contextMenu triggers and roving-tabindex keyboard nav.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/alert">
-            Alert
-          </Link>
-          <span className="home-component-desc">
-            — static inline feedback strip with 4 variants, closable and banner modes.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/pagination">
-            Pagination
-          </Link>
-          <span className="home-component-desc">
-            — data-driven page navigator with smart ellipsis folding, simple / small variants and full a11y.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/breadcrumb">
-            Breadcrumb
-          </Link>
-          <span className="home-component-desc">
-            — hierarchical trail with items + composition APIs, custom separators and mid-path ellipsis.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/numberinput">
-            NumberInput
-          </Link>
-          <span className="home-component-desc">
-            — numeric field with ± steppers, keyboard ↑/↓ + Shift/Alt modifiers, min/max clamp and precision.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/slider">
-            Slider
-          </Link>
-          <span className="home-component-desc">
-            — single or range value picker with marks, sticky-note tooltip, vertical mode and full keyboard nav.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/datepicker">
-            DatePicker
-          </Link>
-          <span className="home-component-desc">
-            — calendar dropdown with portalled popup, keyboard month/year nav, min/max disabling and locale labels.
-          </span>
-        </li>
-        <li>
-          <Link className="home-component-link" href="/components/form">
-            Form
-          </Link>
-          <span className="home-component-desc">
-            — visual shell for labels, required marks, errors and helpers.
-            Bring your own state (react-hook-form + zod recommended).
-          </span>
-        </li>
-      </ul>
+
+      {groups.map((group) => (
+        <details key={group.title} className="home-group" open>
+          <summary className="home-group-title">
+            {group.title}{' '}
+            <span className="home-group-count">({group.items.length})</span>
+          </summary>
+          <ul className="home-component-list">
+            {group.items.map((item) => (
+              <li key={item.href}>
+                <Link className="home-component-link" href={item.href}>
+                  {item.name}
+                </Link>
+                <span className="home-component-desc">{item.desc}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))}
 
       <p className="home-status">
-        Day 19 · 34 components shipped · Form (final round) landed — bring-your-own-state via react-hook-form + zod.
+        Day 19 · 34 components shipped · now grouped into 7 categories
+        (General · Layout · Navigation · Data Entry · Data Display · Feedback ·
+        Other) aligned with Ant Design / Arco conventions.
       </p>
     </article>
   );

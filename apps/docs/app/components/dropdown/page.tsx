@@ -2,8 +2,6 @@
 
 import { useRef, useState } from 'react';
 import { Button, Dropdown, type DropdownMenuEntry } from 'scribble-ui';
-// Reuse the Button page's doc-* class set so all pages share one stylesheet.
-import '../button/page.css';
 
 export default function DropdownDocPage() {
   const [controlledOpen, setControlledOpen] = useState(false);

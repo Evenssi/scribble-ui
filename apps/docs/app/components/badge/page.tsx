@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Badge, Button } from 'scribble-ui';
-import '../button/page.css';
 
 /**
  * Tiny visual stand-in for an Avatar — the docs site stays

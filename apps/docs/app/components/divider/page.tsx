@@ -1,6 +1,5 @@
 import { Divider } from 'scribble-ui';
 // Reuse the Button page's doc-* class set so every docs page shares one stylesheet.
-import '../button/page.css';
 
 export default function DividerDocPage() {
   return (

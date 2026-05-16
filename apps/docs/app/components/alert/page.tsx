@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { Alert, Button } from 'scribble-ui';
-// Reuse the Button page's doc-* class set so all pages share one stylesheet.
-import '../button/page.css';
 
 function SparkleIcon() {
   return (

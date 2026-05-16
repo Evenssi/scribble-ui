@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Breadcrumb, type BreadcrumbItemData } from 'scribble-ui';
-import '../button/page.css';
 
 /* Tiny inline icons — keeps the docs site dependency-free. */
 function HomeIcon() {

@@ -1,8 +1,6 @@
 'use client';
 
 import { Timeline } from 'scribble-ui';
-// Reuse the Button page's doc-* class set so all pages share one stylesheet.
-import '../button/page.css';
 
 export default function TimelineDocPage() {
   return (

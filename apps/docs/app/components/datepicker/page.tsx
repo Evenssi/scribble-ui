@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { DatePicker } from 'scribble-ui';
-// Reuse the Button page's doc-* class set so all pages share one stylesheet.
-import '../button/page.css';
 
 /** Helpers used by a couple of demos. */
 function daysFromToday(n: number): Date {

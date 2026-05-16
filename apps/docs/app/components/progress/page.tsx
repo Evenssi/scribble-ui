@@ -1,7 +1,6 @@
 'use client';
 
 import { Progress } from 'scribble-ui';
-import '../button/page.css';
 
 export default function ProgressDocPage() {
   return (

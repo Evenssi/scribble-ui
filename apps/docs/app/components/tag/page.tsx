@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Tag } from 'scribble-ui';
-import '../button/page.css';
 
 function StarIcon() {
   return (

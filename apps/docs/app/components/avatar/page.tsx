@@ -1,7 +1,6 @@
 'use client';
 
 import { Avatar } from 'scribble-ui';
-import '../button/page.css';
 
 /**
  * A tiny inline icon used in the custom-fallback demo. Keeps the docs

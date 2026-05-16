@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Checkbox, CheckboxGroup } from 'scribble-ui';
-import '../button/page.css';
 
 export default function CheckboxDocPage() {
   const [single, setSingle] = useState(false);

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Switch } from 'scribble-ui';
-import '../button/page.css';
 
 export default function SwitchDocPage() {
   const [controlled, setControlled] = useState(false);

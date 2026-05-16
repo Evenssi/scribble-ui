@@ -1,7 +1,6 @@
 'use client';
 
 import { Spinner } from 'scribble-ui';
-import '../button/page.css';
 
 export default function SpinnerDocPage() {
   return (

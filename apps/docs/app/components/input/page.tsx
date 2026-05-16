@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 import { Input } from 'scribble-ui';
 // Reuse the Button page's doc-* class set so both pages share one stylesheet.
-import '../button/page.css';
 
 /** Inline magnifier — keeps the docs site icon-dependency-free. */
 function SearchIcon() {

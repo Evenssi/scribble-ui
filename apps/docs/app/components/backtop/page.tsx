@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 import { BackTop, Button, Card } from 'scribble-ui';
 // Reuse the Button page's doc-* class set so every page shares one stylesheet.
-import '../button/page.css';
 
 /**
  * A long filler column — repeated three times inside the page so the
