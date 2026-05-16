@@ -109,12 +109,12 @@ export function DatePickerDocClient({ t }: { t: ComponentDoc }) {
             <DatePicker
               minDate={daysFromToday(-3)}
               maxDate={daysFromToday(10)}
-              placeholder="±3..+10 days from today"
+              placeholder="±3 to +10"
               aria-label="Bounded date"
             />
             <DatePicker
               disabledDate={isWeekend}
-              placeholder="Weekdays only"
+              placeholder="No weekend"
               aria-label="No weekends"
             />
           </div>

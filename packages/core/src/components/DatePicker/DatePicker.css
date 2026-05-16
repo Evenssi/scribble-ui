@@ -19,11 +19,16 @@
 
 /* Shell wraps the trigger button + the absolutely-positioned clear
  * button so we can keep them as siblings (avoids nesting interactive
- * elements inside the trigger). */
+ * elements inside the trigger).
+ *
+ * Sizing: stay shrink-to-fit so we don't force the trigger to stretch
+ * beyond the placeholder/value's natural width. The clear ✕ button is
+ * `position: absolute` and does not contribute to intrinsic width. */
 .su-datepicker__shell {
   position: relative;
   display: inline-flex;
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
 }
 
 /* === Trigger ================================================ */
@@ -33,7 +38,21 @@
   display: inline-flex;
   align-items: center;
   gap: var(--su-space-2);
-  width: 100%;
+  /* Sizing strategy (works together with .su-datepicker__value below):
+   *   - `fit-content` = `min(max-content, max(min-content, available))`.
+   *     With no parent width constraint we get max-content (= placeholder
+   *     + icon + padding fully laid out, never clipped). With a narrow
+   *     parent we shrink down to min-content, at which point the inner
+   *     `.value`'s ellipsis takes over.
+   *   - `max-width: 100%` + `min-width: 0` lets the trigger participate
+   *     in flex/grid containers without overflowing them.
+   *   - We deliberately do NOT set `width: 100%` here because that would
+   *     force the trigger to stretch and re-introduce the "placeholder
+   *     hugs the right padding and gets clipped by italic overhang" bug.
+   */
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
 
   background: var(--su-bg-paper);
   border: var(--su-stroke-default) solid var(--su-ink-primary);
@@ -54,17 +73,27 @@
   filter: url(#su-hand-c);
 }
 
-/* Hover: lift like a clickable card; reserve the wobble bump for focus/open. */
+/* Hover: lift like a clickable card; reserve the wobble bump for focus/open.
+ *
+ * IMPORTANT — do NOT switch the SVG filter here.
+ *   The `#su-hand-*` filters use `<feDisplacementMap>` with `scale=1.4 / 2.2 / 3.5`,
+ *   while the default SVG <filter> region is only `x=-10% y=-10% w=120% h=120%`.
+ *   For a tall-thin trigger (~40px tall), the 10% vertical slack is just ~4px,
+ *   which is enough for the calm filter (scale 1.4) but the balanced filter
+ *   (scale 2.2) pushes glyph pixels — including italic placeholder ascenders —
+ *   *outside* the filter region, where they get clipped. Visually this looks
+ *   like "the top of the placeholder gets masked when I hover". So the
+ *   trigger keeps `#su-hand-c` across all states; the hover delta is conveyed
+ *   purely by translate + shadow. Same reasoning for :active.
+ */
 .su-datepicker__trigger:hover:not(:disabled):not(.su-datepicker__trigger--open) {
-  transform: translate(-1px, -1px) rotate(-0.3deg);
+  transform: translate(-1px, -1px);
   box-shadow: var(--su-shadow-sm);
-  filter: url(#su-hand-b);
 }
 
 .su-datepicker__trigger:active:not(:disabled) {
-  transform: translate(2px, 2px) rotate(0.2deg);
+  transform: translate(2px, 2px);
   box-shadow: var(--su-shadow-xs);
-  filter: url(#su-hand-a);
 }
 
 .su-datepicker__trigger:focus-visible {
@@ -73,7 +102,8 @@
 }
 
 .su-datepicker__trigger--open {
-  filter: url(#su-hand-b);
+  /* Keep the calm filter (see hover note above) — visual emphasis comes
+   * from the deeper border color + lifted shadow. */
   box-shadow: var(--su-shadow-sm);
   border-color: var(--su-color-brand-deep);
   transform: none;
@@ -104,9 +134,13 @@
   opacity: 0.85;
 }
 
-/* When clearable + has value: leave room on the right for the ✕ button. */
-.su-datepicker__trigger--clearable {
-  padding-right: 36px;
+/* When clearable + has value: hide the calendar glyph so it doesn't
+ * overlap with the absolutely-positioned ✕ button. The reserved space on
+ * the right is added per-size below (see padding-right overrides) — those
+ * declarations must come AFTER the size shorthands or the `padding`
+ * shorthand would clobber the override. */
+.su-datepicker__trigger--clearable .su-datepicker__icon {
+  display: none;
 }
 
 /* === Sizes (match Input / Select) =========================== */
@@ -129,11 +163,42 @@
   min-height: 52px;
 }
 
+/* Reserve room on the right for the ✕ button. Declared after the size
+ * shorthands so the `padding` simple-property doesn't override us. */
+.su-datepicker__trigger--clearable.su-datepicker__trigger--sm {
+  padding-right: 32px;
+}
+
+.su-datepicker__trigger--clearable.su-datepicker__trigger--md {
+  padding-right: 36px;
+}
+
+.su-datepicker__trigger--clearable.su-datepicker__trigger--lg {
+  padding-right: 40px;
+}
+
 /* === Trigger inner parts ==================================== */
 
 .su-datepicker__value {
-  flex: 1;
+  /* Pair with the trigger's `fit-content` sizing:
+   *   - `flex: 0 1 auto` (NOT `flex: 1`): we don't want the value to
+   *     grow and steal extra space; it's the placeholder/value's natural
+   *     text width that drives the trigger's max-content. Allowing it to
+   *     shrink (`1`) keeps ellipsis viable when the parent is narrow.
+   *   - `min-width: 0` so flex shrinking actually works under constraint.
+   *   - `padding-inline-end: 0.25em` reserves a tiny gutter for italic
+   *     placeholder overhang. Italic glyphs render their ascenders past
+   *     the advance-width box; without this gutter Chromium's text
+   *     overflow algorithm clips the last 1–2 px of the rightmost glyph
+   *     against the inline-flex content edge, which is the exact "right
+   *     side gets shaved" symptom users have been seeing.
+   *   - `box-sizing: content-box` keeps that gutter additive to the
+   *     content width so it doesn't get folded back into ellipsis math.
+   */
+  flex: 0 1 auto;
   min-width: 0;
+  padding-inline-end: 0.25em;
+  box-sizing: content-box;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
