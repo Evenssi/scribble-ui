@@ -7,11 +7,9 @@
  *
  * 因此向这里追加新字段时，TS 会自动要求 en-US 同步补齐 — 缺译即编译报错。
  *
- * 文案口径（与 plan 共识）：
+ * 翻译口径：
  *   - 组件名 / API prop 名 / TS 类型字面量 / demo 内可见 label / 代码示例 全部保留英文
  *   - 仅展示性文案中文化（侧边栏分组、首页 lede / 说明、组件页 lede / 区块标题 / 解说 / API description）
- *
- * 第 1 轮：meta / nav / home 100% 双语满译；components 字段为空对象，第 2 轮逐页扩。
  */
 
 import { alertZh } from './components/alert';
@@ -91,7 +89,6 @@ export type ComponentSlug = (typeof componentSlugs)[number];
 
 /**
  * 单个组件页文档字典的形状。
- * 第 2 轮迁移时每页填充；第 1 轮 components 整体为空对象。
  */
 export type ComponentDoc = {
   title: string;
@@ -222,8 +219,9 @@ export const zhCN: Dictionary = {
   },
 
   /**
-   * 第 2 轮逐页填入。
-   * Partial 让第 1 轮不需要给所有 34 个 slug 写空对象，避免噪音。
+   * 各组件页文档字典。
+   * 使用 Partial 是为了允许逐页迭代时部分组件可暂缺，TypeScript 不会强制
+   * 一次性给出全部 slug 的实现。
    */
   components: {
     alert: alertZh,

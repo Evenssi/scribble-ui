@@ -3,7 +3,7 @@ import type { ComponentDoc } from '../index';
 /**
  * Button 组件页的中文展示文案。
  *
- * 注意（与 plan / .codebuddy/COMPONENTS_STATUS.md 共识）：
+ * 翻译规则：
  *   - 不翻译 demo 内可见 label（如 "Default · md"、"New note"）
  *   - 不翻译 API Type 列的 TS 字面量（如 `'primary' | 'secondary'`）
  *   - 不翻译代码示例 <pre className="doc-code"> 内的源码

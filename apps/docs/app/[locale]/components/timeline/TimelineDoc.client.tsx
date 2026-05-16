@@ -19,19 +19,19 @@ export function TimelineDocClient({ t: tBase }: { t: unknown }) {
         <div className="doc-demo">
           <Timeline>
             <Timeline.Item status="success" time="09:12">
-              Draft created — saved to <code>~/sketches/2025</code>.
+              Order #A-1024 placed.
             </Timeline.Item>
             <Timeline.Item status="info" time="09:40">
-              Invited 2 reviewers via email.
+              Payment authorised.
             </Timeline.Item>
             <Timeline.Item status="warning" time="11:05">
-              Reviewer requested changes: tighten the typography scale.
+              Awaiting warehouse confirmation.
             </Timeline.Item>
             <Timeline.Item status="error" time="14:20">
-              CI failed on <code>lint</code> — missing ESLint config.
+              Address verification failed.
             </Timeline.Item>
             <Timeline.Item time="15:47">
-              Re-ran the pipeline manually.
+              Customer updated the shipping address.
             </Timeline.Item>
           </Timeline>
         </div>
@@ -43,17 +43,17 @@ export function TimelineDocClient({ t: tBase }: { t: unknown }) {
         <p className="doc-note">{t.notes.rightAligned}</p>
         <div className="doc-demo">
           <Timeline mode="right">
-            <Timeline.Item status="success" time="Mon">
-              Landed the design tokens pass.
+            <Timeline.Item status="success" time="07:00">
+              Opened the cafe and brewed the first batch.
             </Timeline.Item>
-            <Timeline.Item status="info" time="Tue">
-              Hooked up the hand-drawn SVG filter across all primitives.
+            <Timeline.Item status="info" time="11:30">
+              Lunch rush — 42 orders served.
             </Timeline.Item>
-            <Timeline.Item status="warning" time="Wed">
-              Caught a regression in the focus ring.
+            <Timeline.Item status="warning" time="15:00">
+              Espresso machine paused for cleaning.
             </Timeline.Item>
-            <Timeline.Item time="Thu">
-              Shipped Timeline behind a feature flag.
+            <Timeline.Item time="20:00">
+              Closed the till and tallied the day.
             </Timeline.Item>
           </Timeline>
         </div>
@@ -65,20 +65,20 @@ export function TimelineDocClient({ t: tBase }: { t: unknown }) {
         <p className="doc-note">{t.notes.alternate}</p>
         <div className="doc-demo">
           <Timeline mode="alternate">
-            <Timeline.Item status="success" time="v0.1.0">
-              First commit — sticky-note colour palette and base tokens.
+            <Timeline.Item status="success" time="Q1">
+              Project kicked off — goals and scope locked in.
             </Timeline.Item>
-            <Timeline.Item status="info" time="v0.2.0">
-              Shipped Button, Input and the hand-drawn SVG filter.
+            <Timeline.Item status="info" time="Q2">
+              Research phase wrapped; first prototype reviewed.
             </Timeline.Item>
-            <Timeline.Item status="info" time="v0.3.0">
-              Empty, Result and Divider joined the roster.
+            <Timeline.Item status="info" time="Q3">
+              Beta release rolled out to early adopters.
             </Timeline.Item>
-            <Timeline.Item status="warning" time="v0.4.0">
-              Tabs + Toast needed a second design review.
+            <Timeline.Item status="warning" time="Q4">
+              Mid-project review flagged a scope adjustment.
             </Timeline.Item>
-            <Timeline.Item status="success" time="v0.5.0">
-              Timeline lands. That&apos;s this page.
+            <Timeline.Item status="success" time="Q5">
+              Final delivery and post-mortem complete.
             </Timeline.Item>
           </Timeline>
         </div>
@@ -95,14 +95,14 @@ export function TimelineDocClient({ t: tBase }: { t: unknown }) {
               time="Morning"
               dot={<span aria-hidden="true">☕</span>}
             >
-              Coffee. Sketched three layout options.
+              Started the day with coffee and a quick plan.
             </Timeline.Item>
             <Timeline.Item
               status="info"
               time="Noon"
               dot={<span aria-hidden="true">✏️</span>}
             >
-              Paired with design on the spacing rhythm.
+              Sketched outlines and reviewed the morning notes.
             </Timeline.Item>
             <Timeline.Item
               status="warning"
@@ -122,10 +122,10 @@ export function TimelineDocClient({ t: tBase }: { t: unknown }) {
                 </svg>
               }
             >
-              Demo went well. Team signed off on the wobble level.
+              Wrapped up the main task and made a small breakthrough.
             </Timeline.Item>
             <Timeline.Item time="Evening" dot={<span aria-hidden="true">🌙</span>}>
-              Wrapped the docs site and called it a day.
+              Wound down with a walk and a chapter of a book.
             </Timeline.Item>
           </Timeline>
         </div>
@@ -138,16 +138,16 @@ export function TimelineDocClient({ t: tBase }: { t: unknown }) {
         <div className="doc-demo">
           <Timeline>
             <Timeline.Item status="success" time="Step 1">
-              Collected requirements from the product team.
+              Collected requirements from stakeholders.
             </Timeline.Item>
             <Timeline.Item status="info" time="Step 2" dashed>
-              Building the prototype — this is where we are now.
+              Building the prototype — currently in progress.
             </Timeline.Item>
             <Timeline.Item time="Step 3">
-              Usability testing with five sticky-note enthusiasts.
+              Run usability testing with target users.
             </Timeline.Item>
             <Timeline.Item time="Step 4">
-              Ship it.
+              Iterate based on feedback and ship.
             </Timeline.Item>
           </Timeline>
         </div>
@@ -159,17 +159,17 @@ export function TimelineDocClient({ t: tBase }: { t: unknown }) {
         <p className="doc-note">{t.notes.reverse}</p>
         <div className="doc-demo">
           <Timeline reverse>
-            <Timeline.Item status="success" time="2024-11-02">
-              v1 released.
+            <Timeline.Item status="success" time="2024-03-02">
+              Published &ldquo;Getting Started with Hand-drawn UIs&rdquo;.
             </Timeline.Item>
-            <Timeline.Item status="info" time="2024-11-18">
-              First round of community feedback.
+            <Timeline.Item status="info" time="2024-04-18">
+              Posted a follow-up Q&amp;A based on reader feedback.
             </Timeline.Item>
-            <Timeline.Item status="warning" time="2024-12-05">
-              Rolled back a flaky dependency.
+            <Timeline.Item status="warning" time="2024-06-05">
+              Patched a broken code sample reported by readers.
             </Timeline.Item>
-            <Timeline.Item status="success" time="2025-01-10">
-              v1.1 with Timeline + Tabs.
+            <Timeline.Item status="success" time="2024-08-10">
+              Released a deep-dive on accessibility patterns.
             </Timeline.Item>
           </Timeline>
         </div>
@@ -181,17 +181,17 @@ export function TimelineDocClient({ t: tBase }: { t: unknown }) {
         <pre className="doc-code">
           <code>{`import { Timeline } from 'scribble-ui';
 
-export function ReleaseLog() {
+export function ProjectMilestones() {
   return (
     <Timeline mode="alternate">
-      <Timeline.Item status="success" time="v0.1.0">
-        First commit — sticky-note colour palette and base tokens.
+      <Timeline.Item status="success" time="Q1">
+        Project kicked off — goals and scope locked in.
       </Timeline.Item>
-      <Timeline.Item status="info" time="v0.2.0" dashed>
-        Shipping Button + Input this week…
+      <Timeline.Item status="info" time="Q2" dashed>
+        Research phase in progress…
       </Timeline.Item>
-      <Timeline.Item time="v0.3.0">
-        Empty and Result (planned).
+      <Timeline.Item time="Q3">
+        Beta release (planned).
       </Timeline.Item>
     </Timeline>
   );
