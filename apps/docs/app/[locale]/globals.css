@@ -34,9 +34,10 @@ a {
 
 .docs-sidebar {
   position: sticky;
-  top: 0;
+  /* 56px = sticky topbar height, see components/DocsTopbar.css */
+  top: 56px;
   align-self: start;
-  height: 100vh;
+  height: calc(100vh - 56px);
   padding: 32px 20px;
   border-right: 2px dashed var(--su-ink-primary);
   background: var(--su-bg-paper);
@@ -268,3 +269,7 @@ a {
     padding: 32px 20px 60px;
   }
 }
+
+/* Layout coordination: the sticky topbar sits at the top of <body>, the
+ * docs-shell follows. We don't change the shell's grid (240px / 1fr)
+ * — the sidebar's `top` was already adjusted above to clear the bar. */

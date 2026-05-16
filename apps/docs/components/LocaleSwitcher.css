@@ -1,0 +1,41 @@
+.docs-locale-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 3px;
+  background: var(--su-bg-paper);
+  border: var(--su-stroke-default) solid var(--su-ink-primary);
+  border-radius: var(--su-radius-tag);
+  box-shadow: var(--su-shadow-sm);
+  font-family: var(--su-font-family-hand);
+}
+
+.docs-locale-switcher__pill {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--su-ink-primary);
+  font-family: inherit;
+  font-size: var(--su-font-size-small);
+  padding: 4px 12px;
+  border-radius: calc(var(--su-radius-tag) - 2px);
+  cursor: pointer;
+  transition: background var(--su-duration-fast) ease,
+    color var(--su-duration-fast) ease;
+}
+
+.docs-locale-switcher__pill:hover:not(.docs-locale-switcher__pill--active) {
+  background: var(--su-note-yellow);
+}
+
+.docs-locale-switcher__pill--active {
+  background: var(--su-color-brand);
+  color: #fff;
+  font-weight: var(--su-font-weight-bold);
+  box-shadow: var(--su-shadow-sm);
+}
+
+.docs-locale-switcher__pill:focus-visible {
+  outline: 2px dashed var(--su-ink-primary);
+  outline-offset: 2px;
+}
