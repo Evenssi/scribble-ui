@@ -1,0 +1,19 @@
+{
+  "name": "@scribble-ui/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "End-to-end tests for the scribble-ui docs site (Playwright).",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:update": "playwright test --update-snapshots",
+    "report": "playwright show-report",
+    "install:browsers": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.4.0"
+  }
+}
