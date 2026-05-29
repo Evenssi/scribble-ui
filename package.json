@@ -13,6 +13,8 @@
     "build:core": "pnpm --filter scribble-ui build",
     "build:docs": "pnpm --filter docs build",
     "lint": "echo \"(lint not configured yet)\" && exit 0",
+    "test": "pnpm --filter scribble-ui test",
+    "test:coverage": "pnpm --filter scribble-ui test --coverage",
     "typecheck": "pnpm -r typecheck"
   },
   "pnpm": {

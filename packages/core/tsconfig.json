@@ -13,7 +13,7 @@
     "dist",
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
-    "test-setup.ts",
+    "test",
     "vitest.config.ts"
   ]
 }
