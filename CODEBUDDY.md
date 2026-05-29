@@ -254,7 +254,7 @@ pnpm --filter docs build           # 静态页数 == 1（首页） + N 个组件
 - **把 `.codebuddy/` 里的内容当成仓库状态来引用。** 它是 gitignore 的，协作者根本拿不到。任何需要共享的内容都必须落到 `CODEBUDDY.md`、`README.md` 或真实代码里。
 - **样式里出现纯黑 `#000` / 纯白 `#fff`。** 不符合品牌色，要用 `tokens.css` 里的 `--sui-ink` / `--sui-canvas`。
 - **测试文件位置漂移。** 早期版本把 `<Name>.test.tsx` 放在组件目录里；现在统一搬到 `packages/core/test/unit/<Name>.test.tsx`，import 路径走 `../../src/components/<Name>/<Name>`。新增测试时不要再回到老路径。
-- **`Select` displayLabel 的初始时序问题。** Trigger 上显示的 label 依赖 `Option` 通过 `useEffect` 注册到 registry；刚 mount 时 trigger 会先渲染 raw `value`（例如 `"a"`）一帧，下一次 commit 才换成对应 `Option` 的 label。写测试时不要把 trigger 的可见文本当作选中状态的真值，改用 `aria-selected` 或 hidden input 的 `value` 来断言。
+- **`Select` 的 trigger label 依赖 render 期静态解析 `<Option>` props，不是依赖运行时注册。** `Select` 在 render 时会 `React.Children.forEach` 扫一遍 children，从每个 `<Option>` 的 props 上同步读 `value` / `label` / `disabled`，拼出一份 `optionsMeta` 给 trigger label / 键盘导航 / typeahead 使用。所以：① `<Option>` 必须是 `Select` 的**直接**子节点，不能再包一层转发组件（包起来后 `React.Children` 看不到 Option）；② 如果 `<Option>` 的 children 是 JSX 而非字符串，**务必**给一个 `label="..."` prop，否则 trigger 退化成显示 `value`。
 - **`jsdom` 没有 `Element.scrollIntoView`。** Listbox / Modal 等会 `el.scrollIntoView({...})`，jsdom 里默认抛 `not a function`。`packages/core/test/setup.ts` 已经把它 polyfill 成 no-op，新写的测试不需要再补；但**写新组件**时如果用了别的 jsdom 不实现的 DOM API，记得在 setup 里补上。
 
 ---
