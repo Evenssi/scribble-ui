@@ -153,9 +153,54 @@ export const Select: React.FC<SelectProps> = ({
   const triggerId = id ?? `${idBase}-trigger`;
   const listboxId = `${idBase}-listbox`;
 
-  // ---- registered options -------------------------------------------------
-  // For JSX-children form, options self-register via SelectContext.
-  // For `options` prop form, we render internal <Option>s below — same path.
+  // ---- options meta (render-time, NOT mount-dependent) -------------------
+  // We resolve the canonical list of options *before* the listbox mounts so
+  // that things like the trigger label, keyboard navigation, and typeahead
+  // work even while the listbox is closed (the listbox only mounts inside
+  // a portal when `open` flips to true). For JSX children we shallow-walk
+  // <Option> elements and read `value` / `label` / `disabled` straight off
+  // their props, falling back to the same string-children rule that Option
+  // itself uses internally.
+  const hasChildren = React.Children.count(children) > 0;
+  const optionsMeta = React.useMemo(() => {
+    if (hasChildren) {
+      const collected: Array<{
+        value: string;
+        label: string;
+        disabled: boolean;
+      }> = [];
+      React.Children.forEach(children, (child) => {
+        if (!React.isValidElement(child)) return;
+        const props = child.props as {
+          value?: string;
+          label?: string;
+          disabled?: boolean;
+          children?: React.ReactNode;
+        };
+        if (typeof props.value !== 'string') return;
+        const label =
+          props.label ??
+          (typeof props.children === 'string' ? props.children : props.value);
+        collected.push({
+          value: props.value,
+          label,
+          disabled: !!props.disabled,
+        });
+      });
+      return collected;
+    }
+    return (options ?? []).map((opt) => ({
+      value: opt.value,
+      label: opt.label,
+      disabled: !!opt.disabled,
+    }));
+  }, [hasChildren, children, options]);
+
+  // ---- registered options (mount-time, used for aria-activedescendant) ---
+  // Each <Option> still self-registers its DOM id via SelectContext. We
+  // need that for `aria-activedescendant`, which must point at a real
+  // element id; everything else (label, keyboard nav, typeahead) reads
+  // `optionsMeta` above and works regardless of whether Option is mounted.
   const [registered, setRegistered] = React.useState<RegisteredOption[]>([]);
   const register = React.useCallback((opt: RegisteredOption) => {
     setRegistered((prev) => {
@@ -190,10 +235,10 @@ export const Select: React.FC<SelectProps> = ({
   React.useEffect(() => {
     if (!open) return;
     const startFrom =
-      registered.find((o) => o.value === selectedValue && !o.disabled) ??
-      registered.find((o) => !o.disabled);
+      optionsMeta.find((o) => o.value === selectedValue && !o.disabled) ??
+      optionsMeta.find((o) => !o.disabled);
     setHighlightedValue(startFrom?.value);
-  }, [open, registered, selectedValue]);
+  }, [open, optionsMeta, selectedValue]);
 
   const isHighlighted = React.useCallback(
     (v: string) => highlightedValue === v,
@@ -292,7 +337,7 @@ export const Select: React.FC<SelectProps> = ({
       typeBufferRef.current = (typeBufferRef.current + char).toLowerCase();
       const buf = typeBufferRef.current;
       // Find first enabled option whose label starts with buffer.
-      const candidate = registered.find(
+      const candidate = optionsMeta.find(
         (o) => !o.disabled && o.label.toLowerCase().startsWith(buf)
       );
       if (candidate) {
@@ -303,7 +348,7 @@ export const Select: React.FC<SelectProps> = ({
         typeBufferRef.current = '';
       }, TYPEAHEAD_RESET_MS);
     },
-    [registered, open, setOpenSafe]
+    [optionsMeta, open, setOpenSafe]
   );
 
   React.useEffect(() => {
@@ -315,7 +360,7 @@ export const Select: React.FC<SelectProps> = ({
   // ---- keyboard ------------------------------------------------------------
   const moveHighlight = React.useCallback(
     (direction: 1 | -1) => {
-      const enabled = registered.filter((o) => !o.disabled);
+      const enabled = optionsMeta.filter((o) => !o.disabled);
       if (enabled.length === 0) return;
       const currentIdx = enabled.findIndex((o) => o.value === highlightedValue);
       const nextIdx =
@@ -327,7 +372,7 @@ export const Select: React.FC<SelectProps> = ({
       const nextOption = enabled[nextIdx];
       if (nextOption) setHighlightedValue(nextOption.value);
     },
-    [registered, highlightedValue]
+    [optionsMeta, highlightedValue]
   );
 
   const onTriggerKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -362,13 +407,13 @@ export const Select: React.FC<SelectProps> = ({
         break;
       case 'Home': {
         event.preventDefault();
-        const first = registered.find((o) => !o.disabled);
+        const first = optionsMeta.find((o) => !o.disabled);
         if (first) setHighlightedValue(first.value);
         break;
       }
       case 'End': {
         event.preventDefault();
-        const enabled = registered.filter((o) => !o.disabled);
+        const enabled = optionsMeta.filter((o) => !o.disabled);
         const last = enabled[enabled.length - 1];
         if (last) setHighlightedValue(last.value);
         break;
@@ -395,11 +440,14 @@ export const Select: React.FC<SelectProps> = ({
   };
 
   // ---- displayed label ----------------------------------------------------
+  // Reads from `optionsMeta` so the trigger shows the right label even
+  // before the listbox has ever been opened (i.e. before any <Option> has
+  // mounted and self-registered).
   const displayLabel = React.useMemo(() => {
     if (selectedValue === undefined) return undefined;
-    const found = registered.find((o) => o.value === selectedValue);
+    const found = optionsMeta.find((o) => o.value === selectedValue);
     return found?.label ?? selectedValue;
-  }, [selectedValue, registered]);
+  }, [selectedValue, optionsMeta]);
 
   // ---- context value ------------------------------------------------------
   const ctx = React.useMemo<SelectContextValue>(
@@ -417,7 +465,6 @@ export const Select: React.FC<SelectProps> = ({
 
   // ---- option nodes -------------------------------------------------------
   // children win when both `options` and JSX children are passed.
-  const hasChildren = React.Children.count(children) > 0;
   const optionNodes = hasChildren
     ? children
     : (options ?? []).map((opt) => (

@@ -5,20 +5,6 @@ import userEvent from '@testing-library/user-event';
 import { Select } from '../../src/components/Select/Select';
 import { Option } from '../../src/components/Select/Option';
 
-/**
- * NOTE on `displayLabel` assertions:
- *
- * Select resolves the trigger label by looking up the selected `value`
- * inside its registered Options. Today, when `value` (or
- * `defaultValue`) is set on the very first render, the trigger briefly
- * renders the raw value (e.g. "apple") before `Option` children
- * register themselves via `useEffect`. This is a known timing quirk in
- * the current implementation that we don't want to encode as a hard
- * spec — these tests therefore focus on roles / ARIA / keyboard
- * navigation / open-close lifecycle / option metadata, and verify
- * label resolution only via the `aria-selected` flag on the option
- * (which IS reliable across re-renders).
- */
 describe('<Select />', () => {
   it('renders a closed combobox showing the placeholder when no value', () => {
     render(
@@ -75,6 +61,8 @@ describe('<Select />', () => {
 
     expect(onChange).toHaveBeenCalledWith('banana');
     expect(screen.queryByRole('listbox')).toBeNull();
+    // Trigger now shows the matched label, not the raw value.
+    expect(screen.getByRole('combobox')).toHaveTextContent('Banana');
 
     // Re-open and verify aria-selected reflects the pick on Banana only.
     await user.click(screen.getByRole('combobox'));
@@ -86,6 +74,17 @@ describe('<Select />', () => {
       'aria-selected',
       'false'
     );
+  });
+
+  it('renders the matched label on first paint when defaultValue is set', () => {
+    render(
+      <Select defaultValue="a">
+        <Option value="a">Alpha</Option>
+        <Option value="b">Bravo</Option>
+      </Select>
+    );
+    // Resolved synchronously on the first render — no Option mount needed.
+    expect(screen.getByRole('combobox')).toHaveTextContent('Alpha');
   });
 
   it('honors the `options` array form when no JSX children are provided', async () => {
@@ -119,8 +118,10 @@ describe('<Select />', () => {
       </Select>
     );
 
+    // Trigger reflects the controlled value's label even before opening.
+    expect(screen.getByRole('combobox')).toHaveTextContent('Apple');
+
     await user.click(screen.getByRole('combobox'));
-    // aria-selected reflects the controlled value, regardless of trigger text.
     expect(screen.getByRole('option', { name: 'Apple' })).toHaveAttribute(
       'aria-selected',
       'true'
@@ -128,6 +129,8 @@ describe('<Select />', () => {
 
     await user.click(screen.getByRole('option', { name: 'Banana' }));
     expect(onChange).toHaveBeenCalledWith('banana');
+    // Parent didn't flip the prop — trigger stays on Apple.
+    expect(screen.getByRole('combobox')).toHaveTextContent('Apple');
 
     // Re-open: parent didn't flip the prop, so Apple is still the selection.
     await user.click(screen.getByRole('combobox'));
@@ -137,7 +140,7 @@ describe('<Select />', () => {
     );
   });
 
-  it('keyboard: ArrowDown opens the listbox and Enter commits a click pick', async () => {
+  it('keyboard: ArrowDown opens the listbox, two more advance the highlight, Enter commits', async () => {
     const onChange = vi.fn();
     const user = userEvent.setup();
     render(
@@ -153,12 +156,13 @@ describe('<Select />', () => {
     await user.keyboard('{ArrowDown}');
     expect(screen.getByRole('listbox')).toBeInTheDocument();
 
-    // Picking via mouse click on a listbox item is the canonical commit
-    // path; verify the listbox is interactive once it's keyboard-opened.
-    await user.click(screen.getByRole('option', { name: 'Charlie' }));
+    // After opening, the highlight starts at the first enabled option (Alpha).
+    // Move down twice to land on Charlie, then commit with Enter.
+    await user.keyboard('{ArrowDown}{ArrowDown}{Enter}');
 
     expect(screen.queryByRole('listbox')).toBeNull();
     expect(onChange).toHaveBeenCalledWith('c');
+    expect(trigger).toHaveTextContent('Charlie');
   });
 
   it('Escape closes the listbox without changing the value', async () => {
