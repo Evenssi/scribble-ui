@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { HandDrawnFilters } from 'scribble-ui';
 
@@ -11,6 +10,7 @@ import 'scribble-ui/styles/components.css';
 
 import './globals.css';
 
+import { DocsNavLink } from '../../components/DocsNavLink';
 import { DocsTopbar } from '../../components/DocsTopbar';
 import { isLocale, locales, type Locale } from '../../i18n/config';
 import { getDictionary } from '../../i18n/getDictionary';
@@ -120,9 +120,7 @@ export default async function LocaleLayout({
           <aside className="docs-sidebar">
             <nav className="docs-nav">
               <p className="docs-nav-section">{nav.gettingStarted}</p>
-              <Link href={`/${locale}`} className="docs-nav-link">
-                {nav.introduction}
-              </Link>
+              <DocsNavLink href={`/${locale}`}>{nav.introduction}</DocsNavLink>
 
               {groups.map((group) => (
                 <details key={group.title} className="docs-nav-group" open>
@@ -130,13 +128,12 @@ export default async function LocaleLayout({
                     {group.title}
                   </summary>
                   {group.items.map((slug) => (
-                    <Link
+                    <DocsNavLink
                       key={slug}
                       href={`/${locale}/components/${slug}`}
-                      className="docs-nav-link"
                     >
                       {dict.home.items[slug as keyof typeof dict.home.items].name}
-                    </Link>
+                    </DocsNavLink>
                   ))}
                 </details>
               ))}

@@ -115,8 +115,27 @@ a {
   transition: background var(--su-duration-fast) ease;
 }
 
+/* Hover is intentionally a no-op visually — only the cursor changes
+ * to indicate interactivity. The previous note-yellow tint was
+ * visually too close to the active state and read as "selected"
+ * on every entry the cursor passed over, which made the sidebar
+ * feel noisy. Active is now the only sticky-note in the nav. */
 .docs-nav-link:hover {
+  cursor: pointer;
+}
+
+/* Active sidebar entry — the page you're currently looking at.
+ * Minimal text-only marker: a single note-yellow tint (no other
+ * sticky-note colour is introduced anywhere else on the site) plus
+ * a bumped font weight via the shared token. No borders, no
+ * shadows, no colour shift — the entire visual delta is type
+ * weight, which keeps the sidebar feeling like plain notebook prose
+ * and matches how the docs body uses bold for emphasis. Hover does
+ * not contribute any background of its own, so active is the only
+ * sticky note in the nav. */
+.docs-nav-link[data-active='true'] {
   background: var(--su-note-yellow);
+  font-weight: var(--su-font-weight-bold);
 }
 
 .docs-main {
