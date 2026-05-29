@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { Button } from './Button';
+import { Button } from '../../src/components/Button/Button';
 
 describe('<Button />', () => {
   it('renders children inside a native button with the default type', () => {

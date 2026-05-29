@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { Input } from './Input';
+import { Input } from '../../src/components/Input/Input';
 
 describe('<Input />', () => {
   it('renders an uncontrolled input with defaultValue and updates locally on typing', async () => {
