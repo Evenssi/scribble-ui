@@ -12,6 +12,9 @@ out/
 # TypeScript
 *.tsbuildinfo
 
+# ESLint cache
+.eslintcache
+
 # Test coverage
 coverage/
 

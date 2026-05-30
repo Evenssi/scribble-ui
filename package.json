@@ -12,13 +12,23 @@
     "build": "pnpm -r build",
     "build:core": "pnpm --filter scribble-ui build",
     "build:docs": "pnpm --filter docs build",
-    "lint": "echo \"(lint not configured yet)\" && exit 0",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "pnpm --filter scribble-ui test",
     "test:coverage": "pnpm --filter scribble-ui test --coverage",
     "test:e2e": "pnpm --filter @scribble-ui/e2e test",
     "test:e2e:ui": "pnpm --filter @scribble-ui/e2e test:ui",
     "test:e2e:update": "pnpm --filter @scribble-ui/e2e test:update",
     "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "eslint": "^9.16.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.13.0",
+    "typescript-eslint": "^8.18.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
