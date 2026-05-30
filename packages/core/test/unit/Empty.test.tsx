@@ -63,4 +63,56 @@ describe('<Empty />', () => {
     render(<Empty size="lg" />);
     expect(screen.getByRole('status').className).toMatch(/su-empty--size-lg/);
   });
+
+  it('renders the search preset SVG when preset="search"', () => {
+    const { container } = render(<Empty preset="search" />);
+    // Search preset uses a magnifier circle inside the illustration.
+    expect(container.querySelector('.su-empty__image svg')).not.toBeNull();
+    expect(container.querySelector('.su-empty__image svg circle')).not.toBeNull();
+  });
+
+  it('renders the data preset SVG when preset="data"', () => {
+    const { container } = render(<Empty preset="data" />);
+    // Data preset renders the open-folder paths.
+    const svg = container.querySelector('.su-empty__image svg');
+    expect(svg).not.toBeNull();
+    // The data preset has multiple <path> nodes; default has them too,
+    // so we just sanity-check the SVG mounted.
+    expect(svg!.querySelectorAll('path').length).toBeGreaterThan(0);
+  });
+
+  it('renders extra (children) below the action when both are present', () => {
+    render(
+      <Empty
+        title="t"
+        action={<button>Retry</button>}
+      >
+        <span data-testid="extra">extra</span>
+      </Empty>
+    );
+    const root = screen.getByRole('status');
+    const action = root.querySelector('.su-empty__action');
+    const extra = root.querySelector('.su-empty__extra');
+    expect(action).not.toBeNull();
+    expect(extra).not.toBeNull();
+    // DOM order: action precedes extra.
+    expect(
+      action!.compareDocumentPosition(extra!) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy();
+  });
+
+  it('treats empty-string title as missing and falls back to "No data"', () => {
+    render(<Empty title="" />);
+    expect(
+      screen.getByRole('status').querySelector('.su-empty__title')?.textContent
+    ).toBe('No data');
+  });
+
+  it('does not render the description block when description is empty string', () => {
+    render(<Empty title="x" description="" />);
+    expect(
+      screen.getByRole('status').querySelector('.su-empty__description')
+    ).toBeNull();
+  });
 });

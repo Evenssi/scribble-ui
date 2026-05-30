@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Popover } from '../../src/components/Popover/Popover';
@@ -144,5 +144,136 @@ describe('<Popover />', () => {
       </Popover>
     );
     expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  it('omits the arrow node when showArrow={false}', async () => {
+    const user = userEvent.setup();
+    render(
+      <Popover content={<div>body</div>} showArrow={false}>
+        <button type="button">Open</button>
+      </Popover>
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    const dialog = screen.getByRole('dialog');
+    expect(dialog.className).toMatch(/su-popover--no-arrow/);
+    expect(dialog.querySelector('[data-su-popover-arrow]')).toBeNull();
+  });
+
+  it('renders the arrow and applies a placement modifier by default', async () => {
+    const user = userEvent.setup();
+    render(
+      <Popover content={<div>body</div>} placement="top">
+        <button type="button">Open</button>
+      </Popover>
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    const dialog = screen.getByRole('dialog');
+    // Placement may flip to bottom in jsdom (no real layout), so just
+    // assert the modifier class scheme matches one of the four sides.
+    expect(dialog.className).toMatch(/su-popover--(top|bottom|left|right)/);
+    expect(dialog.querySelector('[data-su-popover-arrow]')).not.toBeNull();
+  });
+
+  it('appends extra className to the popover surface', async () => {
+    const user = userEvent.setup();
+    render(
+      <Popover content={<div>body</div>} className="my-popover">
+        <button type="button">Open</button>
+      </Popover>
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    expect(screen.getByRole('dialog').className).toMatch(/my-popover/);
+  });
+
+  it('renders an optional footer slot below the body', async () => {
+    const user = userEvent.setup();
+    render(
+      <Popover
+        content={<div>body</div>}
+        footer={<button type="button">Confirm</button>}
+      >
+        <button type="button">Open</button>
+      </Popover>
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    expect(
+      screen.getByRole('dialog').querySelector('.su-popover__footer')
+    ).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'Confirm' })).toBeInTheDocument();
+  });
+
+  it('opens on hover with zero delay (uncontrolled hover trigger)', () => {
+    render(
+      <Popover
+        content={<div>panel body</div>}
+        trigger="hover"
+        openDelay={0}
+        closeDelay={0}
+      >
+        <button type="button">Open</button>
+      </Popover>
+    );
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    fireEvent.mouseEnter(trigger);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    // Pointer leaves the trigger → schedules close (delay 0 → immediate).
+    fireEvent.mouseLeave(trigger);
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('opens on focus and closes on blur when trigger="focus"', async () => {
+    const user = userEvent.setup();
+    render(
+      <Popover content={<div>body</div>} trigger="focus" openDelay={0} closeDelay={0}>
+        <button type="button">Open</button>
+      </Popover>
+    );
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    trigger.focus();
+    // Focus trigger fires onFocus → scheduleOpen.
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    // Tab away to drop focus.
+    await user.tab();
+    // focusout listener should close us.
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('preserves the original trigger onClick before toggling open', async () => {
+    const onClick = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <Popover content={<div>body</div>}>
+        <button type="button" onClick={onClick}>
+          Open
+        </button>
+      </Popover>
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  it('wraps a disabled trigger in a span and still toggles on click', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <Popover content={<div>body</div>} wrapDisabledTrigger>
+        <button type="button" disabled>
+          Open
+        </button>
+      </Popover>
+    );
+    const wrapper = container.querySelector('.su-popover__wrapper');
+    expect(wrapper).not.toBeNull();
+    expect(wrapper).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(wrapper).toHaveAttribute('aria-expanded', 'false');
+
+    await user.click(wrapper!);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(wrapper).toHaveAttribute('aria-expanded', 'true');
+
+    await user.click(wrapper!);
+    expect(screen.queryByRole('dialog')).toBeNull();
   });
 });

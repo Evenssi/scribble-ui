@@ -154,4 +154,17 @@ describe('<Breadcrumb />', () => {
     );
     expect(screen.getByTestId('custom-link')).toBeInTheDocument();
   });
+
+  it('renders nothing and warns when BreadcrumbItem is used outside of <Breadcrumb>', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { container } = render(<BreadcrumbItem href="/x">Stray</BreadcrumbItem>);
+    expect(container.firstChild).toBeNull();
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0]?.[0]).toMatch(/<BreadcrumbItem> was rendered outside/);
+    warn.mockRestore();
+  });
+
+  it('exposes the displayName on BreadcrumbItem for devtools', () => {
+    expect(BreadcrumbItem.displayName).toBe('BreadcrumbItem');
+  });
 });
