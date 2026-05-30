@@ -11,11 +11,11 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/components-34-1e1e1e?style=flat-square" alt="34 components" />
-  <img src="https://img.shields.io/badge/react-%3E%3D18-1e1e1e?style=flat-square" alt="React 18+" />
-  <img src="https://img.shields.io/badge/typescript-strict-1e1e1e?style=flat-square" alt="TypeScript strict" />
-  <img src="https://img.shields.io/badge/peer%20deps-react%20%2B%20react--dom-1e1e1e?style=flat-square" alt="Tiny peer deps" />
-  <img src="https://img.shields.io/badge/license-MIT-1e1e1e?style=flat-square" alt="MIT" />
+  <img src="https://img.shields.io/badge/components-34-fff9c4?style=flat-square&labelColor=1e1e1e" alt="34 components" />
+  <img src="https://img.shields.io/badge/react-%3E%3D18-bbdefb?style=flat-square&labelColor=1e1e1e" alt="React 18+" />
+  <img src="https://img.shields.io/badge/typescript-strict-e1bee7?style=flat-square&labelColor=1e1e1e" alt="TypeScript strict" />
+  <img src="https://img.shields.io/badge/peer%20deps-react%20%2B%20react--dom-b2dfdb?style=flat-square&labelColor=1e1e1e" alt="Tiny peer deps" />
+  <img src="https://img.shields.io/badge/license-MIT-f8bbd0?style=flat-square&labelColor=1e1e1e" alt="MIT" />
 </p>
 
 `scribble-ui` ships **34 hand-drawn React components** with a warm, low-corporate aesthetic: sticky-note palette, asymmetric corners, hard offset shadows, and SVG `feTurbulence` wobble. Built for whiteboard tools, note-taking apps, learning products — anywhere you want to dial down the SaaS polish.

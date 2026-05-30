@@ -11,11 +11,11 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/components-34-1e1e1e?style=flat-square" alt="34 个组件" />
-  <img src="https://img.shields.io/badge/react-%3E%3D18-1e1e1e?style=flat-square" alt="React 18+" />
-  <img src="https://img.shields.io/badge/typescript-strict-1e1e1e?style=flat-square" alt="TypeScript strict" />
-  <img src="https://img.shields.io/badge/peer%20deps-react%20%2B%20react--dom-1e1e1e?style=flat-square" alt="极简 peer deps" />
-  <img src="https://img.shields.io/badge/license-MIT-1e1e1e?style=flat-square" alt="MIT" />
+  <img src="https://img.shields.io/badge/components-34-fff9c4?style=flat-square&labelColor=1e1e1e" alt="34 个组件" />
+  <img src="https://img.shields.io/badge/react-%3E%3D18-bbdefb?style=flat-square&labelColor=1e1e1e" alt="React 18+" />
+  <img src="https://img.shields.io/badge/typescript-strict-e1bee7?style=flat-square&labelColor=1e1e1e" alt="TypeScript strict" />
+  <img src="https://img.shields.io/badge/peer%20deps-react%20%2B%20react--dom-b2dfdb?style=flat-square&labelColor=1e1e1e" alt="极简 peer deps" />
+  <img src="https://img.shields.io/badge/license-MIT-f8bbd0?style=flat-square&labelColor=1e1e1e" alt="MIT" />
 </p>
 
 `scribble-ui` 提供 **34 个手绘风格的 React 组件**：便签色板、不对称圆角、实心偏移阴影，搭配 SVG `feTurbulence` 抖动滤镜，整体温暖、不完美、不"企业蓝"。适合白板工具、笔记应用、学习产品，或任何想去掉 SaaS 精致感的场景。
