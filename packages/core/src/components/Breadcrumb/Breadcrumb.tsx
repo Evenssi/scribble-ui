@@ -94,7 +94,7 @@ function normalizeChildren(children: React.ReactNode): NormalizedItem[] {
 
     if (!isItem) {
       if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
+         
         console.warn(
           '[scribble-ui] <Breadcrumb> only accepts <Breadcrumb.Item> ' +
             'children; other node types will be skipped.'

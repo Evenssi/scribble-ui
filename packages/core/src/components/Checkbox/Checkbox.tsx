@@ -91,7 +91,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       inGroup &&
       value === undefined
     ) {
-      // eslint-disable-next-line no-console
+       
       console.warn(
         '[scribble-ui] <Checkbox> rendered inside <CheckboxGroup> without a `value` prop; ' +
           'the item cannot participate in selection tracking.'

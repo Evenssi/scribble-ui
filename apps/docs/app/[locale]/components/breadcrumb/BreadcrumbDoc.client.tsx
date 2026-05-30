@@ -212,6 +212,7 @@ export function BreadcrumbDocClient({ t }: { t: ComponentDoc }) {
               {
                 title: 'Home',
                 render: (node) => (
+                  // eslint-disable-next-line jsx-a11y/anchor-is-valid
                   <a
                     href="#"
                     data-demo-router="next-link"
@@ -224,6 +225,7 @@ export function BreadcrumbDocClient({ t }: { t: ComponentDoc }) {
               {
                 title: 'Settings',
                 render: (node) => (
+                  // eslint-disable-next-line jsx-a11y/anchor-is-valid
                   <a
                     href="#"
                     data-demo-router="next-link"

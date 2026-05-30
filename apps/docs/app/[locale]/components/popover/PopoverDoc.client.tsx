@@ -25,6 +25,7 @@ export function PopoverDocClient({ t }: { t: ComponentDoc }) {
                 <p style={{ margin: 0 }}>
                   This is a plain popover. You can click the link
                   inside:{' '}
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     href="#"
                     onClick={(e) => e.preventDefault()}

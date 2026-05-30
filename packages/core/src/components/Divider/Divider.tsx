@@ -95,7 +95,7 @@ export const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
       children !== null &&
       children !== false
     ) {
-      // eslint-disable-next-line no-console
+       
       console.warn(
         '[scribble-ui] <Divider>: children are ignored when orientation is vertical.'
       );

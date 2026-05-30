@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { Form, FormItem } from '../../src/components/Form/Form';
+import { Form } from '../../src/components/Form/Form';
 import { Input } from '../../src/components/Input/Input';
 
 describe('<Form /> + <Form.Item />', () => {

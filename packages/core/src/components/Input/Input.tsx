@@ -102,7 +102,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     clearable &&
     hasSuffix
   ) {
-    // eslint-disable-next-line no-console
+     
     console.warn(
       '[scribble-ui] <Input> received both `clearable` and `suffix`; ' +
         'the `suffix` slot wins and the clear affordance is hidden.'

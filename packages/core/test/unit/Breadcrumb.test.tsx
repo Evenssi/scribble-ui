@@ -146,6 +146,7 @@ describe('<Breadcrumb />', () => {
           {
             title: 'Custom',
             href: '/x',
+            // eslint-disable-next-line jsx-a11y/anchor-is-valid
             render: (node) => <a data-testid="custom-link">{node}</a>,
           },
           { title: 'Last' },

@@ -29,7 +29,7 @@ export interface BreadcrumbItemProps
  */
 export function BreadcrumbItem(_props: BreadcrumbItemProps): null {
   if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
+     
     console.warn(
       '[scribble-ui] <BreadcrumbItem> was rendered outside of ' +
         '<Breadcrumb>. It has no effect on its own.'

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { BackTop, Button, Card } from 'scribble-ui';
+import { BackTop, Card } from 'scribble-ui';
 
 import type { ComponentDoc } from '../../../../i18n/dictionaries/zh-CN';
 
