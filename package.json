@@ -20,6 +20,7 @@
     "test:e2e:ui": "pnpm --filter @scribble-ui/e2e test:ui",
     "test:e2e:update": "pnpm --filter @scribble-ui/e2e test:update",
     "typecheck": "pnpm -r typecheck",
+    "i18n:check": "pnpm --filter docs i18n:check",
     "prepare": "husky"
   },
   "lint-staged": {
