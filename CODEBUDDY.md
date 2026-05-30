@@ -192,7 +192,13 @@ pnpm --filter docs build           # 静态页数 == 1（首页） + N 个组件
 # 编辑器 / agent 诊断扫一遍改动文件（CodeBuddy 里就是 read_lints）
 ```
 
-如果新增的组件本身比较有逻辑（受控/非受控、键盘交互、portal、focus trap 之类），**强烈建议**顺手加一份 `packages/core/test/unit/<Name>.test.tsx`，参考 `Modal` / `Drawer` / `Tabs` 的写法。
+截至当前，`packages/core/src/components/` 下的 **35 个组件** **全部**有对应的 `packages/core/test/unit/<Name>.test.tsx`，整体覆盖率快照（v8 provider）：
+
+| 维度 | 行 | 分支 | 函数 |
+|---|---|---|---|
+| 全仓库 | **82.95%** | 76.61% | 79.61% |
+
+新增组件时，请**同步**加一份单测，覆盖：受控/非受控、关键键盘交互、ARIA 角色与状态、portal/focus 行为（如有）。可以参考 `Modal` / `Drawer` / `Tabs` / `Select` / `Breadcrumb` 等几份写法各异的样例。
 
 ---
 
