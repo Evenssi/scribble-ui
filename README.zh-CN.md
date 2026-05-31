@@ -40,11 +40,11 @@ yarn add scribble-ui
 在应用入口**只引入一次**基础样式：
 
 ```ts
-import 'scribble-ui/styles/tokens.css';
+import 'scribble-ui/styles/tokens.css';     // 含极简 reset，会自动 @import './reset.css'
 import 'scribble-ui/styles/components.css';
-// 可选的 CSS reset
-import 'scribble-ui/styles/reset.css';
 ```
+
+> ℹ️ `tokens.css` 顶部已 `@import` 了一份**极简 reset**（仅 `box-sizing` / 按钮重置等约 20 行），无需单独引入 `reset.css`。如果你的项目已经使用了 Tailwind Preflight、modern-normalize 或自家的 reset，scribble-ui 的 reset 会和它们和平共存（同样规则会被后者覆盖）。
 
 然后在应用根节点**只挂载一次** `<HandDrawnFilters />` —— 所有组件都通过 URL 引用滤镜 `id`，SVG `<defs>` 必须存在于 DOM 中：
 

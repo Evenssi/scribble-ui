@@ -40,11 +40,11 @@ yarn add scribble-ui
 Import the base styles **once** at your app entry:
 
 ```ts
-import 'scribble-ui/styles/tokens.css';
+import 'scribble-ui/styles/tokens.css';     // includes a minimal reset via @import './reset.css'
 import 'scribble-ui/styles/components.css';
-// optional CSS reset
-import 'scribble-ui/styles/reset.css';
 ```
+
+> ℹ️ `tokens.css` already `@import`s a **minimal reset** at the top (about 20 lines — `box-sizing`, button defaults, etc.), so you don't need to import `reset.css` separately. If your project already ships Tailwind Preflight, modern-normalize, or your own reset, scribble-ui's reset coexists peacefully (later rules win as usual).
 
 Then mount `<HandDrawnFilters />` **once** at the root of your app — every component references its filter `id`s by URL, so the SVG `<defs>` must live in the DOM:
 
