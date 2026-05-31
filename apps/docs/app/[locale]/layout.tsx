@@ -14,6 +14,7 @@ import { DocsNavLink } from '../../components/DocsNavLink';
 import { DocsTopbar } from '../../components/DocsTopbar';
 import { isLocale, locales, type Locale } from '../../i18n/config';
 import { getDictionary } from '../../i18n/getDictionary';
+import { COMPONENT_GROUPS } from '../../i18n/groups';
 
 type LayoutParams = { locale: string };
 
@@ -54,59 +55,13 @@ export default async function LocaleLayout({
   const dict = await getDictionary(locale);
   const { nav, topbar } = dict;
 
-  // Component slugs are grouped here (not in the dictionary) because the
-  // grouping is structural data, not translatable text. Each slug just
-  // looks up its display name (kept in English) elsewhere.
-  const groups: Array<{ title: string; items: string[] }> = [
-    { title: nav.groups.general, items: ['button'] },
-    { title: nav.groups.layout, items: ['card', 'divider'] },
-    {
-      title: nav.groups.navigation,
-      items: ['tabs', 'breadcrumb', 'pagination', 'dropdown'],
-    },
-    {
-      title: nav.groups.dataEntry,
-      items: [
-        'form',
-        'input',
-        'textarea',
-        'numberinput',
-        'select',
-        'checkbox',
-        'radio',
-        'switch',
-        'slider',
-        'datepicker',
-      ],
-    },
-    {
-      title: nav.groups.dataDisplay,
-      items: [
-        'tag',
-        'avatar',
-        'badge',
-        'carousel',
-        'timeline',
-        'tooltip',
-        'popover',
-        'empty',
-      ],
-    },
-    {
-      title: nav.groups.feedback,
-      items: [
-        'alert',
-        'toast',
-        'modal',
-        'drawer',
-        'progress',
-        'spinner',
-        'skeleton',
-        'result',
-      ],
-    },
-    { title: nav.groups.other, items: ['backtop'] },
-  ];
+  // Structural grouping (which slug belongs to which group, in what order)
+  // lives in i18n/groups.ts so the sidebar and home page can't drift apart.
+  // Translatable text (group titles, item names) still comes from the dict.
+  const groups = COMPONENT_GROUPS.map(({ key, items }) => ({
+    title: nav.groups[key],
+    items,
+  }));
 
   return (
     <html lang={locale}>
