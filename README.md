@@ -125,10 +125,10 @@ export function ConfirmDelete() {
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        title="Delete this note?"
+        header="Delete this note?"
         footer={
           <>
-            <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="default" onClick={() => setOpen(false)}>Cancel</Button>
             <Button variant="danger" onClick={() => setOpen(false)}>Delete</Button>
           </>
         }
