@@ -4,7 +4,9 @@
   "private": true,
   "description": "Documentation site for scribble-ui (English).",
   "scripts": {
+    "predev": "rm -rf .next",
     "dev": "next dev",
+    "prebuild": "rm -rf .next",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
