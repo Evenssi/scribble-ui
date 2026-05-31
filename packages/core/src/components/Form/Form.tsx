@@ -233,16 +233,29 @@ function FormItem({
 
       <div className={cx('su-form-item__control', controlClassName)}>
         {/*
-          We deliberately do NOT clone children to inject value/onChange. The
-          D-plan says Form.Item is purely visual — injecting state would
-          force consumers to hand the form library's Controller a bare
-          ReactElement, defeating the whole "bring your own state" ethos.
+          Form.Item is a *purely visual* container. We deliberately do NOT
+          clone children — that means we inject neither value/onChange NOR
+          aria-describedby. The D-plan says injecting anything would force
+          consumers to hand react-hook-form's <Controller> a bare React-
+          Element, defeating the whole "bring your own state" ethos.
 
-          The one thing we DO inject is `aria-describedby`, but only when:
-            - the child is a single ReactElement, AND
-            - it doesn't already own an aria-describedby.
-          Multiple children? JSX fragments? Anything else? We render them
-          as-is and rely on the consumer to wire aria manually.
+          What we DO provide:
+            - `htmlFor` on the <label>, derived from htmlFor / id / autoId,
+              so the label points at a stable id.
+            - `id` on the error/helper <div>s ({controlId}-error / -helper),
+              ready for the consumer to reference.
+            - `role="alert"` on the error message so SR users hear it.
+
+          What the consumer is responsible for wiring:
+            <Form.Item label="Email" error={errors.email?.message} helperText="...">
+              <Input
+                id={controlId}                              // optional, see htmlFor flow
+                aria-describedby={`${controlId}-helper ${controlId}-error`}
+                aria-invalid={!!errors.email}
+              />
+            </Form.Item>
+
+          (See the README "Form with react-hook-form + zod" example.)
         */}
         {children}
 

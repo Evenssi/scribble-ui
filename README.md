@@ -111,6 +111,20 @@ export function SignUp() {
 
 `react-hook-form` and `zod` are **opt-in** — they're not peer deps. Any controlled component (`<Input>`, `<Select>`, `<DatePicker>`, …) drops into `<Controller>` because they all expose the standard `value` / `onChange` / `error` shape.
 
+> 💡 **A11y note**: `<Form.Item>` is a *purely visual* container and does **not** auto-inject `aria-describedby` or `aria-invalid` on its child (this is to coexist with RHF `<Controller>`'s render-prop shape). When you need the screen-reader association, wire it explicitly:
+>
+> ```tsx
+> <Form.Item label="Email" htmlFor="email" error={errors.email?.message} helperText="We never spam">
+>   <Input
+>     id="email"
+>     aria-describedby="email-error email-helper"
+>     aria-invalid={!!errors.email}
+>   />
+> </Form.Item>
+> ```
+>
+> Form.Item already renders the error/helper nodes with stable `${id}-error` / `${id}-helper` ids — just reference them. The error itself carries `role="alert"`, so SR users hear it without any extra wiring.
+
 ### 3. Modal
 
 ```tsx

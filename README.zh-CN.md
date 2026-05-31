@@ -111,6 +111,20 @@ export function SignUp() {
 
 `react-hook-form` 和 `zod` 是**可选**的 —— 它们不是 peer dependency。所有受控组件（`<Input>` / `<Select>` / `<DatePicker>` / …）都能直接放进 `<Controller>`，因为它们都是标准的 `value` / `onChange` / `error` 形态。
 
+> 💡 **关于 a11y 的小提醒**：`<Form.Item>` 是纯视觉容器，**不会**自动给子元素注入 `aria-describedby` 或 `aria-invalid`（这是为了和 RHF `<Controller>` 的 render-prop 形态共存）。需要无障碍关联时，请手动 wire：
+>
+> ```tsx
+> <Form.Item label="邮箱" htmlFor="email" error={errors.email?.message} helperText="我们不会发垃圾邮件">
+>   <Input
+>     id="email"
+>     aria-describedby="email-error email-helper"
+>     aria-invalid={!!errors.email}
+>   />
+> </Form.Item>
+> ```
+>
+> Form.Item 已经为 error / helper 节点生成了 `${id}-error` / `${id}-helper` 的稳定 id，照着拼即可。错误信息本身带 `role="alert"`，屏幕阅读器会主动播报，无需额外 wire。
+
 ### 3. Modal
 
 ```tsx
